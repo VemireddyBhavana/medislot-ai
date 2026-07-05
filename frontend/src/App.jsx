@@ -12,6 +12,8 @@ import AdminAppointments from './pages/AdminAppointments';
 import AdminAddDoctor from './pages/AdminAddDoctor';
 import AdminNotifications from './pages/AdminNotifications';
 import About from './pages/About';
+import Services from './pages/Services';
+import Contact from './pages/Contact';
 
 function App() {
   return (
@@ -22,6 +24,8 @@ function App() {
         <Route element={<MainLayout />}>
           <Route path="/home" element={<Home />} />
           <Route path="/about" element={<About />} />
+          <Route path="/services" element={<Services />} />
+          <Route path="/contact" element={<Contact />} />
           <Route path="/doctors" element={<Doctors />} />
           <Route path="/book" element={<BookAppointment />} />
           <Route path="/confirmation" element={<Confirmation />} />
