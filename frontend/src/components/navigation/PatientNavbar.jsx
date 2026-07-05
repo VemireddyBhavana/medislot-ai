@@ -23,7 +23,7 @@ export default function PatientNavbar() {
         <nav className="hidden md:flex items-center space-x-6 lg:space-x-8">
           <Link to="/home" className={`text-sm font-bold transition-colors ${isActive('/home') ? 'text-gray-900' : 'text-gray-500 hover:text-gray-900'}`}>Home</Link>
           <Link to="/doctors" className={`text-sm font-bold transition-colors ${isActive('/doctors') ? 'text-gray-900' : 'text-gray-500 hover:text-gray-900'}`}>Doctors</Link>
-          <Link to="/#how-it-works" className={`text-sm font-bold transition-colors ${isActive('/#how-it-works') ? 'text-gray-900' : 'text-gray-500 hover:text-gray-900'}`}>How it works</Link>
+          <button onClick={() => { const el = document.getElementById('how-it-works'); if (el) el.scrollIntoView({ behavior: 'smooth' }); else window.location.href = '/home#how-it-works'; }} className="text-sm font-bold transition-colors text-gray-500 hover:text-gray-900 text-left">How it works</button>
           <Link to="/about" className={`text-sm font-bold transition-colors ${isActive('/about') ? 'text-gray-900' : 'text-gray-500 hover:text-gray-900'}`}>About us</Link>
           <Link to="/services" className={`text-sm font-bold transition-colors ${isActive('/services') ? 'text-gray-900' : 'text-gray-500 hover:text-gray-900'}`}>Services</Link>
           <Link to="/contact" className={`text-sm font-bold transition-colors ${isActive('/contact') ? 'text-gray-900' : 'text-gray-500 hover:text-gray-900'}`}>Contact</Link>

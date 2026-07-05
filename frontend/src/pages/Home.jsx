@@ -237,7 +237,7 @@ export default function Home() {
       </section>
 
       {/* How It Works Section */}
-      <section className="py-16 pb-24 relative z-20 bg-slate-50/50">
+      <section id="how-it-works" className="py-16 pb-24 relative z-20 bg-slate-50/50">
         <PageContainer>
           <div className="text-center mb-14">
             <h2 className="text-2xl font-bold text-slate-900 mb-2">How It Works</h2>
