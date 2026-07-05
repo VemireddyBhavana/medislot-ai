@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import { MapPin, Navigation, Star, Phone, Activity } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
+import { MapPin, Navigation, Star, Phone, Activity, Clock } from 'lucide-react';
 import { motion } from 'framer-motion';
 import PageContainer from '../components/layout/PageContainer';
 import { getNearbyHospitals } from '../api/services';
 
 export default function Hospitals() {
+  const navigate = useNavigate();
   const [hospitals, setHospitals] = useState([]);
   const [loading, setLoading] = useState(true);
   const [locationError, setLocationError] = useState(null);
@@ -85,45 +86,70 @@ export default function Hospitals() {
                 </div>
               ) : (
                 hospitals.map(hospital => (
-                  <motion.div key={hospital._id} variants={fadeInUp} className="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm hover:shadow-xl hover:border-blue-200 transition-all duration-300 flex flex-col">
-                    <img 
-                      src={hospital.image || "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?auto=format&fit=crop&q=80&w=800"} 
-                      alt={hospital.name} 
-                      className="w-full h-48 object-cover"
-                    />
+                  <motion.div key={hospital.id || hospital._id} variants={fadeInUp} className="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm hover:shadow-xl hover:border-blue-200 transition-all duration-300 flex flex-col">
+                    <div className="relative">
+                      <img 
+                        src={hospital.image || "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?auto=format&fit=crop&q=80&w=800"} 
+                        alt={hospital.name} 
+                        className="w-full h-48 object-cover"
+                      />
+                      {hospital.distance != null && (
+                        <div className="absolute bottom-3 left-3 bg-white/90 backdrop-blur-sm px-3 py-1.5 rounded-lg shadow-sm flex items-center gap-1.5 text-xs font-bold text-slate-700">
+                          <Navigation size={12} className="text-blue-600" />
+                          {(hospital.distance / 1000).toFixed(1)} km away
+                        </div>
+                      )}
+                    </div>
+                    
                     <div className="p-5 flex-1 flex flex-col">
                       <div className="flex justify-between items-start mb-2">
                         <h3 className="font-bold text-slate-900 text-lg leading-tight">{hospital.name}</h3>
-                        <div className="flex items-center bg-blue-50 px-2 py-1 rounded text-blue-700 text-xs font-bold">
+                        <div className="flex items-center bg-blue-50 px-2 py-1 rounded text-blue-700 text-xs font-bold shrink-0">
                           <Star size={12} className="mr-1 fill-blue-700" />
-                          {hospital.rating}
+                          {hospital.rating || "4.0"}
                         </div>
                       </div>
                       
-                      <div className="flex items-start gap-2 text-slate-500 text-xs mb-3">
-                        <MapPin size={14} className="shrink-0 mt-0.5 text-blue-500" />
-                        <span>{hospital.address}</span>
+                      <div className="space-y-2 mb-4">
+                        <div className="flex items-start gap-2 text-slate-500 text-xs">
+                          <MapPin size={14} className="shrink-0 mt-0.5 text-blue-500" />
+                          <span>{hospital.address}</span>
+                        </div>
+                        <div className="flex items-start gap-2 text-slate-500 text-xs">
+                          <Phone size={14} className="shrink-0 mt-0.5 text-blue-500" />
+                          <span>{hospital.phone || "+1 (800) MEDISLOT"}</span>
+                        </div>
+                        <div className="flex items-start gap-2 text-slate-500 text-xs">
+                          <Clock size={14} className="shrink-0 mt-0.5 text-blue-500" />
+                          <span className="line-clamp-1">{hospital.timings || "24/7 Emergency"}</span>
+                        </div>
                       </div>
                       
                       <div className="flex flex-wrap gap-1.5 mb-5 mt-auto">
-                        {hospital.amenities.slice(0, 3).map((amenity, i) => (
-                          <span key={i} className="text-[10px] font-bold uppercase tracking-wide text-slate-600 bg-slate-100 px-2 py-1 rounded">
-                            {amenity}
+                        {(hospital.departments || []).slice(0, 3).map((dept, i) => (
+                          <span key={i} className="text-[10px] font-bold uppercase tracking-wide text-slate-600 bg-slate-100 px-2 py-1 rounded border border-slate-200">
+                            {dept}
                           </span>
                         ))}
-                        {hospital.amenities.length > 3 && (
-                          <span className="text-[10px] font-bold uppercase tracking-wide text-slate-600 bg-slate-100 px-2 py-1 rounded">
-                            +{hospital.amenities.length - 3} More
+                        {(hospital.departments || []).length > 3 && (
+                          <span className="text-[10px] font-bold uppercase tracking-wide text-slate-600 bg-slate-100 px-2 py-1 rounded border border-slate-200">
+                            +{(hospital.departments || []).length - 3} More
                           </span>
                         )}
                       </div>
 
-                      <div className="flex gap-2 mt-auto">
-                        <Link to={`/hospital/${hospital._id}`} className="flex-1">
-                          <button className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 rounded-lg transition-colors text-sm">
+                      <div className="flex gap-2 mt-auto pt-4 border-t border-slate-100">
+                        <Link to={`/hospital/${hospital.id || hospital._id}`} className="flex-1">
+                          <button className="w-full bg-white hover:bg-slate-50 text-slate-700 font-bold py-2.5 rounded-lg transition-colors text-sm border border-slate-200 shadow-sm">
                             View Details
                           </button>
                         </Link>
+                        <button 
+                          onClick={() => navigate('/book', { state: { hospitalId: hospital.id || hospital._id, hospitalName: hospital.name } })}
+                          className="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 rounded-lg transition-colors text-sm shadow-sm"
+                        >
+                          Book Appointment
+                        </button>
                       </div>
                     </div>
                   </motion.div>
