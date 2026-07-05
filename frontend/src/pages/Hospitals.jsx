@@ -29,7 +29,15 @@ export default function Hospitals() {
     try {
       setLoading(true);
       const data = await getNearbyHospitals(lat, lng);
-      setHospitals(data);
+      
+      // If user provided location but no hospitals are within the 50km radius, fallback to all
+      if (lat && lng && data.length === 0) {
+        setLocationError("No hospitals found within 50km of your location. Showing all available hospitals.");
+        const allData = await getNearbyHospitals(); // Fetch all without lat/lng
+        setHospitals(allData);
+      } else {
+        setHospitals(data);
+      }
     } catch (error) {
       console.error("Failed to fetch hospitals", error);
     } finally {
