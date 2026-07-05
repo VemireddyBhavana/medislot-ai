@@ -93,7 +93,7 @@ export default function LocationPromptModal() {
                 <div className="flex flex-col gap-3">
                   <button 
                     onClick={requestLocation}
-                    className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-xl transition-colors shadow-sm"
+                    className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-xl hover:-translate-y-0.5 hover:shadow-lg transition-all duration-300 shadow-sm"
                   >
                     Allow Location Access
                   </button>
@@ -141,7 +141,7 @@ export default function LocationPromptModal() {
                 <div className="flex flex-col gap-3">
                   <button 
                     onClick={requestLocation}
-                    className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-xl transition-colors shadow-sm flex items-center justify-center gap-2"
+                    className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-xl hover:-translate-y-0.5 hover:shadow-lg transition-all duration-300 shadow-sm flex items-center justify-center gap-2"
                   >
                     <RefreshCw size={18} /> Try Again
                   </button>

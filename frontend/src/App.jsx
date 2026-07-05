@@ -1,4 +1,5 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import { AnimatePresence } from 'framer-motion';
 import MainLayout from './layouts/MainLayout';
 import AdminLayout from './layouts/AdminLayout';
 import Home from './pages/Home';
@@ -24,11 +25,11 @@ import Hospitals from './pages/Hospitals';
 import HospitalDetails from './pages/HospitalDetails';
 import ScrollToTop from './components/ScrollToTop';
 
-function App() {
+function AnimatedRoutes() {
+  const location = useLocation();
   return (
-    <Router>
-      <ScrollToTop />
-      <Routes>
+    <AnimatePresence mode="wait">
+      <Routes location={location} key={location.pathname}>
         <Route path="/" element={<Navigate to="/admin/login" replace />} />
         <Route path="/legal" element={<Navigate to="/privacy-policy" replace />} />
         
@@ -61,6 +62,15 @@ function App() {
           <Route path="notifications" element={<AdminNotifications />} />
         </Route>
       </Routes>
+    </AnimatePresence>
+  );
+}
+
+function App() {
+  return (
+    <Router>
+      <ScrollToTop />
+      <AnimatedRoutes />
     </Router>
   );
 }

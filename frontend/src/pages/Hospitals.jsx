@@ -94,7 +94,7 @@ export default function Hospitals() {
                 </div>
               ) : (
                 hospitals.map(hospital => (
-                  <motion.div key={hospital.id || hospital._id} variants={fadeInUp} className="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm hover:shadow-xl hover:border-blue-200 transition-all duration-300 flex flex-col">
+                  <motion.div key={hospital.id || hospital._id} variants={fadeInUp} className="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm hover:-translate-y-1 hover:shadow-xl hover:border-blue-200 transition-all duration-300 flex flex-col">
                     <div className="relative">
                       <img 
                         src={hospital.image || "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?auto=format&fit=crop&q=80&w=800"} 
@@ -166,7 +166,7 @@ export default function Hospitals() {
                         </Link>
                         <button 
                           onClick={() => navigate('/book', { state: { hospitalId: hospital.id || hospital._id, hospitalName: hospital.name } })}
-                          className="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 rounded-lg transition-colors text-sm shadow-sm"
+                          className="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 rounded-lg hover:-translate-y-0.5 hover:shadow-lg transition-all duration-300 text-sm shadow-sm"
                         >
                           Book Appointment
                         </button>

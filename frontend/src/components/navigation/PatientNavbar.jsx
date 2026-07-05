@@ -40,7 +40,7 @@ export default function PatientNavbar() {
         {/* Desktop Actions */}
         <div className="hidden md:flex items-center space-x-3 lg:space-x-5">
           <Link to="/hospitals">
-            <button className="bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold py-2.5 px-6 rounded-lg transition-colors shadow-sm">
+            <button className="bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold py-2.5 px-6 rounded-lg hover:-translate-y-0.5 hover:shadow-lg transition-all duration-300 shadow-sm">
               Book Appointment
             </button>
           </Link>
@@ -48,7 +48,7 @@ export default function PatientNavbar() {
 
         {/* Mobile Menu Button */}
         <div className="md:hidden flex items-center gap-4">
-          <Link to="/hospitals" className="bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold py-2 px-4 rounded-lg transition-colors">
+          <Link to="/hospitals" className="bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold py-2 px-4 rounded-lg hover:-translate-y-0.5 hover:shadow-lg transition-all duration-300">
             Book
           </Link>
           <button 

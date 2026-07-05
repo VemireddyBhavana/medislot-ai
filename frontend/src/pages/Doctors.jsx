@@ -157,7 +157,7 @@ export default function Doctors() {
                     </div>
                     <button 
                       onClick={() => handleBookDoctor(doctor._id)}
-                      className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 px-6 rounded-lg transition-colors text-sm shadow-sm"
+                      className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 px-6 rounded-lg hover:-translate-y-0.5 hover:shadow-lg transition-all duration-300 text-sm shadow-sm"
                     >
                       Book Slot
                     </button>

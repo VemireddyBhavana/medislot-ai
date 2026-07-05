@@ -224,7 +224,7 @@ export default function BookAppointment() {
 
           <button 
             onClick={() => navigate('/home')}
-            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-xl transition-colors shadow-sm text-lg"
+            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-xl hover:-translate-y-0.5 hover:shadow-lg transition-all duration-300 shadow-sm text-lg"
           >
             Return to Home
           </button>
@@ -450,7 +450,7 @@ export default function BookAppointment() {
               ) : <div></div>}
               
               {step < 3 ? (
-                <button onClick={handleNext} className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-xl transition-colors flex items-center gap-2 shadow-sm">
+                <button onClick={handleNext} className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-xl hover:-translate-y-0.5 hover:shadow-lg transition-all duration-300 flex items-center gap-2 shadow-sm">
                   Next Step <ArrowRight size={18} />
                 </button>
               ) : (

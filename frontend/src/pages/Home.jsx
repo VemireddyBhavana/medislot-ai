@@ -51,7 +51,7 @@ export default function Home() {
             <motion.div 
               className="lg:col-span-5 z-10 pr-0 lg:pr-8"
               initial="hidden"
-              animate="visible"
+              whileInView="visible" viewport={{ once: true, amount: 0.1 }}
               variants={fadeInUp}
             >
               <div className="inline-flex items-center gap-2 bg-blue-50 text-blue-600 px-3 py-1.5 rounded-full text-xs font-bold mb-6 border border-blue-100">
@@ -67,7 +67,7 @@ export default function Home() {
               </p>
               <div className="flex flex-col sm:flex-row gap-4 mb-12">
                 <Link to="/hospitals">
-                  <button className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white font-bold py-3.5 px-8 rounded-lg transition-colors shadow-sm text-sm">
+                  <button className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white font-bold py-3.5 px-8 rounded-lg hover:-translate-y-0.5 hover:shadow-lg transition-all duration-300 shadow-sm text-sm">
                     Book Appointment
                   </button>
                 </Link>
@@ -172,7 +172,7 @@ export default function Home() {
                   
                   <button 
                     onClick={handleBookSlot}
-                    className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 rounded-lg transition-colors text-sm mb-5 shadow-sm"
+                    className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 rounded-lg hover:-translate-y-0.5 hover:shadow-lg transition-all duration-300 text-sm mb-5 shadow-sm"
                   >
                     Find Best Slots
                   </button>

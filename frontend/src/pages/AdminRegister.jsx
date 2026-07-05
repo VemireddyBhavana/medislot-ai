@@ -130,7 +130,7 @@ export default function AdminRegister() {
               <button 
                 type="submit" 
                 disabled={loading} 
-                className="w-full py-2.5 bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-medium rounded-lg transition-colors text-sm shadow-sm shadow-blue-600/20 disabled:opacity-70 disabled:cursor-not-allowed mt-2"
+                className="w-full py-2.5 bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-medium rounded-lg hover:-translate-y-0.5 hover:shadow-lg transition-all duration-300 text-sm shadow-sm shadow-blue-600/20 disabled:opacity-70 disabled:cursor-not-allowed mt-2"
               >
                 {loading ? 'Creating Account...' : 'Register'}
               </button>

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Outlet, useLocation, Navigate } from 'react-router-dom';
+import { motion } from 'framer-motion';
 import AdminSidebar from '../components/navigation/AdminSidebar';
 import AdminTopbar from '../components/navigation/AdminTopbar';
 
@@ -31,7 +32,15 @@ export default function AdminLayout() {
       <main className="flex-1 flex flex-col h-screen overflow-hidden">
         <AdminTopbar title={getPageTitle()} onMenuClick={() => setSidebarOpen(!sidebarOpen)} />
         <div className="flex-1 overflow-y-auto p-4 sm:p-8">
-          <Outlet />
+          <motion.div
+            initial={{ opacity: 0, scale: 0.98 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.98 }}
+            transition={{ duration: 0.3, ease: "easeOut" }}
+            className="h-full"
+          >
+            <Outlet />
+          </motion.div>
         </div>
       </main>
     </div>

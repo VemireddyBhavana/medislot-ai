@@ -160,7 +160,7 @@ export default function HospitalDetails() {
 
               <button 
                 onClick={handleBookHere}
-                className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3.5 rounded-xl transition-colors shadow-sm flex justify-center items-center gap-2"
+                className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3.5 rounded-xl hover:-translate-y-0.5 hover:shadow-lg transition-all duration-300 shadow-sm flex justify-center items-center gap-2"
               >
                 <Calendar size={18} /> Book Appointment Here
               </button>
