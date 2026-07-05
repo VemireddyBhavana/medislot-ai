@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { MessageSquare, X, Send, User, Bot, Loader2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { GoogleGenerativeAI } from '@google/generative-ai';
 
 export default function Chatbot() {
   const [isOpen, setIsOpen] = useState(false);
@@ -19,54 +20,36 @@ export default function Chatbot() {
     scrollToBottom();
   }, [messages, isTyping]);
 
-  const generateResponse = (message) => {
-    const lowerMessage = message.toLowerCase();
-    
-    // Greeting
-    if (lowerMessage.match(/\b(hi|hello|hey|greetings|morning|afternoon)\b/)) {
-      return "Hello! I am MediBot. How can I assist you with your healthcare needs today?";
-    }
-    
-    // Booking
-    if (lowerMessage.match(/\b(book|appointment|schedule|consultation|see a doctor)\b/)) {
-      return "To book an appointment, please click the 'Book Appointment' button on the navigation bar, or visit our 'Doctors' page to choose a specific specialist. Our smart scheduling system will find the best slot for you!";
-    }
-    
-    // Hours & Time
-    if (lowerMessage.match(/\b(hours|time|open|close|when are you open)\b/)) {
-      return "Our clinic is open Monday through Saturday, from 8:00 AM to 8:00 PM. We are closed on Sundays except for emergencies.";
-    }
-    
-    // Location
-    if (lowerMessage.match(/\b(location|where|address|find you)\b/)) {
-      return "We are conveniently located at 123 Healthcare Ave, Medical District, NY 10001. You can find a map on our Contact page.";
-    }
-    
-    // Insurance & Payment
-    if (lowerMessage.match(/\b(insurance|medicare|pay|cost|fee)\b/)) {
-      return "We accept most major insurance plans including Medicare, BlueCross, and UnitedHealthcare. Consultation fees vary by specialist (typically $600-$1000). Please check individual doctor profiles for specific fees.";
-    }
-    
-    // Specialties
-    if (lowerMessage.match(/\b(specialist|cardiologist|dermatologist|neurologist|doctor)\b/)) {
-      return "We have top-tier specialists across Cardiology, Dermatology, Neurology, Pediatrics, Orthopedics, and Gynecology. Head over to our 'Doctors' page to view their profiles and book a session.";
-    }
-    
-    // Emergency
-    if (lowerMessage.match(/\b(emergency|urgent|pain|help me right now)\b/)) {
-      return "If this is a medical emergency, please call 911 immediately or proceed to the nearest emergency room. For urgent but non-life-threatening clinic matters, call us at (555) 123-4567.";
+  // AI Integration
+  const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
+  const genAI = apiKey ? new GoogleGenerativeAI(apiKey) : null;
+
+  const generateResponse = async (message) => {
+    if (!genAI) {
+      return "⚠️ **Configuration Needed:** Please add your VITE_GEMINI_API_KEY to the frontend .env file to enable the AI Symptom Checker. Without it, I can only provide limited help.\n\nTo book an appointment, please click 'Book Appointment' in the navigation bar.";
     }
 
-    // Thank you
-    if (lowerMessage.match(/\b(thank you|thanks|bye|goodbye)\b/)) {
-      return "You're very welcome! Let me know if you need anything else. Have a healthy day!";
+    try {
+      // Use gemini-1.5-flash for fast responses
+      const model = genAI.getGenerativeModel({ 
+        model: "gemini-1.5-flash",
+        systemInstruction: "You are MediBot, an expert AI symptom checker and clinic assistant for MediSlot AI. Your job is to listen to the user's symptoms, provide a *very brief* and polite analysis, and strongly recommend which specific medical specialist (e.g., Cardiologist, Dermatologist, General Physician) they should book an appointment with. Always remind them to click the 'Book Appointment' button on the navigation bar to schedule a visit. Do not provide dangerous medical diagnoses, but give helpful triage advice. Keep responses under 3 sentences and professional."
+      });
+
+      // Construct simple chat history context
+      const chatHistory = messages.slice(1).map(m => `${m.sender === 'user' ? 'User' : 'MediBot'}: ${m.text}`).join('\n');
+      const prompt = `Chat History:\n${chatHistory}\n\nUser: ${message}\nMediBot:`;
+
+      const result = await model.generateContent(prompt);
+      const response = await result.response;
+      return response.text();
+    } catch (error) {
+      console.error("Gemini API Error:", error);
+      return "I'm currently experiencing technical difficulties connecting to my AI brain. Please try again later, or contact our clinic directly at (555) 123-4567.";
     }
-    
-    // Fallback
-    return "I'm still learning, so I might not have the answer to that. For specific medical advice or complex questions, please contact our clinic directly at (555) 123-4567 or email support@medislot.ai.";
   };
 
-  const handleSendMessage = (e) => {
+  const handleSendMessage = async (e) => {
     e.preventDefault();
     if (!inputValue.trim()) return;
 
@@ -75,16 +58,16 @@ export default function Chatbot() {
     setInputValue('');
     setIsTyping(true);
 
-    // Simulate network delay for bot response
-    setTimeout(() => {
-      const botResponse = {
-        id: Date.now() + 1,
-        text: generateResponse(userMessage.text),
-        sender: 'bot'
-      };
-      setMessages(prev => [...prev, botResponse]);
-      setIsTyping(false);
-    }, 1000);
+    // Get response from Gemini API
+    const responseText = await generateResponse(userMessage.text);
+    
+    const botResponse = {
+      id: Date.now() + 1,
+      text: responseText,
+      sender: 'bot'
+    };
+    setMessages(prev => [...prev, botResponse]);
+    setIsTyping(false);
   };
 
   return (
