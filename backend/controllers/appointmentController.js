@@ -102,8 +102,19 @@ exports.bookAppointment = async (req, res) => {
     }
     
     if (patientPhone) {
-      const waMessage = `*Appointment Confirmed!*\n\nHi ${patientName},\nYour appointment with ${doctor.name} is scheduled for *${appointmentDate}* at *${appointmentTime}*.\n\nThank you, MediSlot AI.`;
-      sendWhatsApp(patientPhone, waMessage);
+      const waMessage = `*Appointment Confirmed!*\n\nHi ${patientName},\nYour appointment with ${doctor.name} at ${hospitalName} is scheduled for *${appointmentDate}* at *${appointmentTime}*.\n\nThank you, MediSlot AI.`;
+      
+      // Send async without blocking response
+      sendWhatsApp(patientPhone, waMessage).then(async (result) => {
+        if (result && result.success) {
+          whatsappNotification.status = 'sent';
+        } else {
+          whatsappNotification.status = 'failed';
+          whatsappNotification.message += ` [ERROR: ${result.error}]`;
+        }
+        whatsappNotification.sentAt = new Date();
+        await whatsappNotification.save();
+      }).catch(err => console.error("WhatsApp async error:", err));
     }
 
     res.status(201).json({ 
