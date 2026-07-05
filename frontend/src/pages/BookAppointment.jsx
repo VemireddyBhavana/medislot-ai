@@ -263,7 +263,7 @@ export default function BookAppointment() {
                     animate="center"
                     exit="exit"
                     transition={{ duration: 0.3 }}
-                    className="absolute inset-0 w-full"
+                    className="w-full"
                   >
                     <h2 className="text-2xl font-bold text-slate-900 mb-6">Choose a Specialist</h2>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-h-[350px] overflow-y-auto pr-2 custom-scrollbar">
@@ -295,7 +295,7 @@ export default function BookAppointment() {
                     animate="center"
                     exit="exit"
                     transition={{ duration: 0.3 }}
-                    className="absolute inset-0 w-full"
+                    className="w-full"
                   >
                     <h2 className="text-2xl font-bold text-slate-900 mb-6">Select Date & Time</h2>
                     
@@ -339,7 +339,7 @@ export default function BookAppointment() {
                     animate="center"
                     exit="exit"
                     transition={{ duration: 0.3 }}
-                    className="absolute inset-0 w-full"
+                    className="w-full"
                   >
                     <h2 className="text-2xl font-bold text-slate-900 mb-6">Patient Details</h2>
                     
@@ -352,7 +352,7 @@ export default function BookAppointment() {
                         </div>
                       </div>
                       
-                      <div className="grid grid-cols-2 gap-4">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
                           <label className="block text-xs font-bold text-slate-700 mb-1.5">Phone Number *</label>
                           <input type="text" name="patientPhone" value={patientDetails.patientPhone} onChange={handleInputChange} className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white text-sm" placeholder="+1 234 567 8900" required />
