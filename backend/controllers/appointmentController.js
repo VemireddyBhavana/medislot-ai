@@ -1,6 +1,7 @@
 const Appointment = require('../models/Appointment');
 const Notification = require('../models/Notification');
 const Doctor = require('../models/Doctor');
+const Hospital = require('../models/Hospital');
 const { sendEmail, sendWhatsApp } = require('../utils/notificationService');
 
 // @route   POST /api/appointments/book
@@ -25,9 +26,15 @@ exports.bookAppointment = async (req, res) => {
       });
     }
 
-    // Get doctor info for denormalization
+    // Get doctor and hospital info for denormalization
     const doctor = await Doctor.findById(doctorId);
     if (!doctor) return res.status(404).json({ message: 'Doctor not found' });
+    
+    let hospitalName = 'Unknown Hospital';
+    if (req.body.hospitalId) {
+      const hospital = await Hospital.findById(req.body.hospitalId);
+      if (hospital) hospitalName = hospital.name;
+    }
 
     // 2. Create Appointment
     const newAppointment = new Appointment({
@@ -36,6 +43,7 @@ exports.bookAppointment = async (req, res) => {
       patientPhone,
       doctorId,
       hospitalId: req.body.hospitalId,
+      hospitalName,
       doctorName: doctor.name,
       specialization: doctor.specialization,
       appointmentDate,
@@ -48,14 +56,24 @@ exports.bookAppointment = async (req, res) => {
 
     const savedAppointment = await newAppointment.save();
 
-    // 3. Create a Notification/Reminder entry automatically in DB
-    const notification = new Notification({
+    // 3. Create Notification Log entries automatically in DB
+    const emailNotification = new Notification({
       appointmentId: savedAppointment._id,
-      message: `New appointment booked for ${patientName} with ${doctor.name} on ${appointmentDate} at ${appointmentTime}.`,
-      type: 'reminder',
+      patientEmail: patientEmail,
+      type: 'email',
+      message: `Your appointment with ${doctor.name} at ${hospitalName} is confirmed for ${appointmentDate} at ${appointmentTime}.`,
       status: 'pending'
     });
-    await notification.save();
+    await emailNotification.save();
+
+    const whatsappNotification = new Notification({
+      appointmentId: savedAppointment._id,
+      patientPhone: patientPhone,
+      type: 'whatsapp',
+      message: `Hello ${patientName}, your appointment at ${hospitalName} is confirmed for ${appointmentDate} at ${appointmentTime}.`,
+      status: 'pending'
+    });
+    await whatsappNotification.save();
 
     // 4. Send External Notifications (WhatsApp & Email)
     const emailSubject = 'Booking Confirmation - MediSlot AI';

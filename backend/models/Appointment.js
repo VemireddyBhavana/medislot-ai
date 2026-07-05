@@ -6,6 +6,7 @@ const appointmentSchema = new mongoose.Schema({
   patientPhone: { type: String, required: true },
   doctorId: { type: mongoose.Schema.Types.ObjectId, ref: 'Doctor', required: true },
   hospitalId: { type: mongoose.Schema.Types.ObjectId, ref: 'Hospital' },
+  hospitalName: { type: String },
   doctorName: { type: String, required: true },
   specialization: { type: String, required: true },
   appointmentDate: { type: String, required: true }, // YYYY-MM-DD
