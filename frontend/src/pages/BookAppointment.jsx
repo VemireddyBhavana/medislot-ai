@@ -25,8 +25,8 @@ export default function BookAppointment() {
   
   // Form State
   const [selectedDoctorId, setSelectedDoctorId] = useState(initialState.doctorId || '');
-  const [selectedDate, setSelectedDate] = useState(initialState.preferredDate || '');
-  const [selectedTime, setSelectedTime] = useState('');
+  const [selectedDate, setSelectedDate] = useState(initialState.appointmentDate || initialState.preferredDate || '');
+  const [selectedTime, setSelectedTime] = useState(initialState.appointmentTime || '');
   const [patientDetails, setPatientDetails] = useState({
     patientName: '',
     patientPhone: '',

@@ -47,7 +47,17 @@ export const getHospitalById = async (id) => {
     const response = await api.get(`/hospitals/${id}`);
     return response.data;
   } catch (error) {
-    console.error('Error fetching hospital:', error);
+    console.error('Error fetching hospital by ID:', error);
+    throw error;
+  }
+};
+
+export const getRecommendedSlots = async (hospitalId, date) => {
+  try {
+    const response = await api.get(`/hospitals/${hospitalId}/recommended-slots?date=${date}`);
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching recommended slots:', error);
     throw error;
   }
 };

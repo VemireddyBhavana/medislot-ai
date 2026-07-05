@@ -3,7 +3,7 @@ import { useParams, Link, useNavigate } from 'react-router-dom';
 import { MapPin, Phone, Mail, Star, CheckCircle, ArrowLeft, Calendar, Activity } from 'lucide-react';
 import { motion } from 'framer-motion';
 import PageContainer from '../components/layout/PageContainer';
-import { getHospitalById } from '../api/services';
+import { getHospitalById, getRecommendedSlots } from '../api/services';
 
 export default function HospitalDetails() {
   const { id } = useParams();
@@ -11,6 +11,8 @@ export default function HospitalDetails() {
   const [hospital, setHospital] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [recommendedSlots, setRecommendedSlots] = useState([]);
+  const [loadingSlots, setLoadingSlots] = useState(false);
 
   useEffect(() => {
     const fetchHospital = async () => {
@@ -26,6 +28,22 @@ export default function HospitalDetails() {
       }
     };
     fetchHospital();
+  }, [id]);
+
+  useEffect(() => {
+    const fetchSlots = async () => {
+      try {
+        setLoadingSlots(true);
+        const today = new Date().toISOString().split('T')[0];
+        const slots = await getRecommendedSlots(id, today);
+        setRecommendedSlots(slots);
+      } catch (err) {
+        console.error("Failed to fetch slots", err);
+      } finally {
+        setLoadingSlots(false);
+      }
+    };
+    fetchSlots();
   }, [id]);
 
   const handleBookHere = () => {
@@ -119,8 +137,45 @@ export default function HospitalDetails() {
           </div>
 
           {/* Sidebar Booking Widget */}
-          <div className="lg:col-span-1">
-            <div className="bg-white p-6 rounded-2xl shadow-lg border border-slate-200 sticky top-24">
+          <div className="lg:col-span-1 space-y-6">
+            
+            {/* Smart Recommendations Card */}
+            <div className="bg-gradient-to-br from-blue-50 to-indigo-50 p-6 rounded-2xl shadow-lg border border-blue-100 sticky top-24">
+              <h3 className="text-lg font-bold text-slate-900 mb-2 flex items-center gap-2">
+                <Star className="text-amber-400 fill-amber-400" size={20} /> Smart Slots
+              </h3>
+              <p className="text-xs text-slate-500 mb-4">AI optimized for lowest wait times today.</p>
+              
+              {loadingSlots ? (
+                <div className="flex justify-center items-center py-4">
+                  <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600"></div>
+                </div>
+              ) : recommendedSlots.length > 0 ? (
+                <div className="space-y-3">
+                  {recommendedSlots.map((slot, index) => (
+                    <div 
+                      key={index} 
+                      onClick={() => navigate('/book', { state: { hospitalId: id, hospitalName: hospital.name, doctorId: slot.doctorId, doctorName: slot.doctorName, appointmentDate: slot.date, appointmentTime: slot.time } })}
+                      className="bg-white p-3 rounded-xl border border-blue-100 hover:border-blue-400 hover:shadow-md cursor-pointer transition-all hover:-translate-y-1 group"
+                    >
+                      <div className="flex justify-between items-start mb-1">
+                        <span className="font-bold text-slate-900 text-sm">{slot.time}</span>
+                        <span className="text-[10px] font-bold uppercase bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full">
+                          {slot.reason}
+                        </span>
+                      </div>
+                      <div className="text-xs font-medium text-slate-600">
+                        Dr. {slot.doctorName}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <p className="text-sm text-slate-500 italic">No smart slots available today.</p>
+              )}
+            </div>
+
+            <div className="bg-white p-6 rounded-2xl shadow-lg border border-slate-200">
               <h3 className="text-lg font-bold text-slate-900 mb-6">Contact & Booking</h3>
               
               <div className="space-y-4 mb-8">
