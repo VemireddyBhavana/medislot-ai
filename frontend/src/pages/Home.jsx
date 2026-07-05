@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { 
@@ -13,13 +13,28 @@ export default function Home() {
   const navigate = useNavigate();
   const [specialization, setSpecialization] = useState('');
   const [preferredDate, setPreferredDate] = useState('');
+  
+  // Ask for location on mount
+  useEffect(() => {
+    if ("geolocation" in navigator) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          sessionStorage.setItem('userLat', position.coords.latitude);
+          sessionStorage.setItem('userLng', position.coords.longitude);
+        },
+        (error) => {
+          console.warn("Location access denied or failed", error);
+        }
+      );
+    }
+  }, []);
 
   const handleBookSlot = () => {
-    navigate('/book', { state: { specialization, preferredDate } });
+    navigate('/hospitals', { state: { specialization, preferredDate } });
   };
 
   const handleBookDoctor = (doctorName) => {
-    navigate('/book', { state: { doctorName } });
+    navigate('/hospitals', { state: { doctorName } });
   };
 
   const fadeInUp = {
@@ -64,7 +79,7 @@ export default function Home() {
                 MediSlot AI optimizes clinic scheduling, reduces no-shows, balances doctor workload, and helps you get the right care at the right time.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 mb-12">
-                <Link to="/book">
+                <Link to="/hospitals">
                   <button className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white font-bold py-3.5 px-8 rounded-lg transition-colors shadow-sm text-sm">
                     Book Appointment
                   </button>

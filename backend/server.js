@@ -12,6 +12,8 @@ const adminRoutes = require('./routes/adminRoutes');
 const doctorRoutes = require('./routes/doctorRoutes');
 const appointmentRoutes = require('./routes/appointmentRoutes');
 const notificationRoutes = require('./routes/notificationRoutes');
+const hospitalRoutes = require('./routes/hospitalRoutes');
+const seedHospitals = require('./utils/seedHospitals');
 
 app.use(cors());
 app.use(express.json());
@@ -21,6 +23,7 @@ app.use('/api/admin', adminRoutes);
 app.use('/api/doctors', doctorRoutes);
 app.use('/api/appointments', appointmentRoutes);
 app.use('/api/notifications', notificationRoutes);
+app.use('/api/hospitals', hospitalRoutes);
 
 // Base Route
 app.get('/', (req, res) => {
@@ -30,4 +33,7 @@ app.get('/', (req, res) => {
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
+  
+  // Seed hospitals if they don't exist
+  seedHospitals();
 });

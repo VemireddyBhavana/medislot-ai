@@ -29,3 +29,25 @@ export const bookAppointment = async (appointmentData) => {
     throw error;
   }
 };
+
+export const getNearbyHospitals = async (lat, lng) => {
+  try {
+    // If no lat/lng provided, backend will return all hospitals
+    const query = (lat && lng) ? `?lat=${lat}&lng=${lng}` : '';
+    const response = await api.get(`/hospitals/nearby${query}`);
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching nearby hospitals:', error);
+    throw error;
+  }
+};
+
+export const getHospitalById = async (id) => {
+  try {
+    const response = await api.get(`/hospitals/${id}`);
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching hospital:', error);
+    throw error;
+  }
+};

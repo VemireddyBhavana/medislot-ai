@@ -1,6 +1,7 @@
 const Appointment = require('../models/Appointment');
 const Notification = require('../models/Notification');
 const Doctor = require('../models/Doctor');
+const { sendEmail, sendWhatsApp } = require('../utils/notificationService');
 
 // @route   POST /api/appointments/book
 exports.bookAppointment = async (req, res) => {
@@ -34,6 +35,7 @@ exports.bookAppointment = async (req, res) => {
       patientEmail,
       patientPhone,
       doctorId,
+      hospitalId: req.body.hospitalId,
       doctorName: doctor.name,
       specialization: doctor.specialization,
       appointmentDate,
@@ -46,7 +48,7 @@ exports.bookAppointment = async (req, res) => {
 
     const savedAppointment = await newAppointment.save();
 
-    // 3. Create a Notification/Reminder entry automatically
+    // 3. Create a Notification/Reminder entry automatically in DB
     const notification = new Notification({
       appointmentId: savedAppointment._id,
       message: `New appointment booked for ${patientName} with ${doctor.name} on ${appointmentDate} at ${appointmentTime}.`,
@@ -54,6 +56,37 @@ exports.bookAppointment = async (req, res) => {
       status: 'pending'
     });
     await notification.save();
+
+    // 4. Send External Notifications (WhatsApp & Email)
+    const emailSubject = 'Booking Confirmation - MediSlot AI';
+    const emailHtml = `
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; border: 1px solid #e2e8f0; border-radius: 10px; overflow: hidden;">
+        <div style="background-color: #2563eb; color: white; padding: 20px; text-align: center;">
+          <h2 style="margin: 0;">Appointment Confirmed!</h2>
+        </div>
+        <div style="padding: 20px;">
+          <p>Dear <strong>${patientName}</strong>,</p>
+          <p>Your appointment has been successfully booked. Here are the details:</p>
+          <ul style="background-color: #f8fafc; padding: 15px 15px 15px 35px; border-radius: 8px;">
+            <li><strong>Doctor:</strong> ${doctor.name} (${doctor.specialization})</li>
+            <li><strong>Date:</strong> ${appointmentDate}</li>
+            <li><strong>Time:</strong> ${appointmentTime}</li>
+          </ul>
+          <p>Please arrive 10 minutes before your scheduled time.</p>
+          <p>Thank you for choosing MediSlot AI!</p>
+        </div>
+      </div>
+    `;
+    
+    // Send email async without blocking the response
+    if (patientEmail && patientEmail !== 'no-email@provided.com') {
+      sendEmail(patientEmail, emailSubject, emailHtml);
+    }
+    
+    if (patientPhone) {
+      const waMessage = `*Appointment Confirmed!*\n\nHi ${patientName},\nYour appointment with ${doctor.name} is scheduled for *${appointmentDate}* at *${appointmentTime}*.\n\nThank you, MediSlot AI.`;
+      sendWhatsApp(patientPhone, waMessage);
+    }
 
     res.status(201).json({ 
       message: 'Appointment booked successfully', 

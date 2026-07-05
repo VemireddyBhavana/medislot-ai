@@ -13,6 +13,12 @@ export default function BookAppointment() {
   
   const [doctors, setDoctors] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (!initialState.hospitalId) {
+      navigate('/hospitals');
+    }
+  }, [initialState.hospitalId, navigate]);
   
   const [step, setStep] = useState(1);
   const [direction, setDirection] = useState(1);
@@ -122,6 +128,7 @@ export default function BookAppointment() {
     try {
       const appointmentData = {
         doctorId: selectedDoctorId,
+        hospitalId: initialState.hospitalId,
         appointmentDate: selectedDate,
         appointmentTime: selectedTime,
         patientName: patientDetails.patientName,
@@ -189,6 +196,9 @@ export default function BookAppointment() {
     <div className="min-h-screen bg-slate-50 pb-20">
       <div className="bg-blue-600 pt-16 pb-24 text-white text-center">
         <PageContainer>
+          <div className="inline-flex items-center gap-2 bg-blue-500 text-white px-3 py-1.5 rounded-full text-xs font-bold mb-6 border border-blue-400">
+            {initialState.hospitalName || "Partner Hospital"}
+          </div>
           <h1 className="text-4xl font-bold mb-4">Book Your Appointment</h1>
           <p className="text-blue-100 max-w-2xl mx-auto">
             Complete the steps below to secure your consultation slot.

@@ -18,6 +18,8 @@ import PrivacyPolicy from './pages/PrivacyPolicy';
 import TermsOfService from './pages/TermsOfService';
 import CookiePolicy from './pages/CookiePolicy';
 import PatientRights from './pages/PatientRights';
+import Hospitals from './pages/Hospitals';
+import HospitalDetails from './pages/HospitalDetails';
 import ScrollToTop from './components/ScrollToTop';
 
 function App() {
@@ -34,6 +36,8 @@ function App() {
           <Route path="/services" element={<Services />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/doctors" element={<Doctors />} />
+          <Route path="/hospitals" element={<Hospitals />} />
+          <Route path="/hospital/:id" element={<HospitalDetails />} />
           <Route path="/book" element={<BookAppointment />} />
           <Route path="/confirmation" element={<Confirmation />} />
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
