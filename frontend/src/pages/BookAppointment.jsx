@@ -134,7 +134,8 @@ export default function BookAppointment() {
         patientName: patientDetails.patientName,
         patientPhone: patientDetails.patientPhone,
         patientEmail: patientDetails.patientEmail || 'no-email@provided.com',
-        notes: patientDetails.reasonForVisit
+        notes: patientDetails.reasonForVisit,
+        priority: patientDetails.priority || 'routine'
       };
       
       await bookAppointment(appointmentData);
@@ -365,7 +366,8 @@ export default function BookAppointment() {
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
                           <label className="block text-xs font-bold text-slate-700 mb-1.5">Phone Number *</label>
-                          <input type="text" name="patientPhone" value={patientDetails.patientPhone} onChange={handleInputChange} className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white text-sm" placeholder="+1 234 567 8900" required />
+                          <input type="text" name="patientPhone" value={patientDetails.patientPhone} onChange={handleInputChange} className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white text-sm mb-1" placeholder="+1 234 567 8900" required />
+                          <p className="text-[10px] text-slate-500 font-medium">Used for secure WhatsApp booking confirmation.</p>
                         </div>
                         <div>
                           <label className="block text-xs font-bold text-slate-700 mb-1.5">Age</label>
@@ -375,12 +377,23 @@ export default function BookAppointment() {
 
                       <div>
                         <label className="block text-xs font-bold text-slate-700 mb-1.5">Email Address</label>
-                        <input type="email" name="patientEmail" value={patientDetails.patientEmail} onChange={handleInputChange} className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white text-sm" placeholder="john@example.com" />
+                        <input type="email" name="patientEmail" value={patientDetails.patientEmail} onChange={handleInputChange} className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white text-sm mb-1" placeholder="john@example.com" />
+                        <p className="text-[10px] text-slate-500 font-medium">Used to send your electronic receipt and appointment reminder.</p>
                       </div>
 
-                      <div>
-                        <label className="block text-xs font-bold text-slate-700 mb-1.5">Reason for Visit</label>
-                        <textarea name="reasonForVisit" value={patientDetails.reasonForVisit} onChange={handleInputChange} rows="3" className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white text-sm resize-none" placeholder="Briefly describe your symptoms or reason for visit..."></textarea>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                          <label className="block text-xs font-bold text-slate-700 mb-1.5">Urgency / Priority</label>
+                          <select name="priority" value={patientDetails.priority || 'routine'} onChange={handleInputChange} className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white text-sm">
+                            <option value="routine">Routine Checkup</option>
+                            <option value="follow-up">Follow-up</option>
+                            <option value="urgent">Urgent</option>
+                          </select>
+                        </div>
+                        <div>
+                          <label className="block text-xs font-bold text-slate-700 mb-1.5">Reason for Visit</label>
+                          <input type="text" name="reasonForVisit" value={patientDetails.reasonForVisit} onChange={handleInputChange} className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white text-sm" placeholder="Briefly describe your symptoms..."/>
+                        </div>
                       </div>
                     </div>
                   </motion.div>
