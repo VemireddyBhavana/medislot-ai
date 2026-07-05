@@ -148,9 +148,9 @@ export default function AdminLogin() {
                   <span className="text-xs font-medium text-slate-500 group-hover:text-slate-700 transition-colors">Remember Me</span>
                 </label>
                 
-                <a href="#" className="text-xs font-medium text-blue-600 hover:text-blue-700 hover:underline transition-colors">
+                <Link to="/admin/forgot-password" className="text-xs font-medium text-blue-600 hover:text-blue-700 hover:underline transition-colors">
                   Forgot Password?
-                </a>
+                </Link>
               </div>
 
               <button 
