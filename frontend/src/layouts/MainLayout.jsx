@@ -2,6 +2,7 @@ import React from 'react';
 import { Outlet } from 'react-router-dom';
 import PatientNavbar from '../components/navigation/PatientNavbar';
 import Footer from '../components/layout/Footer';
+import Chatbot from '../components/chat/Chatbot';
 
 export default function MainLayout() {
   return (
@@ -13,6 +14,7 @@ export default function MainLayout() {
       </main>
 
       <Footer />
+      <Chatbot />
     </div>
   );
 }

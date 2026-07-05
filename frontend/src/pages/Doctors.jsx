@@ -1,33 +1,23 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Search } from 'lucide-react';
+import { Search, Filter, Star, Clock, MapPin, Calendar as CalendarIcon } from 'lucide-react';
 import PageContainer from '../components/layout/PageContainer';
-import SectionHeader from '../components/layout/SectionHeader';
-import DoctorCard from '../components/display/DoctorCard';
-import EmptyState from '../components/layout/EmptyState';
-import TextInput from '../components/forms/TextInput';
-import SelectInput from '../components/forms/SelectInput';
-import LoadingState from '../components/layout/LoadingState';
-import { doctorAPI } from '../services/api';
+import { getDoctors } from '../api/services';
 
 export default function Doctors() {
   const navigate = useNavigate();
   const [doctors, setDoctors] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
-  const [selectedSpecialization, setSelectedSpecialization] = useState('');
+  const [selectedSpecialization, setSelectedSpecialization] = useState('All');
 
   useEffect(() => {
     const fetchDoctors = async () => {
       try {
-        setLoading(true);
-        const data = await doctorAPI.getAll();
+        const data = await getDoctors();
         setDoctors(data);
-        setError(null);
-      } catch (err) {
-        console.error('Failed to fetch doctors:', err);
-        setError('Failed to load doctors. Please try again later.');
+      } catch (error) {
+        console.error("Failed to load doctors", error);
       } finally {
         setLoading(false);
       }
@@ -35,75 +25,136 @@ export default function Doctors() {
     fetchDoctors();
   }, []);
 
-  const specializations = [...new Set(doctors.map(d => d.specialization))].map(spec => ({
-    value: spec, label: spec
-  }));
+  const specializations = ['All', ...new Set(doctors.map(d => d.specialization))];
 
-  const filteredDoctors = doctors.filter(doctor => {
-    const matchesSearch = doctor.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
-                          doctor.specialization.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesSpec = selectedSpecialization ? doctor.specialization === selectedSpecialization : true;
+  const filteredDoctors = doctors.filter(doc => {
+    const matchesSearch = doc.name.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesSpec = selectedSpecialization === 'All' || doc.specialization === selectedSpecialization;
     return matchesSearch && matchesSpec;
   });
 
-  const handleBook = (doctor) => {
-    navigate('/book', { state: { doctorId: doctor._id } });
+  const handleBookDoctor = (doctorId) => {
+    navigate('/book', { state: { doctorId } });
   };
 
   return (
-    <PageContainer>
-      <SectionHeader 
-        title="Our Doctors" 
-        description="Choose from our experienced and specialist doctors"
-      />
-
-      <div className="bg-white p-4 rounded-xl shadow-sm border border-gray-100 mb-8 flex flex-col md:flex-row gap-4">
-        <div className="flex-1 relative">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
-          <TextInput 
-            id="search"
-            placeholder="Search doctors by name..." 
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full"
-            style={{ paddingLeft: '2.5rem' }}
-          />
-        </div>
-        <div className="w-full md:w-64">
-          <SelectInput 
-            id="specialization"
-            value={selectedSpecialization}
-            onChange={(e) => setSelectedSpecialization(e.target.value)}
-            options={specializations}
-            className="w-full"
-          />
-        </div>
-        {selectedSpecialization && (
-          <button 
-            onClick={() => setSelectedSpecialization('')}
-            className="text-sm text-blue-600 font-medium whitespace-nowrap hover:underline px-2"
-          >
-            Clear Filter
-          </button>
-        )}
+    <div className="min-h-screen bg-slate-50 pb-20">
+      {/* Header */}
+      <div className="bg-blue-600 pt-16 pb-24 text-white text-center">
+        <PageContainer>
+          <h1 className="text-4xl font-bold mb-4">Find Your Doctor</h1>
+          <p className="text-blue-100 max-w-2xl mx-auto">
+            Browse our extensive list of highly qualified specialists and book your appointment instantly.
+          </p>
+        </PageContainer>
       </div>
 
-      {loading ? (
-        <LoadingState text="Loading doctors..." />
-      ) : error ? (
-        <EmptyState title="Error" description={error} />
-      ) : filteredDoctors.length > 0 ? (
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredDoctors.map(doctor => (
-            <DoctorCard key={doctor._id} doctor={doctor} onBook={handleBook} />
-          ))}
+      {/* Search and Filter Container */}
+      <PageContainer>
+        <div className="-mt-12 bg-white rounded-2xl shadow-lg p-6 mb-12 border border-slate-100">
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-4">
+            
+            <div className="md:col-span-8 relative">
+              <Search className="absolute left-4 top-3.5 text-slate-400" size={20} />
+              <input 
+                type="text" 
+                placeholder="Search doctors by name..." 
+                className="w-full pl-12 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+            </div>
+            
+            <div className="md:col-span-4 relative">
+              <Filter className="absolute left-4 top-3.5 text-slate-400" size={20} />
+              <select 
+                className="w-full pl-12 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all appearance-none cursor-pointer text-slate-700"
+                value={selectedSpecialization}
+                onChange={(e) => setSelectedSpecialization(e.target.value)}
+              >
+                {specializations.map(spec => (
+                  <option key={spec} value={spec}>{spec}</option>
+                ))}
+              </select>
+            </div>
+            
+          </div>
         </div>
-      ) : (
-        <EmptyState 
-          title="No doctors found" 
-          description="We couldn't find any doctors matching your current search or filters. Try adjusting your criteria."
-        />
-      )}
-    </PageContainer>
+
+        {/* Doctors Grid */}
+        {loading ? (
+          <div className="flex justify-center items-center py-20">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {filteredDoctors.map(doctor => (
+              <div key={doctor._id} className="bg-white rounded-2xl border border-slate-100 overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col group">
+                <div className="p-6 pb-0 flex gap-5">
+                  <img 
+                    src={doctor.image || `https://ui-avatars.com/api/?name=${encodeURIComponent(doctor.name)}&background=eff6ff&color=2563eb`} 
+                    alt={doctor.name} 
+                    className="w-20 h-20 rounded-2xl object-cover shadow-sm group-hover:scale-105 transition-transform duration-300"
+                  />
+                  <div>
+                    <h3 className="font-bold text-slate-900 text-lg mb-1">{doctor.name}</h3>
+                    <p className="text-blue-600 font-medium text-sm mb-2">{doctor.specialization}</p>
+                    <div className="flex items-center gap-1">
+                      <Star className="text-yellow-400 fill-yellow-400" size={14} />
+                      <span className="text-sm font-bold text-slate-700">4.9</span>
+                      <span className="text-xs text-slate-400">(120 Reviews)</span>
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="p-6 pt-4 flex-1 flex flex-col">
+                  <div className="space-y-3 mb-6 flex-1">
+                    <div className="flex items-center gap-3 text-sm text-slate-600">
+                      <div className="w-8 h-8 rounded-full bg-slate-50 flex items-center justify-center shrink-0">
+                        <Clock size={16} className="text-slate-400" />
+                      </div>
+                      <span>{doctor.experienceYears} Years Experience</span>
+                    </div>
+                    <div className="flex items-center gap-3 text-sm text-slate-600">
+                      <div className="w-8 h-8 rounded-full bg-slate-50 flex items-center justify-center shrink-0">
+                        <MapPin size={16} className="text-slate-400" />
+                      </div>
+                      <span>Room {doctor.roomNumber}</span>
+                    </div>
+                    <div className="flex items-center gap-3 text-sm text-slate-600">
+                      <div className="w-8 h-8 rounded-full bg-slate-50 flex items-center justify-center shrink-0">
+                        <CalendarIcon size={16} className="text-slate-400" />
+                      </div>
+                      <span>Available: {doctor.availableDays?.slice(0,3).join(', ')}...</span>
+                    </div>
+                  </div>
+                  
+                  <div className="pt-4 border-t border-slate-100 flex items-center justify-between">
+                    <div>
+                      <p className="text-xs text-slate-500 font-medium">Consultation Fee</p>
+                      <p className="text-lg font-bold text-slate-900">${doctor.fee}</p>
+                    </div>
+                    <button 
+                      onClick={() => handleBookDoctor(doctor._id)}
+                      className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 px-6 rounded-lg transition-colors text-sm shadow-sm"
+                    >
+                      Book Slot
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {!loading && filteredDoctors.length === 0 && (
+          <div className="text-center py-20">
+            <h3 className="text-xl font-bold text-slate-800 mb-2">No doctors found</h3>
+            <p className="text-slate-500">Try adjusting your search or filters.</p>
+          </div>
+        )}
+
+      </PageContainer>
+    </div>
   );
 }
