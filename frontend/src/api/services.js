@@ -61,3 +61,13 @@ export const getRecommendedSlots = async (hospitalId, date) => {
     throw error;
   }
 };
+
+export const getWorkloadSummary = async (hospitalId, date) => {
+  try {
+    const response = await api.get(`/hospitals/${hospitalId}/workload-summary?date=${date}`);
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching workload summary:', error);
+    throw error;
+  }
+};

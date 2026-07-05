@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   Users, Calendar, CalendarCheck, CheckCircle2, 
   XCircle, AlertTriangle, Clock, TrendingUp, Activity, Bell
@@ -59,6 +59,18 @@ export default function AdminDashboard() {
   // Get actionable alerts (Urgent and High Risk)
   const urgentApts = appointments.filter(a => a.priority === 'urgent' && a.status === 'booked').slice(0, 2);
   const highRiskApts = appointments.filter(a => a.noShowRisk === 'high' && a.status === 'booked').slice(0, 2);
+
+  // Compute Workload Distribution
+  const todaysAptsList = appointments.filter(a => a.appointmentDate === today && (a.status === 'booked' || a.status === 'completed'));
+  let workloads = doctors.map(doc => {
+    return {
+      name: doc.name,
+      count: todaysAptsList.filter(a => a.doctorId === doc._id).length
+    };
+  });
+  workloads.sort((a, b) => a.count - b.count);
+  const leastLoaded = workloads.length > 0 ? workloads[0] : null;
+  const mostLoaded = workloads.length > 0 ? workloads[workloads.length - 1] : null;
 
   return (
     <div className="space-y-8 pb-12">
@@ -157,6 +169,37 @@ export default function AdminDashboard() {
                   <div className="flex justify-between items-center"><span className="flex items-center gap-2"><span className="w-3 h-3 rounded-full bg-orange-400"></span>No-Show/Cancel</span><span className="font-medium">{noShowCancelPct}%</span></div>
                 </div>
              </div>
+          </CardWrapper>
+
+          {/* Doctor Workload Distribution */}
+          <CardWrapper>
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-lg font-bold text-gray-900 flex items-center gap-2">
+                <Activity size={18} className="text-blue-500" /> Workload Balancing
+              </h3>
+            </div>
+            
+            <div className="space-y-4">
+              {mostLoaded && (
+                <div className="bg-orange-50 border border-orange-100 p-3 rounded-lg">
+                  <div className="flex justify-between items-center mb-1">
+                    <span className="text-xs font-bold text-orange-800 uppercase tracking-wider">Overloaded</span>
+                    <span className="text-xs font-bold text-orange-600 bg-white px-2 rounded-full">{mostLoaded.count} appts</span>
+                  </div>
+                  <p className="text-sm font-medium text-orange-900">Dr. {mostLoaded.name}</p>
+                </div>
+              )}
+              {leastLoaded && (
+                <div className="bg-emerald-50 border border-emerald-100 p-3 rounded-lg">
+                  <div className="flex justify-between items-center mb-1">
+                    <span className="text-xs font-bold text-emerald-800 uppercase tracking-wider">Recommended</span>
+                    <span className="text-xs font-bold text-emerald-600 bg-white px-2 rounded-full">{leastLoaded.count} appts</span>
+                  </div>
+                  <p className="text-sm font-medium text-emerald-900">Dr. {leastLoaded.name}</p>
+                  <p className="text-[10px] text-emerald-700 mt-1">Route patients here for faster care</p>
+                </div>
+              )}
+            </div>
           </CardWrapper>
 
           {/* Actionable Alerts List */}

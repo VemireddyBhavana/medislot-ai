@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { User, Calendar, Clock, ClipboardList, CheckCircle, ArrowLeft, ArrowRight, UserCheck } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import PageContainer from '../components/layout/PageContainer';
-import { getDoctors, bookAppointment } from '../api/services';
+import { getDoctors, bookAppointment, getWorkloadSummary } from '../api/services';
 
 export default function BookAppointment() {
   const location = useLocation();
@@ -13,6 +13,7 @@ export default function BookAppointment() {
   
   const [doctors, setDoctors] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [recommendedDoctorId, setRecommendedDoctorId] = useState(null);
 
   useEffect(() => {
     if (!initialState.hospitalId) {
@@ -54,6 +55,18 @@ export default function BookAppointment() {
         console.error("Failed to load doctors", error);
       } finally {
         setLoading(false);
+      }
+
+      if (initialState.hospitalId) {
+        try {
+          const today = new Date().toISOString().split('T')[0];
+          const workload = await getWorkloadSummary(initialState.hospitalId, today);
+          if (workload && workload.recommended) {
+            setRecommendedDoctorId(workload.recommended.doctorId);
+          }
+        } catch (err) {
+          console.error("Failed to load workload summary", err);
+        }
       }
     };
     fetchDoctors();
@@ -329,6 +342,11 @@ export default function BookAppointment() {
                             <p className="font-bold text-slate-900">{doctor.name}</p>
                             <p className="text-xs text-slate-500">{doctor.specialization}</p>
                             <p className="text-xs font-bold text-blue-600 mt-1">${doctor.fee}</p>
+                            {recommendedDoctorId === doctor._id && (
+                              <div className="mt-2 inline-flex items-center gap-1 bg-emerald-100 text-emerald-700 text-[10px] font-bold px-2 py-0.5 rounded-full">
+                                Fastest Availability
+                              </div>
+                            )}
                           </div>
                         </div>
                       ))}

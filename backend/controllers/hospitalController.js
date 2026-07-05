@@ -266,3 +266,54 @@ exports.getRecommendedSlots = async (req, res) => {
     res.status(500).json({ message: 'Server Error', error: error.message });
   }
 };
+
+// @desc    Get workload summary for doctors in a hospital
+// @route   GET /api/hospitals/:id/workload-summary
+// @access  Public
+exports.getWorkloadSummary = async (req, res) => {
+  try {
+    const hospitalId = req.params.id;
+    const date = req.query.date || new Date().toISOString().split('T')[0];
+
+    // For hackathon simplicity, treat all active doctors
+    const doctors = await Doctor.find({ isActive: true });
+    
+    // Fetch all appointments for the date
+    const appointments = await Appointment.find({ appointmentDate: date, status: { $in: ['booked', 'completed'] } });
+
+    let workloads = doctors.map(doc => {
+      const docAppointments = appointments.filter(a => a.doctorId.toString() === doc._id.toString());
+      return {
+        doctorId: doc._id,
+        doctorName: doc.name,
+        specialization: doc.specialization,
+        bookingCount: docAppointments.length
+      };
+    });
+
+    if (workloads.length === 0) {
+      return res.json({ recommended: null, overloaded: null, workloads: [] });
+    }
+
+    // Sort by booking count (ascending)
+    workloads.sort((a, b) => a.bookingCount - b.bookingCount);
+
+    const recommended = workloads[0]; // Least loaded
+    const overloaded = workloads[workloads.length - 1]; // Most loaded
+
+    res.json({
+      recommended: {
+        ...recommended,
+        reason: "Lower appointment load"
+      },
+      overloaded: {
+        ...overloaded,
+        reason: "High appointment volume"
+      },
+      workloads
+    });
+  } catch (error) {
+    console.error('Error fetching workload summary:', error);
+    res.status(500).json({ message: 'Server Error', error: error.message });
+  }
+};
