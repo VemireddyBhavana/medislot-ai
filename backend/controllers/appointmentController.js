@@ -4,6 +4,52 @@ const Doctor = require('../models/Doctor');
 const Hospital = require('../models/Hospital');
 const { sendEmail, sendWhatsApp } = require('../utils/notificationService');
 
+const calculateNoShowRisk = (appointmentDate, appointmentTime, priority) => {
+  let score = 0;
+  let reasons = [];
+  
+  // 1. Date factor
+  const daysDiff = Math.ceil((new Date(appointmentDate) - new Date()) / (1000 * 60 * 60 * 24));
+  if (daysDiff > 7) {
+    score += 3;
+    reasons.push("Far-future booking date (>7 days out)");
+  } else if (daysDiff > 3) {
+    score += 1;
+    reasons.push("Moderate booking buffer (>3 days out)");
+  }
+  
+  // 2. Time factor
+  const hour = parseInt(appointmentTime.split(':')[0]);
+  const isMorning = hour < 9;
+  const isEvening = hour >= 18;
+  if (isMorning) {
+    score += 2;
+    reasons.push("Early morning slot");
+  } else if (isEvening) {
+    score += 2;
+    reasons.push("Late evening slot");
+  }
+  
+  // 3. Priority factor
+  if (priority === 'urgent') {
+    score -= 2;
+    reasons.push("High priority urgency discount");
+  } else if (priority === 'routine') {
+    score += 1;
+    reasons.push("Routine appointment buffer");
+  }
+  
+  let risk = 'low';
+  if (score >= 3) risk = 'high';
+  else if (score >= 1) risk = 'medium';
+  
+  let reason = reasons.length > 0 
+    ? `AI Risk Factors: ${reasons.join(', ')}.` 
+    : 'AI Risk Factors: Stable booking metrics.';
+    
+  return { risk, reason };
+};
+
 // @route   POST /api/appointments/book
 exports.bookAppointment = async (req, res) => {
   try {
@@ -36,6 +82,9 @@ exports.bookAppointment = async (req, res) => {
       if (hospital) hospitalName = hospital.name;
     }
 
+    // Calculate dynamic No-Show risk score
+    const riskAnalysis = calculateNoShowRisk(appointmentDate, appointmentTime, priority || 'routine');
+
     // 2. Create Appointment
     const newAppointment = new Appointment({
       patientName,
@@ -50,7 +99,8 @@ exports.bookAppointment = async (req, res) => {
       appointmentTime,
       notes,
       priority: priority || 'routine',
-      noShowRisk: noShowRisk || 'low',
+      noShowRisk: riskAnalysis.risk,
+      noShowReason: riskAnalysis.reason,
       status: 'booked'
     });
 

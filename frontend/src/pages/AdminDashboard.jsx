@@ -223,16 +223,21 @@ export default function AdminDashboard() {
                  </div>
                ))}
 
-               {highRiskApts.map((apt, idx) => (
-                 <div key={`risk-${idx}`} className="pt-4">
-                   <div className="flex justify-between items-start mb-1">
-                     <p className="text-sm font-semibold text-gray-900">High Risk of No-Show</p>
-                     <NoShowRiskBadge risk="high" />
-                   </div>
-                   <p className="text-xs text-gray-500">Patient: {apt.patientName} • {apt.appointmentTime} Slot</p>
-                   <button className="mt-2 text-xs font-medium text-blue-600 hover:underline">Send Manual SMS</button>
-                 </div>
-               ))}
+                {highRiskApts.map((apt, idx) => (
+                  <div key={`risk-${idx}`} className="pt-4">
+                    <div className="flex justify-between items-start mb-1">
+                      <p className="text-sm font-semibold text-gray-900">High Risk of No-Show</p>
+                      <NoShowRiskBadge risk="high" />
+                    </div>
+                    <p className="text-xs text-gray-500">Patient: {apt.patientName} • {apt.appointmentTime} Slot</p>
+                    {apt.noShowReason && (
+                      <p className="text-[11px] text-orange-700 bg-orange-50/50 border border-orange-100/50 rounded-lg p-2 mt-1.5 font-medium italic">
+                        {apt.noShowReason}
+                      </p>
+                    )}
+                    <button className="mt-2 text-xs font-medium text-blue-600 hover:underline">Send Manual SMS</button>
+                  </div>
+                ))}
                
                {urgentApts.length === 0 && highRiskApts.length === 0 && (
                  <div className="pt-2 text-sm text-gray-500 text-center">No immediate actions required.</div>

@@ -143,6 +143,14 @@ export default function AdminAppointments() {
                       <div className="flex flex-col items-center gap-1.5">
                         <PriorityBadge priority={apt.priority} />
                         <NoShowRiskBadge risk={apt.noShowRisk} />
+                        {apt.noShowReason && (
+                          <span 
+                            className="text-[10px] text-slate-500 italic max-w-[120px] truncate block cursor-help" 
+                            title={apt.noShowReason}
+                          >
+                            {apt.noShowReason}
+                          </span>
+                        )}
                       </div>
                     </td>
                     <td className="px-6 py-4">

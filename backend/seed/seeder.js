@@ -116,6 +116,13 @@ const generateAppointments = (doctors) => {
     if (i % 4 === 0) priority = 'follow-up';
     if (i % 7 === 0) priority = 'urgent';
 
+    let reason = 'AI Risk Factors: Stable booking metrics.';
+    if (risk === 'high') {
+      reason = 'AI Risk Factors: Far-future booking date (>7 days out), Early morning slot.';
+    } else if (risk === 'medium') {
+      reason = 'AI Risk Factors: Moderate booking buffer (>3 days out).';
+    }
+
     appointments.push({
       patientName,
       patientEmail: `${patientName.split(' ')[0].toLowerCase()}@example.com`,
@@ -127,6 +134,7 @@ const generateAppointments = (doctors) => {
       appointmentTime: `${10 + (i % 5)}:00`, // times between 10:00 and 15:00
       status,
       noShowRisk: risk,
+      noShowReason: reason,
       priority,
       notes: priority === 'urgent' ? 'Patient reported severe symptoms' : 'Regular checkup'
     });

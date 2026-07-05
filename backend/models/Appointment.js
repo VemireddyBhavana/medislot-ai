@@ -21,6 +21,10 @@ const appointmentSchema = new mongoose.Schema({
     enum: ['low', 'medium', 'high'],
     default: 'low'
   },
+  noShowReason: {
+    type: String,
+    default: 'AI Prediction: Stable booking profile.'
+  },
   priority: {
     type: String,
     enum: ['routine', 'follow-up', 'urgent'],
