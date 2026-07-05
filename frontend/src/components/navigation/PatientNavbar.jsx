@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { HeartPulse } from 'lucide-react';
+import { HeartPulse, Phone } from 'lucide-react';
 import PrimaryButton from '../ui/PrimaryButton';
 
 export default function PatientNavbar() {
@@ -29,10 +29,19 @@ export default function PatientNavbar() {
           <Link to="/contact" className={`text-sm font-bold transition-colors ${isActive('/contact') ? 'text-gray-900' : 'text-gray-500 hover:text-gray-900'}`}>Contact</Link>
         </nav>
         
-        {/* Action Button */}
-        <div className="flex items-center">
+        {/* Actions */}
+        <div className="flex items-center space-x-3 lg:space-x-5">
+          <div className="hidden lg:flex items-center text-gray-700 space-x-1.5 mr-2">
+            <Phone size={18} className="text-blue-600" />
+            <span className="text-sm font-semibold">+91 98765 43210</span>
+          </div>
+          <Link to="/login">
+            <button className="hidden sm:block px-5 py-2 text-sm font-bold text-gray-700 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+              Login
+            </button>
+          </Link>
           <Link to="/doctors">
-            <button className="bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold py-2.5 px-6 rounded-lg transition-colors shadow-sm">
+            <button className="bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold py-2.5 px-6 rounded-lg transition-colors shadow-sm">
               Book Appointment
             </button>
           </Link>
