@@ -125,12 +125,12 @@ export default function Home() {
               <div className="w-full flex flex-col lg:flex-row items-center justify-end gap-6 lg:gap-8">
                 
                 {/* Doctor Image Group */}
-                <div className="relative w-full lg:w-1/2 max-w-[400px]">
+                <div className="relative w-full lg:w-1/2 max-w-[400px] rounded-[32px] overflow-hidden border border-slate-100 dark:border-slate-800 shadow-sm bg-white keep-light shrink-0">
                   <div className="absolute bottom-4 right-0 left-4 h-[80%] bg-blue-50/50 rounded-[40px] -z-10"></div>
                   <img 
                     src="https://res.cloudinary.com/de8opipom/image/upload/v1783233370/WhatsApp_Image_2026-07-05_at_12.03.42_PM_yh82us.jpg" 
                     alt="Doctor" 
-                    className="relative z-10 w-full h-auto object-contain"
+                    className="relative z-10 w-full h-auto object-contain mix-blend-multiply"
                   />
                 </div>
                 
