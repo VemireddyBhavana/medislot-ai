@@ -25,9 +25,13 @@ app.use('/api/appointments', appointmentRoutes);
 app.use('/api/notifications', notificationRoutes);
 app.use('/api/hospitals', hospitalRoutes);
 
-// Base Route
-app.get('/', (req, res) => {
-  res.send('MediSlot AI API is running...');
+const path = require('path');
+// Serve frontend static assets
+app.use(express.static(path.join(__dirname, '../frontend/dist')));
+
+// Serve index.html for frontend client routing
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../frontend/dist/index.html'));
 });
 
 const PORT = process.env.PORT || 5000;
