@@ -30,7 +30,7 @@ const path = require('path');
 app.use(express.static(path.join(__dirname, '../frontend/dist')));
 
 // Serve index.html for frontend client routing
-app.get('*', (req, res) => {
+app.get('*splat', (req, res) => {
   res.sendFile(path.join(__dirname, '../frontend/dist/index.html'));
 });
 
