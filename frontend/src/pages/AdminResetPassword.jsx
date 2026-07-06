@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { Lock, CheckCircle } from 'lucide-react';
-import axios from 'axios';
+import { adminAPI } from '../services/api';
 
 export default function AdminResetPassword() {
   const [password, setPassword] = useState('');
@@ -42,7 +42,7 @@ export default function AdminResetPassword() {
     setLoading(true);
 
     try {
-      await axios.post('http://localhost:5000/api/admin/reset-password', { 
+      await adminAPI.resetPassword({ 
         email, 
         newPassword: password 
       });

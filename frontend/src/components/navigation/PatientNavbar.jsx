@@ -48,7 +48,7 @@ export default function PatientNavbar() {
 
         {/* Mobile Menu Button */}
         <div className="md:hidden flex items-center gap-4">
-          <Link to="/hospitals" className="bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold py-2 px-4 rounded-lg hover:-translate-y-0.5 hover:shadow-lg transition-all duration-300">
+          <Link to="/hospitals" onClick={() => setIsMobileMenuOpen(false)} className="bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold py-2 px-4 rounded-lg hover:-translate-y-0.5 hover:shadow-lg transition-all duration-300">
             Book
           </Link>
           <button 

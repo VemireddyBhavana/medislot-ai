@@ -16,6 +16,14 @@ export const adminAPI = {
     const response = await api.post('/admin/register', data);
     return response.data;
   },
+  forgotPassword: async (data) => {
+    const response = await api.post('/admin/forgot-password', data);
+    return response.data;
+  },
+  resetPassword: async (data) => {
+    const response = await api.post('/admin/reset-password', data);
+    return response.data;
+  },
 };
 
 export const doctorAPI = {

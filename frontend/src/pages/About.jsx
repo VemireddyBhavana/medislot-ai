@@ -1,13 +1,37 @@
 import React from 'react';
 import PageContainer from '../components/layout/PageContainer';
 import { HeartPulse, Target, Users, ShieldCheck } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 export default function About() {
+  const fadeInUp = {
+    hidden: { opacity: 0, y: 30 },
+    visible: { 
+      opacity: 1, 
+      y: 0,
+      transition: { duration: 0.5, ease: "easeOut" }
+    }
+  };
+
+  const staggerContainer = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.15
+      }
+    }
+  };
+
   return (
-    <div className="flex flex-col min-h-screen bg-white font-sans">
-      
+    <motion.div 
+      initial="hidden"
+      animate="visible"
+      variants={staggerContainer}
+      className="flex flex-col min-h-screen bg-white font-sans"
+    >
       {/* Hero Section */}
-      <section className="relative pt-16 pb-20 bg-blue-50/50">
+      <motion.section variants={fadeInUp} className="relative pt-16 pb-20 bg-blue-50/50">
         <PageContainer>
           <div className="max-w-3xl mx-auto text-center">
             <div className="inline-flex items-center justify-center w-16 h-16 bg-blue-100 text-blue-600 rounded-2xl mb-6">
@@ -22,10 +46,10 @@ export default function About() {
             </p>
           </div>
         </PageContainer>
-      </section>
+      </motion.section>
 
       {/* Our Mission & Vision */}
-      <section className="py-20 relative z-20">
+      <motion.section variants={fadeInUp} className="py-20 relative z-20">
         <PageContainer>
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <div className="relative">
@@ -69,10 +93,10 @@ export default function About() {
             </div>
           </div>
         </PageContainer>
-      </section>
+      </motion.section>
 
       {/* Core Values */}
-      <section className="py-20 bg-slate-50 border-t border-slate-100">
+      <motion.section variants={fadeInUp} className="py-20 bg-slate-50 border-t border-slate-100">
         <PageContainer>
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold text-slate-900 mb-4">Our Core Values</h2>
@@ -105,8 +129,8 @@ export default function About() {
             </div>
           </div>
         </PageContainer>
-      </section>
+      </motion.section>
 
-    </div>
+    </motion.div>
   );
 }

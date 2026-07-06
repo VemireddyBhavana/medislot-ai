@@ -15,6 +15,19 @@ export default function AdminNotifications() {
   const [error, setError] = useState(null);
   const [typeFilter, setTypeFilter] = useState('all');
 
+  const getAppointmentRef = (notif) => {
+    if (notif.patientName) return `Patient: ${notif.patientName}`;
+    const aptId = notif.appointmentId;
+    if (!aptId) return 'Ref: N/A';
+    if (typeof aptId === 'object' && aptId._id) {
+      return `Ref: ${aptId._id.substring(0, 8).toUpperCase()}`;
+    }
+    if (typeof aptId === 'string') {
+      return `Ref: ${aptId.substring(0, 8).toUpperCase()}`;
+    }
+    return 'Ref: N/A';
+  };
+
   useEffect(() => {
     fetchNotifications();
   }, []);
@@ -124,7 +137,7 @@ export default function AdminNotifications() {
                             </span>
                           </p>
                           <p className="text-xs font-medium text-slate-500 mt-0.5">
-                            {notif.patientName ? `Patient: ${notif.patientName}` : `Ref: ${notif.appointmentId?._id ? notif.appointmentId._id.substring(0,8).toUpperCase() : notif.appointmentId}`}
+                            {getAppointmentRef(notif)}
                           </p>
                         </div>
                       </div>

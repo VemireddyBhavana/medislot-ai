@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { MapPin, Navigation, Star, Phone, Activity, Clock } from 'lucide-react';
 import { motion } from 'framer-motion';
 import PageContainer from '../components/layout/PageContainer';
@@ -7,6 +7,7 @@ import { getNearbyHospitals } from '../api/services';
 
 export default function Hospitals() {
   const navigate = useNavigate();
+  const location = useLocation();
   const [hospitals, setHospitals] = useState([]);
   const [loading, setLoading] = useState(true);
   const [locationError, setLocationError] = useState(null);
@@ -171,13 +172,13 @@ export default function Hospitals() {
                       </div>
 
                       <div className="flex gap-2 mt-auto pt-4 border-t border-slate-100">
-                        <Link to={`/hospital/${hospital.id || hospital._id}`} className="flex-1">
+                        <Link to={`/hospital/${hospital.id || hospital._id}`} state={location.state} className="flex-1">
                           <button className="w-full bg-white hover:bg-slate-50 text-slate-700 font-bold py-2.5 rounded-lg transition-colors text-sm border border-slate-200 shadow-sm">
                             View Details
                           </button>
                         </Link>
                         <button 
-                          onClick={() => navigate('/book', { state: { hospitalId: hospital.id || hospital._id, hospitalName: hospital.name } })}
+                          onClick={() => navigate('/book', { state: { hospitalId: hospital.id || hospital._id, hospitalName: hospital.name, ...(location.state || {}) } })}
                           className="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 rounded-lg hover:-translate-y-0.5 hover:shadow-lg transition-all duration-300 text-sm shadow-sm"
                         >
                           Book Appointment

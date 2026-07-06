@@ -17,9 +17,9 @@ export default function BookAppointment() {
 
   useEffect(() => {
     if (!initialState.hospitalId) {
-      navigate('/hospitals');
+      navigate('/hospitals', { state: initialState });
     }
-  }, [initialState.hospitalId, navigate]);
+  }, [initialState.hospitalId, navigate, initialState]);
   
   const [step, setStep] = useState(1);
   const [direction, setDirection] = useState(1);
@@ -268,35 +268,35 @@ export default function BookAppointment() {
         <div className="-mt-12 bg-white rounded-2xl shadow-lg border border-slate-100 overflow-hidden max-w-4xl mx-auto flex flex-col md:flex-row min-h-[500px]">
           
           {/* Progress Sidebar */}
-          <div className="bg-slate-900 text-white p-8 md:w-1/3 flex flex-col justify-between">
+          <div className="bg-slate-900 text-white p-6 md:p-8 md:w-1/3 flex flex-col justify-between">
             <div>
-              <h3 className="text-xl font-bold mb-8">Booking Progress</h3>
-              <div className="space-y-8">
-                <div className={`flex items-center gap-4 ${step >= 1 ? 'text-blue-400' : 'text-slate-500'}`}>
-                  <div className={`w-10 h-10 rounded-full flex items-center justify-center border-2 ${step >= 1 ? 'border-blue-400 bg-blue-400/20' : 'border-slate-700'}`}>
-                    <User size={18} />
+              <h3 className="text-lg md:text-xl font-bold mb-4 md:mb-8 text-center md:text-left">Booking Progress</h3>
+              <div className="flex flex-row md:flex-col justify-between md:justify-start md:space-y-8 space-y-0 gap-2 md:gap-0">
+                <div className={`flex flex-col md:flex-row items-center gap-1.5 md:gap-4 ${step >= 1 ? 'text-blue-400' : 'text-slate-500'}`}>
+                  <div className={`w-8 h-8 md:w-10 md:h-10 rounded-full flex items-center justify-center border-2 ${step >= 1 ? 'border-blue-400 bg-blue-400/20' : 'border-slate-700'}`}>
+                    <User size={16} className="md:w-[18px] md:h-[18px]" />
                   </div>
-                  <span className="font-medium">1. Select Doctor</span>
+                  <span className="font-medium text-[11px] md:text-base text-center md:text-left">1. Select Doctor</span>
                 </div>
                 
-                <div className={`flex items-center gap-4 ${step >= 2 ? 'text-blue-400' : 'text-slate-500'}`}>
-                  <div className={`w-10 h-10 rounded-full flex items-center justify-center border-2 ${step >= 2 ? 'border-blue-400 bg-blue-400/20' : 'border-slate-700'}`}>
-                    <Calendar size={18} />
+                <div className={`flex flex-col md:flex-row items-center gap-1.5 md:gap-4 ${step >= 2 ? 'text-blue-400' : 'text-slate-500'}`}>
+                  <div className={`w-8 h-8 md:w-10 md:h-10 rounded-full flex items-center justify-center border-2 ${step >= 2 ? 'border-blue-400 bg-blue-400/20' : 'border-slate-700'}`}>
+                    <Calendar size={16} className="md:w-[18px] md:h-[18px]" />
                   </div>
-                  <span className="font-medium">2. Date & Time</span>
+                  <span className="font-medium text-[11px] md:text-base text-center md:text-left">2. Date & Time</span>
                 </div>
                 
-                <div className={`flex items-center gap-4 ${step >= 3 ? 'text-blue-400' : 'text-slate-500'}`}>
-                  <div className={`w-10 h-10 rounded-full flex items-center justify-center border-2 ${step >= 3 ? 'border-blue-400 bg-blue-400/20' : 'border-slate-700'}`}>
-                    <ClipboardList size={18} />
+                <div className={`flex flex-col md:flex-row items-center gap-1.5 md:gap-4 ${step >= 3 ? 'text-blue-400' : 'text-slate-500'}`}>
+                  <div className={`w-8 h-8 md:w-10 md:h-10 rounded-full flex items-center justify-center border-2 ${step >= 3 ? 'border-blue-400 bg-blue-400/20' : 'border-slate-700'}`}>
+                    <ClipboardList size={16} className="md:w-[18px] md:h-[18px]" />
                   </div>
-                  <span className="font-medium">3. Patient Details</span>
+                  <span className="font-medium text-[11px] md:text-base text-center md:text-left">3. Patient Details</span>
                 </div>
               </div>
             </div>
             
             {selectedDoctor && (
-              <div className="mt-12 p-5 bg-slate-800 rounded-xl border border-slate-700">
+              <div className="hidden md:block mt-12 p-5 bg-slate-800 rounded-xl border border-slate-700">
                 <p className="text-xs text-slate-400 uppercase tracking-wider mb-2 font-bold">Selected Doctor</p>
                 <div className="flex items-center gap-3">
                   <img src={selectedDoctor.image || `https://ui-avatars.com/api/?name=${encodeURIComponent(selectedDoctor.name)}&background=eff6ff&color=2563eb`} alt={selectedDoctor.name} className="w-12 h-12 rounded-full object-cover" />
@@ -386,7 +386,7 @@ export default function BookAppointment() {
                     {selectedDate && (
                       <div>
                         <label className="block text-sm font-bold text-slate-700 mb-3">Available Time Slots</label>
-                        <div className="grid grid-cols-3 gap-3">
+                        <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                           {timeSlots.map(time => (
                             <div 
                               key={time}

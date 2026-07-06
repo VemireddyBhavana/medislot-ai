@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Outlet, useLocation, Navigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import AdminSidebar from '../components/navigation/AdminSidebar';
 import AdminTopbar from '../components/navigation/AdminTopbar';
 
@@ -22,11 +22,37 @@ export default function AdminLayout() {
   };
 
   return (
-    <div className="min-h-screen flex bg-slate-50 overflow-hidden">
+    <div className="min-h-screen flex bg-slate-50 overflow-hidden relative">
       {/* Sidebar - Desktop */}
       <div className="hidden md:block">
         <AdminSidebar />
       </div>
+
+      {/* Sidebar - Mobile/Tablet Drawer */}
+      <AnimatePresence>
+        {sidebarOpen && (
+          <div className="fixed inset-0 z-40 md:hidden flex">
+            {/* Backdrop */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 0.4 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setSidebarOpen(false)}
+              className="fixed inset-0 bg-slate-900"
+            />
+            {/* Sidebar content */}
+            <motion.div
+              initial={{ x: '-100%' }}
+              animate={{ x: 0 }}
+              exit={{ x: '-100%' }}
+              transition={{ type: 'spring', damping: 25, stiffness: 220 }}
+              className="relative z-50 flex flex-col w-64 h-full bg-slate-900 text-white shadow-2xl"
+            >
+              <AdminSidebar closeSidebar={() => setSidebarOpen(false)} />
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
 
       {/* Main Content */}
       <main className="flex-1 flex flex-col h-screen overflow-hidden">

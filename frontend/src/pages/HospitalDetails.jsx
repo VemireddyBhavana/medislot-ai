@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, Link, useNavigate } from 'react-router-dom';
+import { useParams, Link, useNavigate, useLocation } from 'react-router-dom';
 import { MapPin, Phone, Mail, Star, CheckCircle, ArrowLeft, Calendar, Activity } from 'lucide-react';
 import { motion } from 'framer-motion';
 import PageContainer from '../components/layout/PageContainer';
@@ -8,6 +8,7 @@ import { getHospitalById, getRecommendedSlots } from '../api/services';
 export default function HospitalDetails() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const location = useLocation();
   const [hospital, setHospital] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -47,7 +48,7 @@ export default function HospitalDetails() {
   }, [id]);
 
   const handleBookHere = () => {
-    navigate('/book', { state: { hospitalId: hospital.id || hospital._id, hospitalName: hospital.name } });
+    navigate('/book', { state: { hospitalId: hospital.id || hospital._id, hospitalName: hospital.name, ...(location.state || {}) } });
   };
 
   if (loading) {
@@ -155,7 +156,7 @@ export default function HospitalDetails() {
                   {recommendedSlots.map((slot, index) => (
                     <div 
                       key={index} 
-                      onClick={() => navigate('/book', { state: { hospitalId: id, hospitalName: hospital.name, doctorId: slot.doctorId, doctorName: slot.doctorName, appointmentDate: slot.date, appointmentTime: slot.time } })}
+                      onClick={() => navigate('/book', { state: { hospitalId: id, hospitalName: hospital.name, doctorId: slot.doctorId, doctorName: slot.doctorName, appointmentDate: slot.date, appointmentTime: slot.time, ...(location.state || {}) } })}
                       className="bg-white p-3 rounded-xl border border-blue-100 hover:border-blue-400 hover:shadow-md cursor-pointer transition-all hover:-translate-y-1 group"
                     >
                       <div className="flex justify-between items-start mb-1">

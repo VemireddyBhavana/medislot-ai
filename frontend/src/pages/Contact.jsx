@@ -1,13 +1,38 @@
 import React from 'react';
 import PageContainer from '../components/layout/PageContainer';
 import { MapPin, Phone, Mail, Clock } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 export default function Contact() {
+  const fadeInUp = {
+    hidden: { opacity: 0, y: 30 },
+    visible: { 
+      opacity: 1, 
+      y: 0,
+      transition: { duration: 0.5, ease: "easeOut" }
+    }
+  };
+
+  const staggerContainer = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.15
+      }
+    }
+  };
+
   return (
-    <div className="flex flex-col min-h-screen bg-white font-sans">
+    <motion.div 
+      initial="hidden"
+      animate="visible"
+      variants={staggerContainer}
+      className="flex flex-col min-h-screen bg-white font-sans"
+    >
       
       {/* Header */}
-      <section className="relative pt-16 pb-12 bg-slate-50/50 border-b border-slate-100">
+      <motion.section variants={fadeInUp} className="relative pt-16 pb-12 bg-slate-50/50 border-b border-slate-100">
         <PageContainer>
           <div className="max-w-3xl mx-auto text-center">
             <h1 className="text-4xl sm:text-5xl font-bold text-slate-900 mb-4 tracking-tight">
@@ -18,10 +43,10 @@ export default function Contact() {
             </p>
           </div>
         </PageContainer>
-      </section>
+      </motion.section>
 
       {/* Main Content */}
-      <section className="py-16 relative z-20">
+      <motion.section variants={fadeInUp} className="py-16 relative z-20">
         <PageContainer>
           <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-start">
             
@@ -112,8 +137,8 @@ export default function Contact() {
             
           </div>
         </PageContainer>
-      </section>
+      </motion.section>
 
-    </div>
+    </motion.div>
   );
 }

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Mail, CheckCircle } from 'lucide-react';
-import axios from 'axios';
+import { adminAPI } from '../services/api';
 
 export default function AdminForgotPassword() {
   const [email, setEmail] = useState('');
@@ -15,8 +15,7 @@ export default function AdminForgotPassword() {
     setLoading(true);
 
     try {
-      // For MVP we can just use axios directly
-      await axios.post('http://localhost:5000/api/admin/forgot-password', { email });
+      await adminAPI.forgotPassword({ email });
       setSuccess(true);
     } catch (err) {
       setError(err.response?.data?.message || 'Something went wrong. Please try again.');

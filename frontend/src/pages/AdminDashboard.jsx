@@ -72,6 +72,11 @@ export default function AdminDashboard() {
   const leastLoaded = workloads.length > 0 ? workloads[0] : null;
   const mostLoaded = workloads.length > 0 ? workloads[workloads.length - 1] : null;
 
+  const formatDoctorName = (name) => {
+    if (!name) return '';
+    return name.startsWith('Dr. ') ? name : `Dr. ${name}`;
+  };
+
   return (
     <div className="space-y-8 pb-12">
       
@@ -186,7 +191,7 @@ export default function AdminDashboard() {
                     <span className="text-xs font-bold text-orange-800 uppercase tracking-wider">Overloaded</span>
                     <span className="text-xs font-bold text-orange-600 bg-white px-2 rounded-full">{mostLoaded.count} appts</span>
                   </div>
-                  <p className="text-sm font-medium text-orange-900">Dr. {mostLoaded.name}</p>
+                  <p className="text-sm font-medium text-orange-900">{formatDoctorName(mostLoaded.name)}</p>
                 </div>
               )}
               {leastLoaded && (
@@ -195,7 +200,7 @@ export default function AdminDashboard() {
                     <span className="text-xs font-bold text-emerald-800 uppercase tracking-wider">Recommended</span>
                     <span className="text-xs font-bold text-emerald-600 bg-white px-2 rounded-full">{leastLoaded.count} appts</span>
                   </div>
-                  <p className="text-sm font-medium text-emerald-900">Dr. {leastLoaded.name}</p>
+                  <p className="text-sm font-medium text-emerald-900">{formatDoctorName(leastLoaded.name)}</p>
                   <p className="text-[10px] text-emerald-700 mt-1">Route patients here for faster care</p>
                 </div>
               )}
