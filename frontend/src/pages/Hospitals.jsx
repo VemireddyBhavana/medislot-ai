@@ -15,51 +15,51 @@ export default function Hospitals() {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-  const storedLat = sessionStorage.getItem("userLat");
-  const storedLng = sessionStorage.getItem("userLng");
+    const storedLat = sessionStorage.getItem("userLat");
+    const storedLng = sessionStorage.getItem("userLng");
 
-  if (storedLat && storedLng) {
-    const lat = Number(storedLat);
-    const lng = Number(storedLng);
-
-    setUserLocation({ lat, lng });
-    fetchNearbyHospitals(lat, lng);
-  }
-}, []);
+    if (storedLat && storedLng) {
+      const lat = Number(storedLat);
+      const lng = Number(storedLng);
+      setUserLocation({ lat, lng });
+      fetchNearbyHospitals(lat, lng);
+    } else {
+      // Prompt for geolocation if not in sessionStorage
+      if ("geolocation" in navigator) {
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            const lat = position.coords.latitude;
+            const lng = position.coords.longitude;
+            sessionStorage.setItem("userLat", lat);
+            sessionStorage.setItem("userLng", lng);
+            setUserLocation({ lat, lng });
+            fetchNearbyHospitals(lat, lng);
+          },
+          (error) => {
+            console.warn("Geolocation access denied or failed:", error);
+            setLocationError("Location access not granted. Showing all hospitals.");
+            fetchNearbyHospitals(); // Fetch all
+          }
+        );
+      } else {
+        setLocationError("Geolocation is not supported by this browser. Showing all hospitals.");
+        fetchNearbyHospitals(); // Fetch all
+      }
+    }
+  }, []);
 
   const fetchNearbyHospitals = async (lat, lng) => {
-  try {
-    setLoading(true);
-
-    const response = await fetch(
-      `http://localhost:5000/api/hospitals/nearby?lat=${lat}&lng=${lng}`
-    );
-
-    const data = await response.json();
-
-    setHospitals(data.hospitals || data || []);
-  } catch (error) {
-    console.error("Error fetching nearby hospitals:", error);
-  } finally {
-    setLoading(false);
-  }
-};
-
-  const fetchHospitals = async (lat, lng) => {
     try {
       setLoading(true);
-      const data = await getNearbyHospitals(lat, lng);
-      
-      // If user provided location but no hospitals are within the 50km radius, fallback to all
-      if (lat && lng && data.length === 0) {
-        setLocationError("No hospitals found within 50km of your location. Showing all available hospitals.");
-        const allData = await getNearbyHospitals(); // Fetch all without lat/lng
-        setHospitals(allData);
-      } else {
-        setHospitals(data);
+      let url = 'http://localhost:5000/api/hospitals/nearby';
+      if (lat !== undefined && lng !== undefined && lat !== null && lng !== null) {
+        url += `?lat=${lat}&lng=${lng}`;
       }
+      const response = await fetch(url);
+      const data = await response.json();
+      setHospitals(data.hospitals || data || []);
     } catch (error) {
-      console.error("Failed to fetch hospitals", error);
+      console.error("Error fetching nearby hospitals:", error);
     } finally {
       setLoading(false);
     }

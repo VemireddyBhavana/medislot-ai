@@ -13,19 +13,21 @@ exports.getNearbyHospitals = async (req, res) => {
     if (!lat || !lng) {
       // If no location provided, just return all hospitals
       const hospitals = await Hospital.find({ isActive: true });
-      return res.json(hospitals.map(h => ({
-        id: h._id,
-        name: h.name,
-        address: h.address,
-        phone: h.phone,
-        departments: h.departments,
-        timings: h.timings,
-        rating: h.rating,
-        image: h.image,
-        latitude: h.latitude,
-        longitude: h.longitude,
-        distance: null
-      })));
+      return res.json({
+        hospitals: hospitals.map(h => ({
+          id: h._id,
+          name: h.name,
+          address: h.address,
+          phone: h.phone,
+          departments: h.departments,
+          timings: h.timings,
+          rating: h.rating,
+          image: h.image,
+          latitude: h.latitude,
+          longitude: h.longitude,
+          distance: null
+        }))
+      });
     }
 
     // Convert string to float
@@ -140,7 +142,7 @@ exports.getNearbyHospitals = async (req, res) => {
       }
     ]);
 
-    res.json(hospitals);
+    res.json({ hospitals });
   } catch (error) {
     console.error('Error fetching nearby hospitals:', error);
     res.status(500).json({ message: 'Server Error', error: error.message });
