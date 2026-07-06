@@ -1,6 +1,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 @theme {
   --color-primary: #2563eb;
   --color-primary-dark: #1d4ed8;
@@ -272,51 +274,72 @@ input:checked + .slider .clouds {
 
 /* Dark Mode Color System Overrides */
 .dark body,
-.dark .bg-white:not(.keep-light),
-.dark .bg-slate-50,
-.dark .bg-gray-50,
-.dark header,
-.dark footer,
-.dark aside,
+.dark .bg-slate-50:not([class*="dark:bg-"]),
+.dark .bg-gray-50:not([class*="dark:bg-"]),
 .dark main {
   background-color: #0f172a !important; /* Slate 900 */
   color: #f8fafc !important;
 }
 
-.dark .text-slate-900,
-.dark .text-gray-900,
-.dark .text-slate-800,
-.dark .text-gray-800,
+.dark .bg-white:not(.keep-light):not([class*="dark:bg-"]),
+.dark header:not([class*="dark:bg-"]),
+.dark footer:not([class*="dark:bg-"]),
+.dark aside:not([class*="dark:bg-"]),
+.dark .bg-slate-100:not([class*="dark:bg-"]),
+.dark .bg-gray-100:not([class*="dark:bg-"]),
+.dark .bg-slate-200:not([class*="dark:bg-"]),
+.dark .bg-gray-200:not([class*="dark:bg-"]) {
+  background-color: #1e293b !important; /* Slate 800 */
+}
+
+/* Headings and Primary Dark Text */
+.dark .text-slate-900:not([class*="dark:text-"]),
+.dark .text-gray-900:not([class*="dark:text-"]),
+.dark .text-slate-800:not([class*="dark:text-"]),
+.dark .text-gray-800:not([class*="dark:text-"]),
 .dark h1,
 .dark h2,
 .dark h3,
 .dark h4,
 .dark h5,
 .dark h6 {
-  color: #f8fafc !important;
+  color: #f8fafc !important; /* Slate 50 */
 }
 
-.dark .text-slate-500,
-.dark .text-gray-500,
-.dark .text-slate-400,
-.dark .text-gray-400,
+/* Secondary Dark Text & Form Labels */
+.dark .text-slate-700:not([class*="dark:text-"]),
+.dark .text-gray-700:not([class*="dark:text-"]),
+.dark .text-slate-600:not([class*="dark:text-"]),
+.dark .text-gray-600:not([class*="dark:text-"]),
+.dark label {
+  color: #cbd5e1 !important; /* Slate 300 */
+}
+
+/* Muted Text & Paragraphs */
+.dark .text-slate-500:not([class*="dark:text-"]),
+.dark .text-gray-500:not([class*="dark:text-"]),
+.dark .text-slate-400:not([class*="dark:text-"]),
+.dark .text-gray-400:not([class*="dark:text-"]),
 .dark p {
-  color: #94a3b8 !important;
+  color: #94a3b8 !important; /* Slate 400 */
 }
 
-.dark .border-gray-100,
-.dark .border-slate-200,
-.dark .border-slate-800\/80,
-.dark .border-slate-100,
-.dark .border-gray-200,
-.dark .divide-gray-50 > *,
-.dark .border {
-  border-color: #1e293b !important;
+/* Borders & Dividers */
+.dark .border-gray-100:not([class*="dark:border-"]),
+.dark .border-slate-200:not([class*="dark:border-"]),
+.dark .border-slate-800\/80:not([class*="dark:border-"]),
+.dark .border-slate-100:not([class*="dark:border-"]),
+.dark .border-gray-200:not([class*="dark:border-"]),
+.dark .divide-gray-50 > *:not([class*="dark:border-"]),
+.dark .border:not([class*="dark:border-"]) {
+  border-color: #334155 !important; /* Slate 700 */
 }
 
-.dark .bg-blue-50,
-.dark .bg-blue-100\/80,
-.dark .bg-blue-50\/10 {
+/* Alert Boxes & Accents */
+.dark .bg-blue-50:not([class*="dark:bg-"]),
+.dark .bg-blue-50\/50:not([class*="dark:bg-"]),
+.dark .bg-blue-100\/80:not([class*="dark:bg-"]),
+.dark .bg-blue-50\/10:not([class*="dark:bg-"]) {
   background-color: rgba(37, 99, 235, 0.15) !important;
   color: #60a5fa !important;
 }
