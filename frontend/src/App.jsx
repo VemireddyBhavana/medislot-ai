@@ -25,6 +25,7 @@ import Hospitals from './pages/Hospitals';
 import HospitalDetails from './pages/HospitalDetails';
 import ScrollToTop from './components/ScrollToTop';
 import Landing from './pages/Landing';
+import AppointmentsHistory from './pages/AppointmentsHistory';
 
 function ProtectedRoute({ children }) {
   const token = localStorage.getItem('adminToken');
@@ -52,6 +53,7 @@ function AnimatedRoutes() {
           <Route path="/hospitals" element={<Hospitals />} />
           <Route path="/hospital/:id" element={<HospitalDetails />} />
           <Route path="/book" element={<BookAppointment />} />
+          <Route path="/appointments" element={<AppointmentsHistory />} />
           <Route path="/confirmation" element={<Confirmation />} />
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
           <Route path="/terms-of-service" element={<TermsOfService />} />
