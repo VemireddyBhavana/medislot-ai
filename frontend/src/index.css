@@ -10,8 +10,9 @@
   --color-surface: #ffffff;
 }
 
+/* ── IMPORTANT: Do NOT put overflow-x:hidden on html — it breaks
+   Framer Motion's IntersectionObserver (whileInView stops working on mobile) ── */
 html {
-  overflow-x: hidden;
   scroll-behavior: smooth;
 }
 
@@ -19,8 +20,10 @@ body {
   font-family: 'Inter', sans-serif;
   @apply bg-[var(--color-background)] text-gray-800 antialiased;
   transition: background-color 0.4s ease, color 0.4s ease;
-  overflow-x: hidden;
   -webkit-tap-highlight-color: transparent;
+  /* Safe overflow containment that doesn't break scroll detection */
+  max-width: 100vw;
+  overflow-x: clip;
 }
 
 /* ── Dark mode body ── */
@@ -28,6 +31,13 @@ body {
 body.dark {
   background-color: #020617;
   color: #f1f5f9;
+}
+
+/* ── Mobile animation performance ── */
+/* Enable GPU acceleration for animated elements */
+[data-framer-motion-reduced] * {
+  animation: none !important;
+  transition: none !important;
 }
 
 /* Custom Toggle Switch for theme change */

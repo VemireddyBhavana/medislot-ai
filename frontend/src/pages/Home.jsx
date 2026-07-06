@@ -4,11 +4,40 @@ import { motion } from 'framer-motion';
 import { 
   Calendar, ShieldCheck, Activity, Bell,
   User, Clock, 
-  CalendarCheck, ClipboardCheck, Lock,
+  CalendarCheck, ClipboardCheck,
   TrendingUp, Users, Star, ArrowRight, Headset
 } from 'lucide-react';
 import PageContainer from '../components/layout/PageContainer';
 import LocationPromptModal from '../components/location/LocationPromptModal';
+
+// ── Animation Variants ────────────────────────────────────────────────────────
+// Reduced y-distance so animations feel smooth on all screen sizes
+const fadeInUp = {
+  hidden: { opacity: 0, y: 30 },
+  visible: { 
+    opacity: 1, 
+    y: 0,
+    transition: { type: 'spring', stiffness: 70, damping: 14 } 
+  }
+};
+
+const staggerContainer = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: { staggerChildren: 0.1, delayChildren: 0.05 }
+  }
+};
+
+// Viewport config — works correctly on mobile (no margin that hides items)
+const viewport = { once: true, amount: 0.05 };
+
+// Card hover/tap — whileTap for touch devices, whileHover for desktop
+const cardMotion = {
+  whileHover: { y: -5, scale: 1.02 },
+  whileTap:   { scale: 0.97 },
+  transition: { type: 'spring', stiffness: 350, damping: 20 }
+};
 
 export default function Home() {
   const navigate = useNavigate();
@@ -23,33 +52,16 @@ export default function Home() {
     navigate('/hospitals', { state: { doctorName } });
   };
 
-  const fadeInUp = {
-    hidden: { opacity: 0, y: 40 },
-    visible: { 
-      opacity: 1, 
-      y: 0,
-      transition: { type: "spring", stiffness: 80, damping: 15 } 
-    }
-  };
-
-  const staggerContainer = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: { staggerChildren: 0.12 }
-    }
-  };
-
   return (
-    <div className="flex flex-col min-h-screen bg-white dark:bg-slate-950 font-sans overflow-x-hidden transition-colors duration-300">
+    <div className="flex flex-col min-h-screen bg-white dark:bg-slate-950 font-sans transition-colors duration-300">
       <LocationPromptModal />
       
-      {/* ── Hero Section ── */}
+      {/* ── Hero ── */}
       <section className="relative pt-10 pb-16 sm:pt-14 sm:pb-20 lg:pt-20 lg:pb-28 bg-white dark:bg-slate-950 transition-colors duration-300">
         <PageContainer>
           <div className="flex flex-col lg:grid lg:grid-cols-12 gap-8 lg:gap-6 items-center">
             
-            {/* Left: Text Content */}
+            {/* Left — Text */}
             <motion.div 
               className="w-full lg:col-span-5 text-center lg:text-left"
               initial="hidden"
@@ -69,18 +81,24 @@ export default function Home() {
               </p>
               <div className="flex flex-col sm:flex-row gap-3 mb-10 justify-center lg:justify-start">
                 <Link to="/hospitals" className="w-full sm:w-auto">
-                  <button className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-7 rounded-lg hover:-translate-y-0.5 hover:shadow-lg transition-all duration-300 shadow-sm text-sm">
+                  <motion.button 
+                    whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}
+                    className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-7 rounded-lg shadow-sm text-sm transition-colors"
+                  >
                     Book Appointment
-                  </button>
+                  </motion.button>
                 </Link>
                 <Link to="/doctors" className="w-full sm:w-auto">
-                  <button className="w-full bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-200 font-bold py-3 px-7 rounded-lg border border-slate-200 dark:border-slate-700 transition-colors shadow-sm text-sm">
+                  <motion.button 
+                    whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}
+                    className="w-full bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-200 font-bold py-3 px-7 rounded-lg border border-slate-200 dark:border-slate-700 transition-colors shadow-sm text-sm"
+                  >
                     View Doctors
-                  </button>
+                  </motion.button>
                 </Link>
               </div>
 
-              {/* Stats Row */}
+              {/* Stats */}
               <div className="flex flex-wrap justify-center lg:justify-start gap-6 sm:gap-10">
                 {[
                   { icon: User, value: '250+', label: 'Doctors' },
@@ -100,15 +118,15 @@ export default function Home() {
               </div>
             </motion.div>
             
-            {/* Middle: Doctor Image — hidden on small mobile, shown tablet+ */}
+            {/* Middle — Doctor Image (hidden on xs) */}
             <motion.div 
               className="hidden sm:flex lg:col-span-3 justify-center"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.15 }}
+              transition={{ duration: 0.5, delay: 0.15 }}
             >
               <div className="relative w-full max-w-[260px] sm:max-w-[300px] rounded-[28px] overflow-hidden border border-slate-100 dark:border-slate-800 shadow-md bg-white dark:bg-slate-900 shrink-0">
-                <div className="absolute bottom-4 right-0 left-4 h-[80%] bg-blue-50/50 dark:bg-blue-950/20 rounded-[32px] -z-10"></div>
+                <div className="absolute bottom-4 right-0 left-4 h-[80%] bg-blue-50/50 dark:bg-blue-950/20 rounded-[32px] -z-10" />
                 <img 
                   src="https://res.cloudinary.com/de8opipom/image/upload/v1783233370/WhatsApp_Image_2026-07-05_at_12.03.42_PM_yh82us.jpg" 
                   alt="Doctor" 
@@ -117,16 +135,16 @@ export default function Home() {
               </div>
             </motion.div>
 
-            {/* Right: Booking Form */}
+            {/* Right — Booking Form */}
             <motion.div 
               className="w-full lg:col-span-4"
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
             >
               <div className="w-full max-w-[420px] mx-auto lg:ml-auto lg:mr-0 bg-white dark:bg-slate-900 p-5 rounded-2xl shadow-[0_8px_30px_rgba(0,0,0,0.07)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.3)] border border-slate-100 dark:border-slate-800 transition-colors duration-300">
                 <h3 className="text-base font-bold text-slate-900 dark:text-white mb-1">Book Your Appointment</h3>
-                <p className="text-[12px] text-slate-500 dark:text-slate-400 mb-4">Get AI-recommended slots based on availability & wait time.</p>
+                <p className="text-[12px] text-slate-500 dark:text-slate-400 mb-4">Get AI-recommended slots based on availability &amp; wait time.</p>
                 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4">
                   <div>
@@ -164,12 +182,13 @@ export default function Home() {
                   </div>
                 </div>
                 
-                <button 
+                <motion.button 
+                  whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.97 }}
                   onClick={handleBookSlot}
-                  className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 rounded-lg hover:-translate-y-0.5 hover:shadow-lg transition-all duration-300 text-xs mb-4 shadow-sm cursor-pointer"
+                  className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 rounded-lg text-xs mb-4 shadow-sm cursor-pointer transition-colors"
                 >
                   Find Best Slots
-                </button>
+                </motion.button>
 
                 <div className="flex justify-between items-start border-t border-slate-100 dark:border-slate-800 pt-3">
                   {[
@@ -191,7 +210,7 @@ export default function Home() {
         </PageContainer>
       </section>
 
-      {/* ── Features Cards ── */}
+      {/* ── Feature Cards ── */}
       <section className="py-10 sm:py-14 bg-white dark:bg-slate-950 transition-colors duration-300">
         <PageContainer>
           <motion.div 
@@ -199,7 +218,7 @@ export default function Home() {
             variants={staggerContainer}
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true, margin: "-40px" }}
+            viewport={viewport}
           >
             {[
               { icon: CalendarCheck, title: 'Smart Slot Recommendation', desc: 'AI suggests the best available slots for you.' },
@@ -210,9 +229,8 @@ export default function Home() {
               <motion.div 
                 key={title}
                 variants={fadeInUp} 
-                whileHover={{ y: -6, scale: 1.02 }}
-                transition={{ type: "spring", stiffness: 300 }}
-                className="bg-white dark:bg-slate-900 p-5 rounded-2xl shadow-sm dark:shadow-slate-950/20 border border-slate-100 dark:border-slate-800 flex items-center gap-4 hover:shadow-md hover:border-blue-100 dark:hover:border-blue-800 transition-all duration-300"
+                {...cardMotion}
+                className="bg-white dark:bg-slate-900 p-5 rounded-2xl shadow-sm dark:shadow-slate-950/20 border border-slate-100 dark:border-slate-800 flex items-center gap-4 hover:shadow-md hover:border-blue-100 dark:hover:border-blue-800 transition-colors duration-200 cursor-default"
               >
                 <div className="w-11 h-11 bg-blue-50 dark:bg-blue-950/40 rounded-xl flex items-center justify-center shrink-0">
                   <Icon className="text-blue-600 dark:text-blue-400" size={22} />
@@ -234,7 +252,7 @@ export default function Home() {
             className="text-center mb-10 sm:mb-14"
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true }}
+            viewport={viewport}
             variants={fadeInUp}
           >
             <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white mb-2">How It Works</h2>
@@ -246,7 +264,7 @@ export default function Home() {
             variants={staggerContainer}
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true, margin: "-40px" }}
+            viewport={viewport}
           >
             {/* Connecting line — desktop only */}
             <div className="hidden lg:block absolute top-1/2 left-[12%] right-[12%] h-[2px] border-t-2 border-dashed border-slate-200 dark:border-slate-700 -z-0 transform -translate-y-1/2" />
@@ -259,15 +277,16 @@ export default function Home() {
             ].map((step) => (
               <motion.div 
                 key={step.num} 
-                variants={fadeInUp} 
-                className="bg-white dark:bg-slate-900 p-4 sm:p-5 rounded-2xl shadow-sm dark:shadow-slate-950/20 border border-slate-100 dark:border-slate-800 relative z-10 flex items-center gap-3 transition-colors duration-300"
+                variants={fadeInUp}
+                whileTap={{ scale: 0.97 }}
+                className="bg-white dark:bg-slate-900 p-4 sm:p-5 rounded-2xl shadow-sm dark:shadow-slate-950/20 border border-slate-100 dark:border-slate-800 relative z-10 flex items-center gap-3 transition-colors duration-200"
               >
                 <div className="flex items-center justify-center w-7 h-7 bg-blue-600 text-white rounded-full text-xs font-bold shrink-0">{step.num}</div>
                 <div className="w-10 h-10 sm:w-11 sm:h-11 bg-blue-50 dark:bg-blue-950/40 rounded-xl flex items-center justify-center shrink-0">
                   <step.icon className="text-blue-600 dark:text-blue-400" size={20} />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <h3 className="font-bold text-slate-900 dark:text-white text-sm mb-0.5 truncate">{step.title}</h3>
+                  <h3 className="font-bold text-slate-900 dark:text-white text-sm mb-0.5">{step.title}</h3>
                   <p className="text-[11px] text-slate-500 dark:text-slate-400 leading-snug">{step.desc}</p>
                 </div>
               </motion.div>
@@ -283,7 +302,7 @@ export default function Home() {
             className="flex flex-wrap justify-between items-end gap-3 mb-8 sm:mb-10"
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true }}
+            viewport={viewport}
             variants={fadeInUp}
           >
             <div>
@@ -300,7 +319,7 @@ export default function Home() {
             variants={staggerContainer}
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true, margin: "-40px" }}
+            viewport={viewport}
           >
             {[
               { name: 'Dr. Sarah Johnson', spec: 'Cardiologist', exp: '10+ Years', rating: '4.9', reviews: '120', avail: 'Available Today', color: 'green', img: 'Sarah+Johnson' },
@@ -310,10 +329,11 @@ export default function Home() {
             ].map((doc, idx) => (
               <motion.div 
                 key={idx} 
-                variants={fadeInUp} 
+                variants={fadeInUp}
                 whileHover={{ y: -4 }}
-                transition={{ type: 'spring', stiffness: 300 }}
-                className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-800 p-4 sm:p-5 shadow-sm hover:shadow-md hover:border-blue-100 dark:hover:border-blue-800 transition-all duration-300"
+                whileTap={{ scale: 0.97 }}
+                transition={{ type: 'spring', stiffness: 350, damping: 20 }}
+                className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-800 p-4 sm:p-5 shadow-sm hover:shadow-md hover:border-blue-100 dark:hover:border-blue-800 transition-colors duration-200"
               >
                 <div className="flex gap-3 mb-3 items-center">
                   <img src={`https://ui-avatars.com/api/?name=${doc.img}&background=eff6ff&color=2563eb`} alt={doc.name} className="w-14 h-14 rounded-xl object-cover border border-slate-100 dark:border-slate-700 shrink-0" />
@@ -334,12 +354,13 @@ export default function Home() {
                   {doc.color === 'green' ? <div className="w-1.5 h-1.5 bg-green-500 rounded-full" /> : <Clock size={11} />}
                   {doc.avail}
                 </div>
-                <button 
+                <motion.button 
+                  whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.95 }}
                   onClick={() => handleBookDoctor(doc.name)}
                   className="w-full py-2 text-xs font-bold text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-blue-800 rounded-lg hover:bg-blue-50 dark:hover:bg-blue-950/30 transition-colors cursor-pointer"
                 >
                   Book Now
-                </button>
+                </motion.button>
               </motion.div>
             ))}
           </motion.div>
@@ -349,22 +370,28 @@ export default function Home() {
       {/* ── Trust Banner ── */}
       <section className="bg-blue-600 py-8 sm:py-10 mt-auto w-full border-t border-blue-700">
         <PageContainer>
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-5 sm:gap-8">
+          <motion.div 
+            className="grid grid-cols-2 lg:grid-cols-4 gap-5 sm:gap-8"
+            variants={staggerContainer}
+            initial="hidden"
+            whileInView="visible"
+            viewport={viewport}
+          >
             {[
               { icon: Clock, title: 'Easy & Fast Booking', desc: 'Book in less than 2 minutes' },
               { icon: ShieldCheck, title: 'Secure & Confidential', desc: 'Your data is safe with us' },
               { icon: Headset, title: '24/7 Support', desc: 'We are always here to help' },
               { icon: Users, title: 'Trusted by Thousands', desc: '15K+ happy patients' },
             ].map(({ icon: Icon, title, desc }) => (
-              <div key={title} className="flex items-start gap-3">
+              <motion.div key={title} variants={fadeInUp} className="flex items-start gap-3">
                 <Icon className="text-blue-200 shrink-0 mt-0.5" size={22} />
                 <div>
                   <h4 className="text-white font-bold text-xs sm:text-sm mb-0.5">{title}</h4>
                   <p className="text-blue-100 text-[11px] sm:text-xs leading-relaxed">{desc}</p>
                 </div>
-              </div>
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
         </PageContainer>
       </section>
 

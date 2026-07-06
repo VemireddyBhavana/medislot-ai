@@ -66,12 +66,11 @@ export default function Hospitals() {
   };
 
   const fadeInUp = {
-    hidden: { opacity: 0, y: 80, scale: 0.9 },
+    hidden: { opacity: 0, y: 25 },
     visible: { 
       opacity: 1, 
       y: 0, 
-      scale: 1,
-      transition: { type: "spring", stiffness: 80, damping: 10, mass: 1 } 
+      transition: { type: 'spring', stiffness: 75, damping: 14 } 
     }
   };
 
@@ -79,7 +78,7 @@ export default function Hospitals() {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
-      transition: { staggerChildren: 0.2, delayChildren: 0.15 }
+      transition: { staggerChildren: 0.1, delayChildren: 0.05 }
     }
   };
 
@@ -127,9 +126,9 @@ export default function Hospitals() {
                   <motion.div 
                     key={hospital.id || hospital._id} 
                     variants={fadeInUp}
-                    whileHover={{ y: -6, scale: 1.01 }}
-                    whileTap={{ scale: 0.98 }}
-                    transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+                    whileHover={{ y: -5 }}
+                    whileTap={{ scale: 0.97 }}
+                    transition={{ type: 'spring', stiffness: 350, damping: 20 }}
                     className="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 overflow-hidden shadow-sm hover:shadow-xl dark:hover:shadow-slate-950/40 hover:border-blue-200 dark:hover:border-blue-700 transition-all duration-300 flex flex-col"
                   >
                     <div className="relative overflow-hidden group">

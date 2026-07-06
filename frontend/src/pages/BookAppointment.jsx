@@ -161,18 +161,20 @@ export default function BookAppointment() {
 
   const stepVariants = {
     enter: (direction) => ({
-      x: direction > 0 ? 50 : -50,
+      x: direction > 0 ? 30 : -30,
       opacity: 0
     }),
     center: {
       zIndex: 1,
       x: 0,
-      opacity: 1
+      opacity: 1,
+      transition: { type: 'spring', stiffness: 80, damping: 14 }
     },
     exit: (direction) => ({
       zIndex: 0,
-      x: direction < 0 ? 50 : -50,
-      opacity: 0
+      x: direction < 0 ? 30 : -30,
+      opacity: 0,
+      transition: { duration: 0.15 }
     })
   };
 

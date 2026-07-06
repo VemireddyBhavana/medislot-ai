@@ -42,13 +42,20 @@ export default function Doctors() {
     hidden: { opacity: 0 },
     show: {
       opacity: 1,
-      transition: { staggerChildren: 0.08 }
+      transition: { staggerChildren: 0.08, delayChildren: 0.05 }
     }
   };
 
   const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    show: { opacity: 1, y: 0, transition: { duration: 0.35 } }
+    hidden: { opacity: 0, y: 15 },
+    show: { opacity: 1, y: 0, transition: { type: 'spring', stiffness: 80, damping: 14 } }
+  };
+
+  // Works on both touch (whileTap) and mouse (whileHover)
+  const cardMotion = {
+    whileHover: { y: -4 },
+    whileTap: { scale: 0.97 },
+    transition: { type: 'spring', stiffness: 350, damping: 20 }
   };
 
   return (
@@ -111,9 +118,8 @@ export default function Doctors() {
             {filteredDoctors.map(doctor => (
               <motion.div 
                 variants={itemVariants} 
-                key={doctor._id} 
-                whileHover={{ y: -4 }}
-                transition={{ type: 'spring', stiffness: 300 }}
+                key={doctor._id}
+                {...cardMotion}
                 className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-800 overflow-hidden shadow-sm hover:shadow-xl dark:hover:shadow-slate-950/40 transition-all duration-300 flex flex-col group"
               >
                 <div className="p-5 pb-0 flex gap-4">
