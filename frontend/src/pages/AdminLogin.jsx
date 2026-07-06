@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import { motion } from 'framer-motion';
 import { HeartPulse } from 'lucide-react';
 import { adminAPI } from '../services/api';
 
@@ -41,7 +42,13 @@ export default function AdminLogin() {
   };
 
   return (
-    <div className="min-h-screen flex bg-slate-50 font-sans">
+    <motion.div 
+      initial={{ opacity: 0, x: 50, scale: 1.02 }}
+      animate={{ opacity: 1, x: 0, scale: 1 }}
+      exit={{ opacity: 0, x: -50, scale: 0.98 }}
+      transition={{ type: "tween", ease: "anticipate", duration: 0.4 }}
+      className="min-h-screen flex bg-slate-50 font-sans"
+    >
       
       {/* LEFT SIDE - Light Blue Background with Illustration */}
       <div className="hidden lg:flex lg:w-[42%] bg-[#f4f7fe] flex-col relative px-10 py-10 border-r border-slate-200/60 justify-between">
@@ -155,6 +162,6 @@ export default function AdminLogin() {
           
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }
