@@ -51,7 +51,7 @@ export default function Hospitals() {
   const fetchNearbyHospitals = async (lat, lng) => {
     try {
       setLoading(true);
-      let url = 'http://localhost:5000/api/hospitals/nearby';
+      let url = '/api/hospitals/nearby';
       if (lat !== undefined && lng !== undefined && lat !== null && lng !== null) {
         url += `?lat=${lat}&lng=${lng}`;
       }
