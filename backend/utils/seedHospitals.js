@@ -400,7 +400,7 @@ const mockHospitals = [
     longitude: 78.5601,
     departments: ["Emergency Care", "Cardiology", "Neurology", "General Surgery"],
     timings: "24/7 Emergency, Outpatient: 9:00 AM - 7:00 PM",
-    image: "https://images.unsplash.com/photo-1502740479091-635887520276?auto=format&fit=crop&q=80&w=800",
+    image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTvhkY4EUj9D1ybGDYbji0Kg_hA90-JAGSM12u8PnZq5lubLUNlATtZzbg&s=10",
     rating: 4.4,
     description: "Equipped with high-tech operation suites and comprehensive modern diagnostics in Uppal.",
     isActive: true
@@ -685,7 +685,7 @@ const unsplashIds = [
   "photo-1551601651-2a8555f1a136",
   "photo-1613370441023-018443830225",
   "photo-1582750433449-64935f2b8f18",
-  "photo-1579156492187-c37222d8fce3",
+  "photo-1584515979956-d9f6e5d09982",
   "photo-1588196749597-9ff075ee6b5b",
   "photo-1582560475-018443830225",
   "photo-1585435557343-3b092031a831",
