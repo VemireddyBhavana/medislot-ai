@@ -582,7 +582,7 @@ const mockHospitals = [
     longitude: 78.4608,
     departments: ["Oncology", "Chemotherapy", "Radiotherapy", "Cancer Screening"],
     timings: "24/7 Emergency, Outpatient: 8:00 AM - 4:00 PM",
-    image: "https://images.unsplash.com/photo-1551076805-e1869033e561?auto=format&fit=crop&q=80&w=800",
+    image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT53n3nvtzyAGOCAMw9IpBtfQYcFcRvjf4Ahr2vYsHRXqpREwY8aPptwak&s=10",
     rating: 4.6,
     description: "Regional state university oncology research center specializing in low-cost cancer therapies.",
     isActive: true
