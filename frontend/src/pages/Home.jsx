@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
+import { motion, MotionConfig } from 'framer-motion';
 import { 
   Calendar, ShieldCheck, Activity, Bell,
   User, Clock, 
@@ -29,8 +29,9 @@ const staggerContainer = {
   }
 };
 
-// Viewport config — works correctly on mobile (no margin that hides items)
-const viewport = { once: true, amount: 0.05 };
+// Viewport config — margin helps trigger IntersectionObserver early enough on mobile
+// (iOS Safari fires IO events late, so we add a generous rootMargin)
+const viewport = { once: true, amount: 0.1, margin: '0px 0px -50px 0px' };
 
 // Card hover/tap — whileTap for touch devices, whileHover for desktop
 const cardMotion = {
@@ -53,6 +54,7 @@ export default function Home() {
   };
 
   return (
+    <MotionConfig reducedMotion="user">
     <div className="flex flex-col min-h-screen bg-white dark:bg-slate-950 font-sans transition-colors duration-300">
       <LocationPromptModal />
       
@@ -396,5 +398,6 @@ export default function Home() {
       </section>
 
     </div>
+    </MotionConfig>
   );
 }

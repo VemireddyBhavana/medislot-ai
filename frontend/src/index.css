@@ -10,10 +10,12 @@
   --color-surface: #ffffff;
 }
 
-/* ── IMPORTANT: Do NOT put overflow-x:hidden on html — it breaks
-   Framer Motion's IntersectionObserver (whileInView stops working on mobile) ── */
+/* ── IMPORTANT: overflow-x:hidden MUST be on html (not body alone) —
+   putting it only on body creates a new scroll root that breaks
+   Framer Motion's IntersectionObserver on iOS Safari ── */
 html {
   scroll-behavior: smooth;
+  overflow-x: hidden;
 }
 
 body {
@@ -21,9 +23,6 @@ body {
   @apply bg-[var(--color-background)] text-gray-800 antialiased;
   transition: background-color 0.4s ease, color 0.4s ease;
   -webkit-tap-highlight-color: transparent;
-  /* Safe overflow containment that doesn't break scroll detection */
-  max-width: 100vw;
-  overflow-x: clip;
 }
 
 /* ── Dark mode body ── */
@@ -34,10 +33,20 @@ body.dark {
 }
 
 /* ── Mobile animation performance ── */
-/* Enable GPU acceleration for animated elements */
-[data-framer-motion-reduced] * {
-  animation: none !important;
-  transition: none !important;
+/* GPU-accelerate framer-motion elements for smooth mobile animations */
+[style*="transform"], [style*="opacity"] {
+  will-change: transform, opacity;
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+}
+
+/* Respect user's reduced-motion preference */
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
 
 /* Custom Toggle Switch for theme change */
@@ -376,6 +385,33 @@ input:checked + .slider .clouds {
   border-color: #334155 !important;
 }
 
+/* ── Login/Auth page: completely exempt from dark mode input overrides ── */
+[data-login-page] input,
+[data-login-page] select,
+[data-login-page] textarea,
+.dark [data-login-page] input,
+.dark [data-login-page] select,
+.dark [data-login-page] textarea {
+  background: transparent !important;
+  background-color: transparent !important;
+  color: #ffffff !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+  -webkit-box-shadow: none !important;
+}
+
+/* Override Chrome autofill dark highlight inside login page */
+[data-login-page] input:-webkit-autofill,
+[data-login-page] input:-webkit-autofill:hover,
+[data-login-page] input:-webkit-autofill:focus,
+[data-login-page] input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 9999px transparent inset !important;
+  box-shadow: 0 0 0 9999px transparent inset !important;
+  -webkit-text-fill-color: #ffffff !important;
+  caret-color: #fff;
+  transition: background-color 999999s ease 0s !important;
+}
+
 .dark .bg-slate-900\/40,
 .dark .bg-slate-900\/80 {
   background-color: rgba(30, 41, 59, 0.6) !important;
@@ -461,6 +497,19 @@ nav.before .active-element {
   border-bottom: 2px solid #fff;
 }
 
+@media (max-width: 639px) {
+  .glass-inputbox {
+    margin: 18px 0;
+  }
+  .glass-inputbox input {
+    height: 42px;
+    font-size: 0.95rem;
+  }
+  .glass-inputbox label {
+    font-size: 0.95rem;
+  }
+}
+
 .glass-inputbox label {
   position: absolute;
   top: 50%;
@@ -475,12 +524,36 @@ nav.before .active-element {
 .glass-inputbox input {
   width: 100%;
   height: 50px;
-  background: transparent;
+  background: transparent !important;
+  background-color: transparent !important;
   border: none;
   outline: none;
   font-size: 1rem;
   padding: 0 35px 0 5px;
-  color: #fff;
+  color: #fff !important;
+  border-color: transparent !important;
+}
+
+/* Override browser autofill dark/yellow background on glassmorphic inputs */
+.glass-inputbox input:-webkit-autofill,
+.glass-inputbox input:-webkit-autofill:hover,
+.glass-inputbox input:-webkit-autofill:focus,
+.glass-inputbox input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 1000px transparent inset !important;
+  box-shadow: 0 0 0 1000px transparent inset !important;
+  -webkit-text-fill-color: #fff !important;
+  caret-color: #fff !important;
+  background-color: transparent !important;
+  transition: background-color 5000s ease-in-out 0s !important;
+}
+
+/* Prevent dark mode global overrides from bleeding into glass inputs */
+.dark .glass-inputbox input,
+.glass-inputbox input {
+  background: transparent !important;
+  background-color: transparent !important;
+  color: #fff !important;
+  border-color: transparent !important;
 }
 
 .glass-inputbox input:focus ~ label,

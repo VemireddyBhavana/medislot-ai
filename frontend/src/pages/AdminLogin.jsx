@@ -42,111 +42,260 @@ export default function AdminLogin() {
   };
 
   return (
-    <motion.div 
-      initial={{ opacity: 0, scale: 1.02 }}
-      animate={{ opacity: 1, scale: 1 }}
-      exit={{ opacity: 0, scale: 0.98 }}
-      transition={{ type: "tween", ease: "anticipate", duration: 0.4 }}
-      className="relative min-h-screen w-full flex items-center justify-center overflow-hidden font-sans"
-    >
+    /* Fixed full-screen root — completely independent of body/layout styles */
+    <div
+      data-login-page="true"
+      style={{
+      position: 'fixed',
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      width: '100%',
+      height: '100%',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      fontFamily: "'Inter', sans-serif",
+      zIndex: 0,
+      overflow: 'hidden',
+    }}>
       {/* Background Video */}
-      <video 
-        autoPlay 
-        loop 
-        muted 
+      <video
+        autoPlay
+        loop
+        muted
         playsInline
-        className="absolute top-0 left-0 w-full h-full object-cover -z-10"
+        style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          width: '100%',
+          height: '100%',
+          objectFit: 'cover',
+          zIndex: 0,
+        }}
       >
         <source src="https://res.cloudinary.com/de8opipom/video/upload/v1783343289/WhatsApp_Video_2026-07-06_at_6.16.41_PM_yjm2ng.mp4" type="video/mp4" />
       </video>
 
-      {/* Dark overlay for contrast */}
-      <div className="absolute inset-0 bg-black/45 -z-10" />
+      {/* Dark overlay */}
+      <div style={{
+        position: 'absolute',
+        top: 0, left: 0, right: 0, bottom: 0,
+        backgroundColor: 'rgba(0,0,0,0.42)',
+        zIndex: 1,
+      }} />
 
-      {/* Glassmorphic Form Box */}
-      <div className="relative w-[400px] bg-transparent border-2 border-white/20 rounded-[20px] backdrop-blur-[20px] flex justify-center items-center py-10 px-8 shadow-2xl z-10">
-        <div className="w-full">
-          <form onSubmit={handleLogin}>
-            
-            {/* Logo inside form box */}
-            <div className="flex items-center justify-center gap-2 mb-6">
-              <div className="text-white bg-white/20 p-2 rounded-xl backdrop-blur-md border border-white/10">
-                <HeartPulse size={22} strokeWidth={2.5} />
-              </div>
-              <span className="text-lg font-extrabold text-white tracking-tight">MediSlot AI</span>
+      {/* Centered card wrapper — scrollable on very small screens */}
+      <div style={{
+        position: 'absolute',
+        top: 0, left: 0, right: 0, bottom: 0,
+        overflowY: 'auto',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        zIndex: 2,
+        padding: '20px 16px',
+        boxSizing: 'border-box',
+      }}>
+        <motion.div
+          initial={{ opacity: 0, scale: 1.04, y: 10 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          exit={{ opacity: 0, scale: 0.97 }}
+          transition={{ type: 'tween', ease: 'anticipate', duration: 0.4 }}
+          style={{
+            width: '100%',
+            maxWidth: '400px',
+            background: 'rgba(255,255,255,0.1)',
+            border: '1.5px solid rgba(255,255,255,0.22)',
+            borderRadius: '20px',
+            backdropFilter: 'blur(22px)',
+            WebkitBackdropFilter: 'blur(22px)',
+            padding: '40px 32px',
+            boxShadow: '0 20px 60px rgba(0,0,0,0.45)',
+            flexShrink: 0,
+          }}
+        >
+          {/* Logo */}
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', marginBottom: '18px' }}>
+            <div style={{
+              color: '#fff',
+              background: 'rgba(255,255,255,0.2)',
+              padding: '8px',
+              borderRadius: '12px',
+              border: '1px solid rgba(255,255,255,0.15)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}>
+              <HeartPulse size={22} strokeWidth={2.5} color="#fff" />
             </div>
+            <span style={{ fontSize: '1.1rem', fontWeight: 800, color: '#fff', letterSpacing: '-0.02em' }}>MediSlot AI</span>
+          </div>
 
-            <h2 className="text-3xl font-semibold text-white text-center mb-6">Admin Login</h2>
+          {/* Title */}
+          <h2 style={{
+            fontSize: '1.75rem',
+            fontWeight: 600,
+            color: '#fff',
+            textAlign: 'center',
+            margin: '0 0 24px 0',
+            lineHeight: 1.2,
+          }}>Admin Login</h2>
 
-            {error && (
-              <div className="bg-red-500/20 backdrop-blur-md text-red-200 p-3 rounded-lg mb-4 text-xs font-semibold border border-red-500/30 text-center">
-                {error}
-              </div>
-            )}
-            
+          {/* Error */}
+          {error && (
+            <div style={{
+              background: 'rgba(239,68,68,0.2)',
+              color: '#fca5a5',
+              padding: '10px 14px',
+              borderRadius: '8px',
+              marginBottom: '14px',
+              fontSize: '0.75rem',
+              fontWeight: 600,
+              border: '1px solid rgba(239,68,68,0.3)',
+              textAlign: 'center',
+            }}>
+              {error}
+            </div>
+          )}
+
+          <form onSubmit={handleLogin}>
             {/* Email Input */}
-            <div className="glass-inputbox">
-              <input 
+            <div style={{ position: 'relative', marginBottom: '28px', borderBottom: '2px solid rgba(255,255,255,0.8)' }}>
+              <input
                 id="email"
                 type="email"
                 required
                 value={formData.email}
                 onChange={handleChange}
+                autoComplete="email"
+                placeholder=" "
+                style={{
+                  width: '100%',
+                  height: '48px',
+                  background: 'transparent',
+                  backgroundColor: 'transparent',
+                  border: 'none',
+                  outline: 'none',
+                  fontSize: '1rem',
+                  padding: '0 36px 0 5px',
+                  color: '#fff',
+                  caretColor: '#fff',
+                  WebkitTextFillColor: '#fff',
+                  boxShadow: 'none',
+                  fontFamily: 'inherit',
+                }}
               />
-              <label htmlFor="email">Email</label>
-              <span className="icon">
-                <Mail size={18} className="text-white/60" />
+              <label htmlFor="email" style={{
+                position: 'absolute',
+                top: formData.email ? '-4px' : '50%',
+                left: '5px',
+                transform: formData.email ? 'none' : 'translateY(-50%)',
+                color: 'rgba(255,255,255,0.85)',
+                fontSize: formData.email ? '0.8rem' : '1rem',
+                pointerEvents: 'none',
+                transition: 'all 0.25s ease',
+              }}>Email</label>
+              <span style={{ position: 'absolute', right: '8px', top: '50%', transform: 'translateY(-50%)', color: 'rgba(255,255,255,0.6)', display: 'flex' }}>
+                <Mail size={18} color="rgba(255,255,255,0.6)" />
               </span>
             </div>
-            
+
             {/* Password Input */}
-            <div className="glass-inputbox">
-              <input 
+            <div style={{ position: 'relative', marginBottom: '24px', borderBottom: '2px solid rgba(255,255,255,0.8)' }}>
+              <input
                 id="password"
                 type="password"
                 required
                 value={formData.password}
                 onChange={handleChange}
+                autoComplete="current-password"
+                placeholder=" "
+                style={{
+                  width: '100%',
+                  height: '48px',
+                  background: 'transparent',
+                  backgroundColor: 'transparent',
+                  border: 'none',
+                  outline: 'none',
+                  fontSize: '1rem',
+                  padding: '0 36px 0 5px',
+                  color: '#fff',
+                  caretColor: '#fff',
+                  WebkitTextFillColor: '#fff',
+                  boxShadow: 'none',
+                  fontFamily: 'inherit',
+                }}
               />
-              <label htmlFor="password">Password</label>
-              <span className="icon">
-                <Lock size={18} className="text-white/60" />
+              <label htmlFor="password" style={{
+                position: 'absolute',
+                top: formData.password ? '-4px' : '50%',
+                left: '5px',
+                transform: formData.password ? 'none' : 'translateY(-50%)',
+                color: 'rgba(255,255,255,0.85)',
+                fontSize: formData.password ? '0.8rem' : '1rem',
+                pointerEvents: 'none',
+                transition: 'all 0.25s ease',
+              }}>Password</label>
+              <span style={{ position: 'absolute', right: '8px', top: '50%', transform: 'translateY(-50%)', color: 'rgba(255,255,255,0.6)', display: 'flex' }}>
+                <Lock size={18} color="rgba(255,255,255,0.6)" />
               </span>
             </div>
 
             {/* Remember Me & Forgot Password */}
-            <div className="flex justify-between items-center text-sm text-white mb-6">
-              <label className="flex items-center gap-1.5 cursor-pointer select-none">
-                <input 
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
+              <label style={{ display: 'flex', alignItems: 'center', gap: '6px', cursor: 'pointer', userSelect: 'none' }}>
+                <input
                   type="checkbox"
                   id="remember"
                   checked={formData.remember}
                   onChange={handleChange}
-                  className="w-4.5 h-4.5 rounded bg-transparent border-white/40 checked:bg-white checked:border-white focus:ring-0 cursor-pointer transition-colors"
+                  style={{ width: '15px', height: '15px', cursor: 'pointer', accentColor: '#fff' }}
                 />
-                <span className="text-xs font-semibold text-white/90">Remember Me</span>
+                <span style={{ fontSize: '0.75rem', fontWeight: 600, color: 'rgba(255,255,255,0.9)' }}>Remember Me</span>
               </label>
-              
-              <Link to="/admin/forgot-password" className="text-xs font-semibold text-white hover:underline transition-colors">
+              <Link
+                to="/admin/forgot-password"
+                style={{ fontSize: '0.75rem', fontWeight: 600, color: '#fff', textDecoration: 'none' }}
+              >
                 Forgot Password?
               </Link>
             </div>
 
-            {/* Submit Button */}
-            <button 
-              type="submit" 
-              disabled={loading} 
-              className="w-full h-11 bg-white text-slate-900 font-bold rounded-[40px] hover:bg-slate-100 hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0 transition-all duration-300 text-sm disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+            {/* Submit */}
+            <button
+              type="submit"
+              disabled={loading}
+              style={{
+                width: '100%',
+                height: '44px',
+                background: '#fff',
+                color: '#0f172a',
+                fontWeight: 700,
+                borderRadius: '40px',
+                border: 'none',
+                fontSize: '0.9rem',
+                cursor: loading ? 'not-allowed' : 'pointer',
+                opacity: loading ? 0.6 : 1,
+                transition: 'all 0.25s ease',
+                fontFamily: 'inherit',
+                letterSpacing: '0.01em',
+              }}
             >
               {loading ? 'Logging in...' : 'Log in'}
             </button>
           </form>
-          
-          <p className="text-center text-xs text-white/80 mt-6">
-            Don't have an account? <Link to="/admin/register" className="text-white font-bold hover:underline ml-1">Create one</Link>
+
+          <p style={{ textAlign: 'center', fontSize: '0.75rem', color: 'rgba(255,255,255,0.75)', marginTop: '20px', margin: '20px 0 0' }}>
+            Don't have an account?{' '}
+            <Link to="/admin/register" style={{ color: '#fff', fontWeight: 700, textDecoration: 'none' }}>
+              Create one
+            </Link>
           </p>
-        </div>
+        </motion.div>
       </div>
-    </motion.div>
+    </div>
   );
 }
