@@ -114,7 +114,7 @@ const mockHospitals = [
     longitude: 78.3789,
     departments: ["Gastroenterology", "Urology", "Nephrology", "General Surgery"],
     timings: "24/7 Emergency, Outpatient: 9:00 AM - 6:00 PM",
-    image: "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?auto=format&fit=crop&q=80&w=800",
+    image: "https://irp.cdn-website.com/69c0b277/dms3rep/multi/PACE+Hospitals+-+HITEC+City.jpg",
     rating: 4.6,
     description: "A leading center of excellence in digestive health, urology, and nephrology services.",
     isActive: true
