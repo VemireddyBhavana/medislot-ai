@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { HeartPulse, Shield, User, Laptop, Lock } from 'lucide-react';
+import { HeartPulse } from 'lucide-react';
+import adminDoctorImg from '../assets/admin_doctor.png';
 import { adminAPI } from '../services/api';
 
 export default function AdminRegister() {
@@ -46,33 +47,22 @@ export default function AdminRegister() {
         
         {/* Illustration Area */}
         <div className="flex-1 flex flex-col items-center justify-center relative z-10 w-full max-w-md mx-auto">
-          {/* We use a composed SVG/Icon layout to approximate the illustration */}
-          <div className="relative w-full aspect-video flex items-center justify-center mb-10">
-            {/* Background elements */}
-            <div className="absolute top-4 right-12 w-48 h-56 bg-blue-100 rounded-full mix-blend-multiply filter blur-2xl opacity-70"></div>
-            <div className="absolute bottom-4 left-12 w-32 h-32 bg-blue-200 rounded-full mix-blend-multiply filter blur-xl opacity-60"></div>
-            
-            {/* Center Shield */}
-            <div className="relative z-0 text-blue-500 opacity-90 transform translate-x-12 -translate-y-4">
-              <Shield size={180} strokeWidth={1} fill="#dbeafe" />
-              <div className="absolute inset-0 flex items-center justify-center">
-                <Lock size={48} className="text-blue-600 mb-6" />
-              </div>
-            </div>
-            
-            {/* Doctor & Laptop */}
-            <div className="absolute bottom-4 left-1/4 z-10 flex items-end">
-              <div className="bg-white p-4 rounded-xl shadow-lg border border-blue-50 flex flex-col items-center">
-                <div className="w-16 h-16 bg-blue-50 rounded-full flex items-center justify-center text-blue-600 mb-2">
-                  <User size={32} />
-                </div>
-                <Laptop size={48} className="text-slate-700" />
-              </div>
-            </div>
+          {/* Doctor Image */}
+          <div className="relative w-full flex items-center justify-center mb-8">
+            {/* Subtle glow blobs behind image */}
+            <div className="absolute top-0 right-0 w-56 h-56 bg-blue-200 rounded-full mix-blend-multiply filter blur-3xl opacity-50"></div>
+            <div className="absolute bottom-0 left-0 w-40 h-40 bg-blue-100 rounded-full mix-blend-multiply filter blur-2xl opacity-60"></div>
+
+            <img
+              src={adminDoctorImg}
+              alt="Doctor with secure admin access"
+              className="relative z-10 w-full max-w-[420px] object-contain drop-shadow-2xl"
+              style={{ filter: 'drop-shadow(0 20px 40px rgba(59,130,246,0.18))', transform: 'scaleX(-1)' }}
+            />
           </div>
-          
+
           {/* Text Below Illustration */}
-          <div className="text-center mt-4">
+          <div className="text-center">
             <h2 className="text-xl font-bold text-blue-700 mb-3">Secure Admin Access</h2>
             <p className="text-slate-500 text-sm max-w-[280px] mx-auto leading-relaxed">
               Manage doctors, appointments and clinic operations in one place.
