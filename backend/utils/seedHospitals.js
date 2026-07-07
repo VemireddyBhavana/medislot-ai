@@ -647,7 +647,7 @@ const mockHospitals = [
     longitude: 78.4907,
     departments: ["Orthopedics", "Traumatology", "Cardiology", "Internal Medicine"],
     timings: "24/7 Emergency, Outpatient: 8:00 AM - 6:00 PM",
-    image: "https://images.unsplash.com/photo-1586773860418-d37222d8fce3?auto=format&fit=crop&q=80&w=800",
+    image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTH6VoAkpmxeUJQorWuRNXe8Y7jeBjUV9XKjzUDBm69PF08hJXA0Lxyekaq&s=10",
     rating: 4.6,
     description: "One of the region's top center of excellence for orthopedic replacements and clinical support.",
     isActive: true
