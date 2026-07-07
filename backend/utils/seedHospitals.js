@@ -127,7 +127,7 @@ const mockHospitals = [
     longitude: 78.4502,
     departments: ["Cardiology", "Neurology", "Vascular Surgery", "Pulmonology"],
     timings: "24/7 Emergency, Outpatient: 8:00 AM - 8:00 PM",
-    image: "https://images.unsplash.com/photo-1586773860418-d37222d8fce3?auto=format&fit=crop&q=80&w=800",
+    image: "https://care-new-dev.s3.ap-south-1.amazonaws.com/assets/images/main/opd-hitech-image.webp",
     rating: 4.7,
     description: "A pioneer in modern cardiac care, offering complete clinical services in Banjara Hills.",
     isActive: true
@@ -166,7 +166,7 @@ const mockHospitals = [
     longitude: 78.3826,
     departments: ["Cardiology", "Internal Medicine", "General Surgery", "Orthopedics"],
     timings: "24/7 Emergency, Outpatient: 8:00 AM - 6:00 PM",
-    image: "https://images.unsplash.com/photo-1551076805-e1869033e561?auto=format&fit=crop&q=80&w=800",
+    image: "https://care-new-dev.s3.ap-south-1.amazonaws.com/assets/images/main/opd-hitech-image.webp",
     rating: 4.6,
     description: "Expanding critical care and cardiac checkup facilities in the IT corridor.",
     isActive: true
@@ -387,7 +387,7 @@ const mockHospitals = [
     longitude: 78.468,
     departments: ["Outpatient Checkups", "Diagnostics", "Preventative Care", "Physiotherapy"],
     timings: "Outpatient: 8:00 AM - 8:00 PM",
-    image: "https://images.unsplash.com/photo-1502740479091-635887520276?auto=format&fit=crop&q=80&w=800",
+    image: "https://care-new-dev.s3.ap-south-1.amazonaws.com/assets/images/main/opd-hitech-image.webp",
     rating: 4.4,
     description: "Focused outpatient facility supporting diagnostics, therapies, and regular checkups.",
     isActive: true
