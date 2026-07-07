@@ -543,7 +543,7 @@ const mockHospitals = [
     longitude: 78.4728,
     departments: ["General Medicine", "Pediatrics", "Gynecology", "Ophthalmology"],
     timings: "24/7 Emergency, Outpatient: 9:00 AM - 4:00 PM",
-    image: "https://images.unsplash.com/photo-1586773860418-d37222d8fce3?auto=format&fit=crop&q=80&w=800",
+    image: "https://content3.jdmagicbox.com/v2/comp/hyderabad/82/040p5400982/catalogue/princess-esra-hospital-moghalpura-hyderabad-multispeciality-hospitals-nVkPiWAf69.jpg",
     rating: 4.4,
     description: "Serving the Old City community with primary to tertiary healthcare facilities.",
     isActive: true
