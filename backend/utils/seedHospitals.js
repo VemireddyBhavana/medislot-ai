@@ -621,7 +621,7 @@ const mockHospitals = [
     longitude: 78.3875,
     departments: ["General Surgery", "Pediatrics", "Gynecology & Obstetrics", "Orthopedics"],
     timings: "24/7 Emergency, Outpatient: 9:00 AM - 8:00 PM",
-    image: "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?auto=format&fit=crop&q=80&w=800",
+    image: "https://content.jdmagicbox.com/v2/comp/hyderabad/n2/040pxx40.xx40.240209120009.q6n2/catalogue/prasad-hospitals-manikonda-hyderabad-cancer-centres-2hp9ke8t3f.jpg",
     rating: 4.5,
     description: "Multispeciality hospital serving the community of KPHB with leading diagnostic and surgical departments.",
     isActive: true
