@@ -231,7 +231,7 @@ const mockHospitals = [
     longitude: 78.4455,
     departments: ["General Medicine", "Pediatrics", "Orthopedics", "Cardiology", "Emergency Care"],
     timings: "24/7 Emergency, Outpatient: 9:00 AM - 6:00 PM",
-    image: "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?auto=format&fit=crop&q=80&w=800",
+    image: "https://www.mallareddynarayana.com/build/assets/mrn-hospital-CG7xbAQb.webp",
     rating: 4.5,
     description: "Highly trusted super-speciality health destination serving patients with affordable checkups and surgery.",
     isActive: true
