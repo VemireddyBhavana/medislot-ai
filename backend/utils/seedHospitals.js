@@ -374,7 +374,7 @@ const mockHospitals = [
     longitude: 78.35321,
     departments: ["General Surgery", "Orthopedics", "Urology", "ENT", "Bariatrics"],
     timings: "24/7 Emergency, Outpatient: 8:00 AM - 8:00 PM",
-    image: "https://images.unsplash.com/photo-1551076805-e1869033e561?auto=format&fit=crop&q=80&w=800",
+    image: "https://www.apollospectra.com/backend/web/hospital-images/1617623029Apollo_Spectra_Hospitals_MRC_Building.jpg.webp",
     rating: 4.5,
     description: "Specialized hospital for minimally invasive surgical treatments and diagnostics.",
     isActive: true
