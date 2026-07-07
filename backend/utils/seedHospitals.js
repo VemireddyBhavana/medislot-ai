@@ -465,7 +465,7 @@ const mockHospitals = [
     longitude: 78.4011,
     departments: ["Orthopedics", "General Medicine", "Pediatrics", "Trauma Care"],
     timings: "24/7 Emergency, Outpatient: 9:00 AM - 6:00 PM",
-    image: "https://images.unsplash.com/photo-1516549655169-df83a0774514?auto=format&fit=crop&q=80&w=800",
+    image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQXtlpX1z9aLmkEtnYfLIbYZI-JxD4TqbOpTPxY6sGJDGOodzVhLOPTUc-8&s=10",
     rating: 4.3,
     description: "Quick access multi-specialty neighborhood hospital providing reliable, high-value checkups.",
     isActive: true
@@ -478,7 +478,7 @@ const mockHospitals = [
     longitude: 78.4439,
     departments: ["Maternity", "Critical Care", "Internal Medicine", "General Surgery"],
     timings: "24/7 Emergency, Outpatient: 8:00 AM - 5:00 PM",
-    image: "https://images.unsplash.com/photo-1551076805-e1869033e561?auto=format&fit=crop&q=80&w=800",
+    image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQXtlpX1z9aLmkEtnYfLIbYZI-JxD4TqbOpTPxY6sGJDGOodzVhLOPTUc-8&s=10",
     rating: 4.4,
     description: "Renowned local healthcare destination specializing in clinical treatments and diagnostics.",
     isActive: true
