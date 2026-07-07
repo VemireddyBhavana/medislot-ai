@@ -10,7 +10,7 @@ const mockHospitals = [
     longitude: 78.4125274,
     departments: ["Cardiology", "Neurology", "Orthopedics", "Emergency Medicine", "Oncology", "Gastroenterology"],
     timings: "24/7 Emergency, Outpatient: 8:00 AM - 5:00 PM",
-    image: "https://images.unsplash.com/photo-1586773860418-d37222d8fce3?auto=format&fit=crop&q=80&w=800",
+    image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRRx3Xj8LyUi4J2JE6FvAM1eJSvYN7yh2Plg3RMwZS3W_v0smvVmQv_Nhk&s=10",
     rating: 4.8,
     description: "A premier multi-specialty tertiary care hospital offering cutting edge medical services.",
     isActive: true
