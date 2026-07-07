@@ -549,19 +549,6 @@ const mockHospitals = [
     isActive: true
   },
   {
-    name: "Gandhi Hospital",
-    address: "Musheerabad, Secunderabad",
-    phone: "+91 40 2750 5555",
-    latitude: 17.4255,
-    longitude: 78.5020,
-    departments: ["Emergency Medicine", "Pediatrics", "Cardiology", "General Surgery", "Orthopedics"],
-    timings: "24/7 Emergency, Outpatient: 8:00 AM - 2:00 PM",
-    image: "https://media.telanganatoday.com/wp-content/uploads/2025/04/Gandhi-Hospital.jpg",
-    rating: 4.4,
-    description: "Major state government tertiary medical research and clinical infrastructure.",
-    isActive: true
-  },
-  {
     name: "MNJ Institute of Oncology & Regional Cancer Centre",
     address: "Red Hills, Hyderabad",
     phone: "+91 40 2331 8400",
