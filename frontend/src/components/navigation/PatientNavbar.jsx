@@ -189,67 +189,73 @@ export default function PatientNavbar() {
     const maxSpacing = navContainer.offsetWidth - 60;
     const targetWidth = spacing > maxSpacing ? maxSpacing : spacing;
 
+    // Create the SVG nodes in the DOM immediately so we can animate them directly
+    createSVG(activeIndicator);
+
+    const beam = activeIndicator.querySelector(".beam");
+    const strike = activeIndicator.querySelector(".strike");
+    const strikeSvgs = activeIndicator.querySelectorAll(".strike svg");
+
     gsap.killTweensOf(activeIndicator);
+    if (beam) gsap.killTweensOf(beam);
+    if (strike) gsap.killTweensOf(strike);
+    if (strikeSvgs.length) gsap.killTweensOf(strikeSvgs);
 
-    // Initialize CSS variables to ensure GSAP has start values
-    gsap.set(activeIndicator, {
-      "--active-element-width": "0px",
-      "--active-element-opacity": 0,
-      "--active-element-scale-x": 1,
-      "--active-element-scale-y": 1,
-      "--active-element-mask-position": "0%",
-      "--active-element-strike-x": "0%",
+    const tl = gsap.timeline({
+      onComplete: () => {
+        activeIndicator.innerHTML = "";
+        navContainer.classList.remove("before", "after");
+        activeIndicator.removeAttribute("style");
+        gsap.set(activeIndicator, {
+          x: x,
+          "--active-element-show": "1",
+        });
+      }
     });
 
-    gsap.to(activeIndicator, {
-      keyframes: [
-        {
-          "--active-element-width": `${targetWidth}px`,
-          duration: 0.3,
-          ease: "none",
-          onStart: () => {
-            createSVG(activeIndicator);
-            gsap.to(activeIndicator, {
-              "--active-element-opacity": 1,
-              duration: 0.1,
-            });
-          },
-        },
-        {
-          "--active-element-scale-x": "0",
-          "--active-element-scale-y": ".25",
-          "--active-element-width": "0px",
-          duration: 0.3,
-          onStart: () => {
-            gsap.to(activeIndicator, {
-              "--active-element-mask-position": "40%",
-              duration: 0.5,
-            });
-            gsap.to(activeIndicator, {
-              "--active-element-opacity": 0,
-              delay: 0.45,
-              duration: 0.25,
-            });
-          },
-          onComplete: () => {
-            activeIndicator.innerHTML = "";
-            navContainer.classList.remove("before", "after");
-            activeIndicator.removeAttribute("style");
-            gsap.set(activeIndicator, {
-              x: x,
-              "--active-element-show": "1",
-            });
-          },
-        },
-      ],
-    });
-
-    gsap.to(activeIndicator, {
+    // Parent indicator slide movement
+    tl.to(activeIndicator, {
       x: x,
-      "--active-element-strike-x": "-50%",
       duration: 0.6,
       ease: "none",
-    });
+    }, 0);
+
+    // Expand width and fade in (0.3s)
+    tl.to([beam, strike], {
+      width: targetWidth,
+      opacity: 1,
+      duration: 0.3,
+      ease: "none",
+    }, 0);
+
+    tl.to(strikeSvgs, {
+      width: targetWidth * 2,
+      duration: 0.3,
+      ease: "none",
+    }, 0);
+
+    // Shrink width, scale down, and fade out (0.3s)
+    tl.to([beam, strike], {
+      width: 0,
+      opacity: 0,
+      duration: 0.3,
+      ease: "power1.in",
+    }, 0.3);
+
+    tl.to(strikeSvgs, {
+      width: 0,
+      scaleX: 0,
+      scaleY: 0.25,
+      duration: 0.3,
+      ease: "power1.in",
+    }, 0.3);
+
+    // Animate webkit-mask-position/maskPosition directly on the strike element
+    tl.to(strike, {
+      "--active-element-mask-position": "40%",
+      duration: 0.5,
+      ease: "power1.out",
+    }, 0.3);
 
     prevIndexRef.current = activeIndex;
 
