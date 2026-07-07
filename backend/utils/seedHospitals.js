@@ -244,7 +244,7 @@ const mockHospitals = [
     longitude: 78.3889,
     departments: ["Pediatrics", "Cardiology", "Orthopedics", "General Surgery", "Internal Medicine"],
     timings: "24/7 Emergency, Outpatient: 9:00 AM - 7:00 PM",
-    image: "https://images.unsplash.com/photo-1551076805-e1869033e561?auto=format&fit=crop&q=80&w=800",
+    image: "https://content3.jdmagicbox.com/v2/comp/hyderabad/69/040p5436869/catalogue/omni-hospitals-dilsukhnagar-hyderabad-orthopaedic-doctors-7tg2i.jpg",
     rating: 4.5,
     description: "Multi-specialty neighborhood super-specialty hospital offering leading inpatient services.",
     isActive: true
