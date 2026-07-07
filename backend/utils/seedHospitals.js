@@ -322,7 +322,7 @@ const mockHospitals = [
     longitude: 78.43825,
     departments: ["Pediatrics", "Neonatology", "Child Development", "Pediatric Surgery"],
     timings: "24/7 Children's Emergency, Outpatient: 9:00 AM - 6:00 PM",
-    image: "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?auto=format&fit=crop&q=80&w=800",
+    image: "https://cdn3.rainbowhospitals.in/branch/about_images/xSC2mgl6tBAGejgEmobKisRSDE7lIN7DeSejaonh.jpg",
     rating: 4.8,
     description: "Pioneering specialized pediatric and perinatal healthcare standards.",
     isActive: true
@@ -335,7 +335,7 @@ const mockHospitals = [
     longitude: 78.35321,
     departments: ["Pediatrics", "Neonatology", "Obstetrics & Gynecology"],
     timings: "24/7 Children's Emergency, Outpatient: 8:00 AM - 6:00 PM",
-    image: "https://images.unsplash.com/photo-1586773860418-d37222d8fce3?auto=format&fit=crop&q=80&w=800",
+    image: "https://cdn3.rainbowhospitals.in/branch/about_images/xSC2mgl6tBAGejgEmobKisRSDE7lIN7DeSejaonh.jpg",
     rating: 4.7,
     description: "High quality pediatric clinic and child diagnostics in the Kondapur IT corridor.",
     isActive: true
