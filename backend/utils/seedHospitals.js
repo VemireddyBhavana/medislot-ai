@@ -452,7 +452,7 @@ const mockHospitals = [
     longitude: 78.46314,
     departments: ["Organ Transplant", "Hepatobiliary", "Neurology", "Cardiology"],
     timings: "24/7 Emergency, Outpatient: 9:00 AM - 5:00 PM",
-    image: "https://images.unsplash.com/photo-1538108149393-cebb47acdd4e?auto=format&fit=crop&q=80&w=800",
+    image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQorhw8KjLp8v6h4ZIs-Eh3Iiywaac82aHI7tL4SHpx5rEjcwrrWGYqpIXf&s=10",
     rating: 4.6,
     description: "Renowned globally for complex multi-organ transplants and critical care.",
     isActive: true
