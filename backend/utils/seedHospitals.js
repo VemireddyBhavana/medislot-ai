@@ -491,7 +491,7 @@ const mockHospitals = [
     longitude: 78.4357,
     departments: ["Oncology", "Surgical Oncology", "Medical Oncology", "Bone Marrow Transplant"],
     timings: "24/7 Emergency, Outpatient: 8:00 AM - 6:00 PM",
-    image: "https://images.unsplash.com/photo-1502740479091-635887520276?auto=format&fit=crop&q=80&w=800",
+    image: "https://lh3.googleusercontent.com/gps-cs-s/APNQkAHUx7O4fETRW-hNU8hNQMG6f0vjDZfqoEgeQN94XAU4adiNijoqcNL36e7KiXm4lmAlgyqOFx2_Q9imlYKH7lAs5nISZ09QLsqAOr8HCuCr0SEq4CZGSXSngrAKtHmYy4vYqMcPPwVjumqA=s1360-w1360-h1020-rw",
     rating: 4.7,
     description: "Specialized cancer institute and research center supporting advanced medical therapies.",
     isActive: true
@@ -504,7 +504,7 @@ const mockHospitals = [
     longitude: 78.3444,
     departments: ["Oncology", "Radiotherapy", "Mammography", "Chemotherapy"],
     timings: "24/7 Emergency, Outpatient: 9:00 AM - 7:00 PM",
-    image: "https://images.unsplash.com/photo-1581056771107-24ca5f033842?auto=format&fit=crop&q=80&w=800",
+    image: "https://lh3.googleusercontent.com/gps-cs-s/APNQkAHUx7O4fETRW-hNU8hNQMG6f0vjDZfqoEgeQN94XAU4adiNijoqcNL36e7KiXm4lmAlgyqOFx2_Q9imlYKH7lAs5nISZ09QLsqAOr8HCuCr0SEq4CZGSXSngrAKtHmYy4vYqMcPPwVjumqA=s1360-w1360-h1020-rw",
     rating: 4.7,
     description: "Extending advanced diagnostic scans and comprehensive cancer therapies in Gachibowli.",
     isActive: true
