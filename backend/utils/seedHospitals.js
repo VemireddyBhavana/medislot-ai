@@ -393,19 +393,6 @@ const mockHospitals = [
     isActive: true
   },
   {
-    name: "Srikara Hospitals",
-    address: "#222, Phase 2, Mythri Nagar, Madeenaguda, Miyapur, Hyderabad",
-    phone: "040 4747 0000",
-    latitude: 17.4984,
-    longitude: 78.3496,
-    departments: ["Orthopedics", "Joint Replacement", "Spine Surgery", "Emergency Medicine"],
-    timings: "24/7 Emergency, Outpatient: 9:00 AM - 6:00 PM",
-    image: "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?auto=format&fit=crop&q=80&w=800",
-    rating: 4.5,
-    description: "Renowned multispecialty clinic offering orthopedic surgery and key inpatient treatments.",
-    isActive: true
-  },
-  {
     name: "CARE Hospitals Musheerabad",
     address: "1-4-908/7/1, Near Raja Deluxe Theatre, Bakaram, Musheerabad, Hyderabad",
     phone: "+91 40 6810 6529",
