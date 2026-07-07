@@ -2,6 +2,18 @@
   --dark-color: #000;
 }
 
+/* Force-enable ALL animations inside landing page — overrides prefers-reduced-motion
+   so flowers always animate on mobile, ngrok, and any device */
+@media (prefers-reduced-motion: reduce) {
+  .landing-root *,
+  .landing-root *::before,
+  .landing-root *::after {
+    animation-duration: revert !important;
+    animation-iteration-count: revert !important;
+    transition-duration: revert !important;
+  }
+}
+
 .landing-root {
   perspective: 1000px;
   background-color: var(--dark-color);
