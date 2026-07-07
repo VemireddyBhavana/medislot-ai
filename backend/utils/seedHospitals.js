@@ -517,7 +517,7 @@ const mockHospitals = [
     longitude: 78.3846,
     departments: ["Cardiology", "Orthopedics", "Critical Care", "Neurology"],
     timings: "24/7 Emergency, Outpatient: 8:00 AM - 8:00 PM",
-    image: "https://lh3.googleusercontent.com/gps-cs-s/APNQkAEIcs71ZIregvOrGTVAQ-SX34VFj_bCgwgeliVvKLm-2r4Oq_mitmusJMZv_RQeCZ1S1zh-2N3ld8Dps4yKWZwnstngrXefNPYoWACfjwuwcE1X9ldGmiRjZeTl2ce3NEY8CMAD=s1360-w1360-h1020-rw",
+    image: "https://cdn.credihealth.com/production/system/images/assets/20626/original/Maxcure-Hospital_-Secretariat-Road.jpg",
     rating: 4.6,
     description: "Modern clinical diagnostic systems and high-value inpatient medical facilities.",
     isActive: true
