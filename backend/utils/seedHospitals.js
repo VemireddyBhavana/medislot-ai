@@ -595,7 +595,7 @@ const mockHospitals = [
     longitude: 78.4610,
     departments: ["Pediatrics", "Neonatology", "Maternity", "Pediatric Surgery"],
     timings: "24/7 Pediatric Emergency, Outpatient: 8:00 AM - 3:00 PM",
-    image: "https://images.unsplash.com/photo-1502740479091-635887520276?auto=format&fit=crop&q=80&w=800",
+    image: "https://content3.jdmagicbox.com/v2/comp/hyderabad/s3/040pxx40.xx40.250120190110.t3s3/catalogue/niloufer-hospital-lakdi-ka-pool-khairatabad-hyderabad-hospitals-a6mkg3j387.jpg",
     rating: 4.6,
     description: "Highly trusted government children's and maternity hospital.",
     isActive: true
