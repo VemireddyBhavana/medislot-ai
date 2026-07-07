@@ -413,7 +413,7 @@ const mockHospitals = [
     longitude: 78.4988,
     departments: ["Cardiology", "Internal Medicine", "Gastroenterology", "Nephrology", "General Surgery"],
     timings: "24/7 Emergency, Outpatient: 8:00 AM - 6:00 PM",
-    image: "https://images.unsplash.com/photo-1586773860418-d37222d8fce3?auto=format&fit=crop&q=80&w=800",
+    image: "https://care-new-dev.s3.ap-south-1.amazonaws.com/assets/images/main/opd-hitech-image.webp",
     rating: 4.5,
     description: "Delivering advanced super-specialty treatment and clinical services across Musheerabad.",
     isActive: true
