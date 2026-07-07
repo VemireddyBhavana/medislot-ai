@@ -191,6 +191,16 @@ export default function PatientNavbar() {
 
     gsap.killTweensOf(activeIndicator);
 
+    // Initialize CSS variables to ensure GSAP has start values
+    gsap.set(activeIndicator, {
+      "--active-element-width": "0px",
+      "--active-element-opacity": 0,
+      "--active-element-scale-x": 1,
+      "--active-element-scale-y": 1,
+      "--active-element-mask-position": "0%",
+      "--active-element-strike-x": "0%",
+    });
+
     gsap.to(activeIndicator, {
       keyframes: [
         {
