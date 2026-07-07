@@ -296,7 +296,7 @@ const mockHospitals = [
     longitude: 78.42929,
     departments: ["Oncology", "Surgical Oncology", "Radiation Oncology", "Medical Oncology"],
     timings: "24/7 Emergency, Outpatient: 8:00 AM - 5:00 PM",
-    image: "https://images.unsplash.com/photo-1581056771107-24ca5f033842?auto=format&fit=crop&q=80&w=800",
+    image: "https://images.jdmagicbox.com/v2/comp/hyderabad/v1/040pxx40.xx40.160108115003.c0v1/catalogue/dr-a-santa-basavatarakam-indo-american-cancer-hospital-and-research-institute--banjara-hills-hyderabad-oncologists-l5nib.jpg",
     rating: 4.8,
     description: "One of the most trusted cancer diagnosis and treatment hubs in the country.",
     isActive: true
