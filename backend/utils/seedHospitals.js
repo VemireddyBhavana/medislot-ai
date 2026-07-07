@@ -36,7 +36,7 @@ const mockHospitals = [
     longitude: 78.4830438,
     departments: ["Cardiology", "Orthopedics", "Neurology", "Oncology", "Pediatrics"],
     timings: "24/7 Emergency, Outpatient: 8:30 AM - 5:30 PM",
-    image: "https://images.unsplash.com/photo-1538108149393-cebb47acdd4e?auto=format&fit=crop&q=80&w=800",
+    image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT6TZkT1bq8h5Tob4gQl3DIW_gS8FmdGMlJ6ELHg5HsSljUhG9yEdLjEwM&s=10",
     rating: 4.7,
     description: "State-of-the-art super-specialty hospital dedicated to compassionate medical care.",
     isActive: true
@@ -75,7 +75,7 @@ const mockHospitals = [
     longitude: 78.4635,
     departments: ["Orthopedics", "Joint Replacement", "Spine Surgery", "Internal Medicine"],
     timings: "24/7 Emergency, Outpatient: 8:00 AM - 4:00 PM",
-    image: "https://images.unsplash.com/photo-1502740479091-635887520276?auto=format&fit=crop&q=80&w=800",
+    image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT6TZkT1bq8h5Tob4gQl3DIW_gS8FmdGMlJ6ELHg5HsSljUhG9yEdLjEwM&s=10",
     rating: 4.6,
     description: "Renowned globally for orthopedic specialties, arthroscopy, and joint replacement.",
     isActive: true
@@ -348,7 +348,7 @@ const mockHospitals = [
     longitude: 78.35321,
     departments: ["Gynecology", "Maternity", "Pediatric Surgery", "Fertility"],
     timings: "24/7 Maternity, Outpatient: 9:00 AM - 5:30 PM",
-    image: "https://images.unsplash.com/photo-1538108149393-cebb47acdd4e?auto=format&fit=crop&q=80&w=800",
+    image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT6TZkT1bq8h5Tob4gQl3DIW_gS8FmdGMlJ6ELHg5HsSljUhG9yEdLjEwM&s=10",
     rating: 4.7,
     description: "A premium medical destination for maternity services, infant health, and fertility.",
     isActive: true
@@ -426,7 +426,7 @@ const mockHospitals = [
     longitude: 78.35321,
     departments: ["Cardiology", "Orthopedics", "Nephrology", "General Surgery"],
     timings: "24/7 Emergency, Outpatient: 9:00 AM - 5:00 PM",
-    image: "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?auto=format&fit=crop&q=80&w=800",
+    image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT6TZkT1bq8h5Tob4gQl3DIW_gS8FmdGMlJ6ELHg5HsSljUhG9yEdLjEwM&s=10",
     rating: 4.6,
     description: "Expanding top quality multi-specialty super-specialty interventions near Kondapur.",
     isActive: true
