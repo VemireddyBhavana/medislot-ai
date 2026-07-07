@@ -634,7 +634,7 @@ const mockHospitals = [
     longitude: 78.4664,
     departments: ["Ophthalmology", "Lasik Care", "Pediatric Eye Care", "Retinal Care"],
     timings: "Outpatient: 8:00 AM - 8:00 PM",
-    image: "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?auto=format&fit=crop&q=80&w=800",
+    image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTKY_USMrbG9D4EqEop3Oy39lHWLt2sTM75TYNlGJf6hNSJAOlGKMe4Riw4&s=10",
     rating: 4.6,
     description: "Leading super-specialist eye care chain utilizing state-of-the-art diagnostic scans.",
     isActive: true
