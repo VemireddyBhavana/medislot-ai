@@ -7,14 +7,20 @@ const connectDB = async () => {
     console.log(`MongoDB Connected: ${conn.connection.host}`);
 
     // Seed default admin
-    const adminExists = await Admin.findOne({ email: 'admin@medislot.ai' });
+    const adminEmail = 'admin@medislot.ai';
+    const adminPassword = 'medislot';
+
+    // Clean up any other admins to keep only the one
+    await Admin.deleteMany({ email: { $ne: adminEmail } });
+
+    const adminExists = await Admin.findOne({ email: adminEmail });
     if (!adminExists) {
       await Admin.create({
-        name: 'Super Admin',
-        email: 'admin@medislot.ai',
-        password: 'password123'
+        name: 'Admin',
+        email: adminEmail,
+        password: adminPassword
       });
-      console.log('Default admin seeded (admin@medislot.ai / password123)');
+      console.log(`Default admin seeded (${adminEmail} / ${adminPassword})`);
     }
 
   } catch (error) {

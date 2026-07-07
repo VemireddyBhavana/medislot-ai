@@ -12,7 +12,7 @@ dotenv.config({ path: '../.env' });
 const adminData = {
   name: 'Clinic Administrator',
   email: 'admin@medislot.ai',
-  password: 'hashed_password_placeholder' // In a real app, use bcrypt
+  password: 'medislot'
 };
 
 const doctorsData = [

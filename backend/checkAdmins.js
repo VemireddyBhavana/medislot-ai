@@ -34,9 +34,7 @@ async function test() {
   // 3. Test existing accounts
   console.log('\n=== Testing all existing admin logins ===\n');
   const accounts = [
-    { email: 'admin@medislot.ai', password: 'admin123' },
-    { email: 'sai@gmail.com', password: 'vemireddy' },
-    { email: 'testadmin@example.com', password: 'Password123' },
+    { email: 'admin@medislot.ai', password: 'medislot' },
   ];
 
   for (const acc of accounts) {

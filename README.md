@@ -27,6 +27,12 @@ MediSlot AI is a next-generation healthcare SaaS that eliminates manual scheduli
 - **Database**: MongoDB (Mongoose)
 - **AI/External**: Google Gemini API, OpenStreetMap (Overpass API)
 
+## 🔑 Demo Credentials
+
+To access the Admin Portal, use the following login credentials:
+* **Email:** `admin@medislot.ai`
+* **Password:** `medislot`
+
 ## 🚀 Local Setup & Hackathon Demo Guide
 
 ### 1. Database & Environment Setup
