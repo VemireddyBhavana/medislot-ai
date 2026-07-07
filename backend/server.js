@@ -36,7 +36,7 @@ if (fs.existsSync(frontendDistPath)) {
 }
 
 // Serve index.html or fallback api welcome message
-app.get('*', (req, res) => {
+app.get('/*splat', (req, res) => {
   if (fs.existsSync(indexPath)) {
     res.sendFile(indexPath);
   } else {
