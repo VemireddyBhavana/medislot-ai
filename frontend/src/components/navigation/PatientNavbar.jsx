@@ -84,48 +84,98 @@ export default function PatientNavbar() {
   const activeIndex = navItems.findIndex(item => !item.isButton && location.pathname === item.path);
 
   useEffect(() => {
-    if (activeIndex === -1) return;
-
-    const activeBtn = linkRefs.current[activeIndex];
     const activeIndicator = activeElementRef.current;
     const navContainer = navRef.current;
 
-    if (!activeBtn || !activeIndicator || !navContainer) return;
+    if (!activeIndicator || !navContainer) return;
 
+    // Helper to compute element offset
     const getOffsetLeft = (element) => {
       const elementRect = element.getBoundingClientRect();
       const navRect = navContainer.getBoundingClientRect();
+      // Element width minus active line width (36px in CSS)
       return (
         elementRect.left -
         navRect.left +
-        (elementRect.width - activeIndicator.offsetWidth) / 2
+        (elementRect.width - 36) / 2
       );
     };
 
+    // Helper to align indicator instantly
+    const alignIndicator = () => {
+      if (activeIndex === -1) {
+        gsap.set(activeIndicator, {
+          "--active-element-show": 0,
+        });
+        return;
+      }
+      const activeBtn = linkRefs.current[activeIndex];
+      if (activeBtn) {
+        gsap.set(activeIndicator, {
+          x: getOffsetLeft(activeBtn),
+          "--active-element-show": 1,
+        });
+      }
+    };
+
+    // If route doesn't match any navbar link, hide indicator
+    if (activeIndex === -1) {
+      gsap.to(activeIndicator, {
+        "--active-element-show": 0,
+        duration: 0.2,
+      });
+      prevIndexRef.current = null;
+      
+      window.addEventListener('resize', alignIndicator);
+      return () => {
+        window.removeEventListener('resize', alignIndicator);
+      };
+    }
+
+    const activeBtn = linkRefs.current[activeIndex];
+    if (!activeBtn) return;
+
     const x = getOffsetLeft(activeBtn);
 
+    // Initial mount alignment (when previous index is null)
     if (prevIndexRef.current === null) {
-      gsap.set(activeIndicator, {
-        x: x,
-        "--active-element-show": 1,
-      });
+      alignIndicator();
       prevIndexRef.current = activeIndex;
-      return;
+
+      // Handle cases where fonts/styles load later and shift text width
+      if (document.fonts) {
+        document.fonts.ready.then(alignIndicator);
+      }
+      const t1 = setTimeout(alignIndicator, 50);
+      const t2 = setTimeout(alignIndicator, 300);
+
+      window.addEventListener('resize', alignIndicator);
+      return () => {
+        clearTimeout(t1);
+        clearTimeout(t2);
+        window.removeEventListener('resize', alignIndicator);
+      };
     }
 
     const prevIndex = prevIndexRef.current;
-    if (prevIndex === activeIndex) return;
+    if (prevIndex === activeIndex) {
+      window.addEventListener('resize', alignIndicator);
+      return () => {
+        window.removeEventListener('resize', alignIndicator);
+      };
+    }
 
     const prevBtn = linkRefs.current[prevIndex];
     if (!prevBtn) {
-      gsap.set(activeIndicator, {
-        x: x,
-        "--active-element-show": 1,
-      });
+      alignIndicator();
       prevIndexRef.current = activeIndex;
-      return;
+      window.addEventListener('resize', alignIndicator);
+      return () => {
+        window.removeEventListener('resize', alignIndicator);
+      };
     }
 
+    // Run active laser strike GSAP animation
     const direction = activeIndex > prevIndex ? "after" : "before";
     const oldX = getOffsetLeft(prevBtn);
     const spacing = Math.abs(x - oldX);
@@ -192,6 +242,11 @@ export default function PatientNavbar() {
     });
 
     prevIndexRef.current = activeIndex;
+
+    window.addEventListener('resize', alignIndicator);
+    return () => {
+      window.removeEventListener('resize', alignIndicator);
+    };
   }, [activeIndex]);
 
   const createSVG = (element) => {
