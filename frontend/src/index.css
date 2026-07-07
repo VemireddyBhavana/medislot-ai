@@ -40,9 +40,15 @@ body.dark {
   transform: translateZ(0);
 }
 
-/* Respect user's reduced-motion preference */
+/* Respect user's reduced-motion preference (exclude landing-root elements) */
 @media (prefers-reduced-motion: reduce) {
-  *, ::before, ::after {
+  *:not(.landing-root):not(.landing-root *) {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  *:not(.landing-root):not(.landing-root *)::before,
+  *:not(.landing-root):not(.landing-root *)::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;

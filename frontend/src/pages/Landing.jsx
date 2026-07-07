@@ -6,14 +6,6 @@ import './LandingFlowers.css';
 
 export default function Landing() {
   const navigate = useNavigate();
-  const [isLoaded, setIsLoaded] = useState(false);
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsLoaded(true);
-    }, 1000);
-    return () => clearTimeout(timer);
-  }, []);
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -67,7 +59,7 @@ export default function Landing() {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0, x: -50, scale: 0.96 }}
       transition={{ type: "tween", ease: "anticipate", duration: 0.4 }}
-      className={`min-h-screen text-white font-sans overflow-hidden relative flex flex-col justify-between landing-root ${!isLoaded ? 'not-loaded' : ''}`}
+      className="min-h-screen text-white font-sans overflow-x-hidden overflow-y-auto relative flex flex-col justify-between landing-root"
     >
       {/* Flower CSS Background Animation */}
       <div className="night"></div>
@@ -392,8 +384,8 @@ export default function Landing() {
       </header>
 
       {/* Main Content inside a stunning dark glassmorphic box aligned to the left */}
-      <main className="flex-1 max-w-7xl mx-auto px-6 flex items-center justify-start py-8 z-10 w-full">
-        <div className="w-full lg:w-[48%] lg:max-w-[550px] p-6 lg:p-8 rounded-3xl bg-slate-950/65 backdrop-blur-xl border border-slate-900/50 shadow-2xl flex flex-col gap-6">
+      <main className="flex-1 max-w-7xl mx-auto px-4 sm:px-6 flex items-start lg:items-center justify-start py-4 lg:py-8 z-10 w-full">
+        <div className="w-full md:w-[52%] lg:w-[48%] lg:max-w-[550px] p-5 lg:p-8 rounded-3xl bg-slate-950/40 md:bg-slate-950/60 lg:bg-slate-950/65 backdrop-blur-xl border border-slate-900/50 shadow-2xl flex flex-col gap-5 relative z-10">
           {/* Hero Content */}
           <motion.div 
             className="text-left space-y-4"
