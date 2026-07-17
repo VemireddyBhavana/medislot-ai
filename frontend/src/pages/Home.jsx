@@ -405,7 +405,9 @@ export default function Home() {
                 className="bg-white dark:bg-slate-900 p-5 sm:p-6 rounded-2xl shadow-sm dark:shadow-slate-950/20 border border-slate-100 dark:border-slate-800 relative z-10 flex flex-col gap-4 transition-colors duration-200 hover:shadow-md hover:border-blue-100 dark:hover:border-blue-800"
               >
                 <div className="flex items-center justify-between">
-                  <div className="flex items-center justify-center w-8 h-8 bg-blue-600 text-white rounded-full text-xs font-bold shrink-0">Step {step.num}</div>
+                  <div className="flex items-center justify-center px-3 py-1 bg-blue-600 text-white rounded-full text-[10px] font-extrabold tracking-wider uppercase shrink-0">
+                    Step {step.num}
+                  </div>
                   <div className="w-11 h-11 bg-blue-50 dark:bg-blue-950/40 rounded-xl flex items-center justify-center">
                     <step.icon className="text-blue-600 dark:text-blue-400" size={22} />
                   </div>
