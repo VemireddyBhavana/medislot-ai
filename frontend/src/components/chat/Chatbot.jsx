@@ -2,8 +2,6 @@ import React, { useState, useRef, useEffect } from 'react';
 import { MessageSquare, X, Send, User, Bot, Loader2, Mic, MicOff } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { GoogleGenerativeAI } from '@google/generative-ai';
-import { useLanguage } from '../../context/LanguageContext';
-
 const chatLanguages = [
   { code: 'en', name: 'English' },
   { code: 'te', name: 'తెలుగు' },
@@ -11,6 +9,49 @@ const chatLanguages = [
   { code: 'mr', name: 'मराठी' },
   { code: 'gu', name: 'ગુજરાતી' }
 ];
+
+const localBotStrings = {
+  en: {
+    welcome: "Hi! I'm MediBot. How can I help you today?",
+    status: "Online | Automated Assistant",
+    placeholder: "Type your message...",
+    listening: "Listening...",
+    stopMic: "Stop Recording",
+    startMic: "Use Voice Booking"
+  },
+  te: {
+    welcome: "హాయ్! నేను మెడిబాట్. ఈ రోజు నేను మీకు ఎలా సహాయపడగలను?",
+    status: "ఆన్‌లైన్ | ఆటోమేటెడ్ అసిస్టెంట్",
+    placeholder: "మీ సందేశాన్ని టైప్ చేయండి...",
+    listening: "వింటున్నాను...",
+    stopMic: "రికార్డింగ్ ఆపివేయి",
+    startMic: "వాయిస్ బుకింగ్ ఉపయోగించండి"
+  },
+  hi: {
+    welcome: "नमस्ते! मैं मेडीबॉट हूँ। आज मैं आपकी क्या मदद कर सकता हूँ?",
+    status: "ऑनलाइन | स्वचालित सहायक",
+    placeholder: "अपना संदेश टाइप करें...",
+    listening: "सुन रहा हूँ...",
+    stopMic: "रिकॉर्डिंग रोकें",
+    startMic: "वॉयस बुकिंग का उपयोग करें"
+  },
+  mr: {
+    welcome: "हाय! मी मेडीबॉट आहे. आज मी तुम्हाला कशी मदत करू?",
+    status: "ऑनलाइन | स्वयंचलित सहाय्यक",
+    placeholder: "तुमचा संदेश टाईप करा...",
+    listening: "ऐकत आहे...",
+    stopMic: "रेकॉर्डिंग थांबवा",
+    startMic: "व्हॉइस बुकिंग वापरा"
+  },
+  gu: {
+    welcome: "હાય! હું મેડીબોટ છું. આજે હું તમને કેવી રીતે મદદ કરી શકું?",
+    status: "ઓનલાઇન | સ્વચાલિત સહાયક",
+    placeholder: "તમારો સંદેશ લખો...",
+    listening: "સાંભળી રહ્યું છે...",
+    stopMic: "રેકોર્ડિંગ બંધ કરો",
+    startMic: "વૉઇસ બુકિંગ વાપરો"
+  }
+};
 
 function RobotAvatar({ size = 48, className = "" }) {
   return (
@@ -116,10 +157,18 @@ function RobotAvatar({ size = 48, className = "" }) {
 }
 
 export default function Chatbot() {
-  const { language, setLanguage } = useLanguage();
+  const [chatbotLang, setChatbotLang] = useState(() => {
+    return localStorage.getItem('chatbot_language') || 'en';
+  });
+
+  const changeChatbotLanguage = (lang) => {
+    setChatbotLang(lang);
+    localStorage.setItem('chatbot_language', lang);
+  };
+
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState([
-    { id: 1, text: "Hi! I'm MediBot. How can I help you today?", sender: 'bot' }
+    { id: 1, text: "", sender: 'bot' }
   ]);
   const [inputValue, setInputValue] = useState('');
   const [isTyping, setIsTyping] = useState(false);
@@ -175,7 +224,7 @@ export default function Chatbot() {
       // Use gemini-flash-latest for fast responses
       const model = genAI.getGenerativeModel({ 
         model: "gemini-flash-latest",
-        systemInstruction: "You are MediBot, an expert AI symptom checker and clinic assistant for MediSlot AI. Your job is to listen to the user's symptoms, provide a *very brief* and polite analysis, and strongly recommend which specific medical specialist (e.g., Cardiologist, Dermatologist, General Physician) they should book an appointment with. Always remind them to click the 'Book Appointment' button on the navigation bar to schedule a visit. Do not provide dangerous medical diagnoses, but give helpful triage advice. Keep responses under 3 sentences and professional."
+        systemInstruction: `You are MediBot, an expert AI symptom checker and clinic assistant for MediSlot AI. Your job is to listen to the user's symptoms, provide a *very brief* and polite analysis, and strongly recommend which specific medical specialist (e.g., Cardiologist, Dermatologist, General Physician) they should book an appointment with. Always remind them to click the 'Book Appointment' button on the navigation bar to schedule a visit. Do not provide dangerous medical diagnoses, but give helpful triage advice. Keep responses under 3 sentences and professional. IMPORTANT: You must respond entirely in the language corresponding to language code: '${chatbotLang}'. Supported codes: en = English, te = Telugu (తెలుగు), hi = Hindi (हिन्दी), mr = Marathi (मराठी), gu = Gujarati (ગુજરાતી). Respond in that language script.`
       });
 
       // Construct simple chat history context
@@ -233,7 +282,7 @@ export default function Chatbot() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 80, scale: 0.8 }}
             transition={{ type: 'spring', damping: 20, stiffness: 280 }}
-            className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 w-[calc(100vw-2rem)] sm:w-96 max-w-[380px] bg-white rounded-2xl shadow-[0_12px_40px_rgb(0,0,0,0.12)] border border-slate-200 z-50 flex flex-col overflow-hidden"
+            className="notranslate fixed bottom-4 right-4 sm:bottom-6 sm:right-6 w-[calc(100vw-2rem)] sm:w-96 max-w-[380px] bg-white rounded-2xl shadow-[0_12px_40px_rgb(0,0,0,0.12)] border border-slate-200 z-50 flex flex-col overflow-hidden"
             style={{ height: '500px', maxHeight: '80vh' }}
           >
             {/* Header */}
@@ -244,7 +293,7 @@ export default function Chatbot() {
                 </div>
                 <div>
                   <h3 className="font-bold text-sm">MediBot</h3>
-                  <p className="text-xs text-blue-200">Online | Automated Assistant</p>
+                  <p className="text-xs text-blue-200">{localBotStrings[chatbotLang].status}</p>
                 </div>
               </div>
               <button 
@@ -261,11 +310,11 @@ export default function Chatbot() {
               style={{ msOverflowStyle: 'none', scrollbarWidth: 'none' }}
             >
               {chatLanguages.map((lang) => {
-                const isActive = language === lang.code;
+                const isActive = chatbotLang === lang.code;
                 return (
                   <button
                     key={lang.code}
-                    onClick={() => setLanguage(lang.code)}
+                    onClick={() => changeChatbotLanguage(lang.code)}
                     className={`text-xs font-bold px-3 py-1.5 rounded-full transition-all duration-200 cursor-pointer select-none
                       ${isActive 
                         ? 'bg-emerald-700 text-white shadow-sm dark:bg-emerald-600' 
@@ -295,7 +344,7 @@ export default function Chatbot() {
                   )}
                   
                   <div className={`p-3 rounded-2xl max-w-[75%] text-sm ${msg.sender === 'user' ? 'bg-blue-600 text-white rounded-br-none' : 'bg-white border border-slate-200 text-slate-700 rounded-bl-none shadow-sm'}`}>
-                    {msg.text}
+                    {msg.id === 1 ? localBotStrings[chatbotLang].welcome : msg.text}
                   </div>
                   
                   {msg.sender === 'user' && (
@@ -343,7 +392,7 @@ export default function Chatbot() {
                 type="text" 
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
-                placeholder={isRecording ? "Listening..." : "Type your message..."} 
+                placeholder={isRecording ? localBotStrings[chatbotLang].listening : localBotStrings[chatbotLang].placeholder} 
                 className={`flex-1 bg-slate-50 border border-slate-200 rounded-full px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all ${isRecording ? 'border-red-400 bg-red-50 text-red-700 animate-pulse' : ''}`}
               />
               {recognitionRef.current && (
@@ -358,7 +407,7 @@ export default function Chatbot() {
                     type="button"
                     onClick={toggleRecording}
                     className={`relative z-10 w-10 h-10 rounded-full flex items-center justify-center border transition-all ${isRecording ? 'bg-red-500 text-white border-red-500 shadow-md shadow-red-200' : 'bg-slate-50 text-slate-500 border-slate-200 hover:bg-slate-100 hover:text-slate-700'}`}
-                    title={isRecording ? "Stop Recording" : "Use Voice Booking"}
+                    title={isRecording ? localBotStrings[chatbotLang].stopMic : localBotStrings[chatbotLang].startMic}
                   >
                     {isRecording ? <MicOff size={16} /> : <Mic size={16} />}
                   </button>
