@@ -313,34 +313,55 @@ export default function Home() {
       </section>
 
       {/* 🌟🌟 Feature Cards 🌟🌟 */}
-      <section className="py-10 sm:py-14 bg-white dark:bg-slate-950 transition-colors duration-300">
+      <section className="py-14 sm:py-20 bg-slate-50 dark:bg-slate-900/30 transition-colors duration-300">
         <PageContainer>
+          {/* Section Header */}
+          <motion.div
+            className="text-center mb-10 sm:mb-12"
+            initial="hidden"
+            whileInView="visible"
+            viewport={viewport}
+            variants={fadeInUp}
+          >
+            <span className="inline-flex items-center gap-2 bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400 px-3 py-1.5 rounded-full text-xs font-bold mb-4 border border-blue-100 dark:border-blue-900/50">
+              <Activity size={13} /> Powered by Gemini AI
+            </span>
+            <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white mb-2">Platform Features</h2>
+            <p className="text-slate-500 dark:text-slate-400 text-sm max-w-xl mx-auto leading-relaxed">
+              MediSlot AI uses state-of-the-art machine learning to make healthcare smarter, faster, and more accessible.
+            </p>
+          </motion.div>
+
           <motion.div 
-            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4"
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6"
             variants={staggerContainer}
             initial="hidden"
             whileInView="visible"
             viewport={viewport}
           >
             {[
-              { icon: CalendarCheck, title: 'AI Smart Scheduling', desc: 'AI suggests the best available slots for you.', path: '/features/smart-scheduling' },
-              { icon: TrendingUp, title: 'AI No-Show Prediction', desc: 'We predict no-show risk and prepare better.', path: '/features/no-show-prediction' },
-              { icon: Users, title: 'Doctor Workload Balancer', desc: 'Distributes appointments evenly across doctors.', path: '/features/workload-balancer' },
-              { icon: Bell, title: 'Smart Reminders', desc: 'Timely SMS & email reminders for appointments.', path: '/features/reminders' },
-              { icon: Stethoscope, title: 'AI Symptom Checker', desc: 'Analyze symptoms with Gemini and find the right doctors.', path: '/features/symptom-checker' },
+              { icon: CalendarCheck, title: 'AI Smart Scheduling', desc: 'AI suggests the best available time slots for you based on doctor availability and wait time predictions.', path: '/features/smart-scheduling', color: 'blue' },
+              { icon: TrendingUp, title: 'AI No-Show Prediction', desc: 'Machine learning predicts patient no-show likelihood so clinics can optimise their rosters proactively.', path: '/features/no-show-prediction', color: 'purple' },
+              { icon: Users, title: 'Doctor Workload Balancer', desc: 'Intelligently distributes appointments across doctors to prevent burnout and reduce patient wait times.', path: '/features/workload-balancer', color: 'green' },
+              { icon: Bell, title: 'Smart Reminders', desc: 'Automated multi-channel SMS, email, and WhatsApp reminders to reduce missed appointments.', path: '/features/reminders', color: 'orange' },
+              { icon: Stethoscope, title: 'AI Symptom Checker', desc: 'Describe symptoms in plain English — our Gemini-powered triage engine recommends the right specialist instantly.', path: '/features/symptom-checker', color: 'red' },
+              { icon: ShieldCheck, title: 'Secure Health Records', desc: 'Your medical history and appointments are encrypted and available securely across all devices.', path: '/patient/dashboard', color: 'teal' },
             ].map(({ icon: Icon, title, desc, path }) => (
-              <Link to={path} key={title} className="h-full block">
+              <Link to={path} key={title} className="h-full block group">
                 <motion.div 
                   variants={fadeInUp} 
                   {...cardMotion}
-                  className="bg-white dark:bg-slate-900 p-5 rounded-2xl shadow-sm dark:shadow-slate-950/20 border border-slate-100 dark:border-slate-800 flex flex-col gap-3 justify-between hover:shadow-md hover:border-blue-100 dark:hover:border-blue-800 transition-all duration-200 h-full cursor-pointer"
+                  className="bg-white dark:bg-slate-900 p-6 rounded-2xl shadow-sm dark:shadow-slate-950/20 border border-slate-100 dark:border-slate-800 flex flex-col gap-4 hover:shadow-lg hover:border-blue-200 dark:hover:border-blue-700 transition-all duration-300 h-full cursor-pointer"
                 >
-                  <div className="w-11 h-11 bg-blue-50 dark:bg-blue-950/40 rounded-xl flex items-center justify-center shrink-0">
-                    <Icon className="text-blue-600 dark:text-blue-400" size={22} />
+                  <div className="w-12 h-12 bg-blue-50 dark:bg-blue-950/40 rounded-2xl flex items-center justify-center shrink-0 group-hover:bg-blue-100 dark:group-hover:bg-blue-900/40 transition-colors">
+                    <Icon className="text-blue-600 dark:text-blue-400" size={24} />
                   </div>
-                  <div>
-                    <h3 className="font-bold text-slate-900 dark:text-white text-[13px] leading-tight mb-1">{title}</h3>
-                    <p className="text-slate-500 dark:text-slate-400 text-[11px] leading-snug">{desc}</p>
+                  <div className="flex-1">
+                    <h3 className="font-bold text-slate-900 dark:text-white text-sm leading-tight mb-2">{title}</h3>
+                    <p className="text-slate-500 dark:text-slate-400 text-xs leading-relaxed">{desc}</p>
+                  </div>
+                  <div className="flex items-center gap-1 text-blue-600 dark:text-blue-400 text-xs font-bold mt-1 group-hover:gap-2 transition-all">
+                    Explore <ArrowRight size={13} />
                   </div>
                 </motion.div>
               </Link>
@@ -350,7 +371,7 @@ export default function Home() {
       </section>
 
       {/* How It Works */}
-      <section id="how-it-works" className="py-12 sm:py-16 bg-slate-50/70 dark:bg-slate-900/30 transition-colors duration-300">
+      <section id="how-it-works" className="py-14 sm:py-20 bg-white dark:bg-slate-950 transition-colors duration-300">
         <PageContainer>
           <motion.div 
             className="text-center mb-10 sm:mb-14"
@@ -360,41 +381,38 @@ export default function Home() {
             variants={fadeInUp}
           >
             <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white mb-2">How It Works</h2>
-            <p className="text-slate-500 dark:text-slate-400 text-sm">Simple steps to book your appointment</p>
+            <p className="text-slate-500 dark:text-slate-400 text-sm">Book your appointment in 5 simple steps</p>
           </motion.div>
 
           <motion.div 
-            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 lg:gap-5 relative"
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4 sm:gap-5 relative"
             variants={staggerContainer}
             initial="hidden"
             whileInView="visible"
             viewport={viewport}
           >
-            {/* Connecting line */}
-            <div className="hidden lg:block absolute top-1/2 left-[10%] right-[10%] h-[2px] border-t-2 border-dashed border-slate-200 dark:border-slate-700 -z-0 transform -translate-y-1/2" />
-
             {[
-              { num: 1, icon: Stethoscope, title: 'Describe Symptoms', desc: 'Explain symptoms to our AI-powered booking helper.' },
-              { num: 2, icon: CalendarCheck, title: 'AI Finds Specialist', desc: 'Gemini reviews details and suggests the optimal specialist.' },
-              { num: 3, icon: User, title: 'Choose Recommended Doctor', desc: 'Select the workload-balanced doctor suggested for you.' },
-              { num: 4, icon: ClipboardCheck, title: 'Book Appointment', desc: 'Secure your calendar slot at nearby hospitals instantly.' },
-              { num: 5, icon: Bell, title: 'Get Smart Reminders', desc: 'Receive automated SMS, email, and WhatsApp re-engagement notes.' },
+              { num: 1, icon: Stethoscope, title: 'Describe Symptoms', desc: 'Tell our AI-powered assistant what you are experiencing in plain language.' },
+              { num: 2, icon: CalendarCheck, title: 'AI Finds Specialist', desc: 'Gemini analyses your symptoms and recommends the right medical specialty.' },
+              { num: 3, icon: User, title: 'Pick Your Doctor', desc: 'Choose from a workload-balanced list of available doctors near you.' },
+              { num: 4, icon: ClipboardCheck, title: 'Book Appointment', desc: 'Confirm your preferred date and time slot at the nearest hospital.' },
+              { num: 5, icon: Bell, title: 'Receive Reminders', desc: 'Get automated SMS, email, and WhatsApp reminders so you never miss a visit.' },
             ].map((step) => (
               <motion.div 
                 key={step.num} 
                 variants={fadeInUp}
                 whileTap={{ scale: 0.97 }}
-                className="bg-white dark:bg-slate-900 p-4 sm:p-5 rounded-2xl shadow-sm dark:shadow-slate-950/20 border border-slate-100 dark:border-slate-800 relative z-10 flex flex-col gap-3 transition-colors duration-200"
+                className="bg-white dark:bg-slate-900 p-5 sm:p-6 rounded-2xl shadow-sm dark:shadow-slate-950/20 border border-slate-100 dark:border-slate-800 relative z-10 flex flex-col gap-4 transition-colors duration-200 hover:shadow-md hover:border-blue-100 dark:hover:border-blue-800"
               >
                 <div className="flex items-center justify-between">
-                  <div className="flex items-center justify-center w-7 h-7 bg-blue-600 text-white rounded-full text-xs font-bold">{step.num}</div>
-                  <div className="w-10 h-10 bg-blue-50 dark:bg-blue-950/40 rounded-xl flex items-center justify-center">
-                    <step.icon className="text-blue-600 dark:text-blue-400" size={20} />
+                  <div className="flex items-center justify-center w-8 h-8 bg-blue-600 text-white rounded-full text-xs font-bold shrink-0">Step {step.num}</div>
+                  <div className="w-11 h-11 bg-blue-50 dark:bg-blue-950/40 rounded-xl flex items-center justify-center">
+                    <step.icon className="text-blue-600 dark:text-blue-400" size={22} />
                   </div>
                 </div>
                 <div>
-                  <h3 className="font-bold text-slate-900 dark:text-white text-sm mb-0.5">{step.title}</h3>
-                  <p className="text-[11px] text-slate-500 dark:text-slate-400 leading-snug">{step.desc}</p>
+                  <h3 className="font-bold text-slate-900 dark:text-white text-sm leading-tight mb-1.5">{step.title}</h3>
+                  <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">{step.desc}</p>
                 </div>
               </motion.div>
             ))}

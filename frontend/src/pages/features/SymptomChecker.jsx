@@ -12,6 +12,7 @@ export default function SymptomChecker() {
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState(null);
   const [copied, setCopied] = useState(false);
+  const [showDeveloperConsole, setShowDeveloperConsole] = useState(false);
 
   const handleAnalyze = async () => {
     if (!symptoms.trim()) return;
@@ -143,6 +144,23 @@ export default function SymptomChecker() {
                         </p>
                       </div>
 
+                      {/* Possible Conditions */}
+                      {result.possibleConditions && result.possibleConditions.length > 0 && (
+                        <div>
+                          <h4 className="text-[10px] font-bold text-slate-400 uppercase tracking-wide mb-2">Informational Conditions Classified</h4>
+                          <div className="flex flex-wrap gap-2">
+                            {result.possibleConditions.map((cond, i) => (
+                              <span 
+                                key={i} 
+                                className="bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-[11px] px-3 py-1 rounded-full border border-slate-200 dark:border-slate-750 font-semibold shadow-sm"
+                              >
+                                {cond}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
                       {/* Emergency Warning */}
                       {result.emergencyWarning && (
                         <div className="bg-red-500/10 border border-red-500/30 text-red-700 dark:text-red-400 p-4 rounded-xl text-xs flex gap-3 items-start leading-relaxed">
@@ -163,23 +181,44 @@ export default function SymptomChecker() {
                     </div>
                   </CardWrapper>
 
-                  {/* LLM JSON Developer Console */}
-                  <CardWrapper className="bg-slate-950 text-white border-slate-800 p-4 relative" noPadding>
-                    <div className="px-4 py-3 border-b border-slate-900 flex justify-between items-center">
-                      <span className="flex items-center gap-1.5 text-[10px] font-bold text-slate-400 uppercase tracking-wider">
-                        <Code size={13} /> Structured JSON Response
-                      </span>
-                      <button 
-                        onClick={handleCopyJson}
-                        className="text-[10px] bg-slate-900 hover:bg-slate-800 text-slate-400 border border-slate-800 hover:text-white px-2.5 py-1 rounded-md transition-all flex items-center gap-1 font-bold cursor-pointer"
+                  {/* Toggle button for raw JSON response console */}
+                  <div className="flex justify-end pr-2">
+                    <button 
+                      onClick={() => setShowDeveloperConsole(prev => !prev)}
+                      className="text-xs text-blue-600 dark:text-blue-400 font-bold hover:underline cursor-pointer flex items-center gap-1"
+                    >
+                      <Code size={14} />
+                      {showDeveloperConsole ? 'Hide Developer Details (JSON)' : 'Show Developer Details (JSON)'}
+                    </button>
+                  </div>
+
+                  <AnimatePresence>
+                    {showDeveloperConsole && (
+                      <motion.div
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: 'auto' }}
+                        exit={{ opacity: 0, height: 0 }}
+                        className="overflow-hidden"
                       >
-                        {copied ? <Check size={11} /> : 'Copy JSON'}
-                      </button>
-                    </div>
-                    <div className="p-4 overflow-x-auto max-h-[220px] font-mono text-[11px] text-blue-300 leading-normal whitespace-pre">
-                      {JSON.stringify(result, null, 2)}
-                    </div>
-                  </CardWrapper>
+                        <CardWrapper className="bg-slate-950 text-white border-slate-800 p-4 relative" noPadding>
+                          <div className="px-4 py-3 border-b border-slate-900 flex justify-between items-center">
+                            <span className="flex items-center gap-1.5 text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+                              <Code size={13} /> Structured JSON Response
+                            </span>
+                            <button 
+                              onClick={handleCopyJson}
+                              className="text-[10px] bg-slate-900 hover:bg-slate-800 text-slate-400 border border-slate-800 hover:text-white px-2.5 py-1 rounded-md transition-all flex items-center gap-1 font-bold cursor-pointer"
+                            >
+                              {copied ? <Check size={11} /> : 'Copy JSON'}
+                            </button>
+                          </div>
+                          <div className="p-4 overflow-x-auto max-h-[220px] font-mono text-[11px] text-blue-300 leading-normal whitespace-pre">
+                            {JSON.stringify(result, null, 2)}
+                          </div>
+                        </CardWrapper>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
                 </motion.div>
               ) : (
                 <div className="bg-slate-100 dark:bg-slate-900/40 border border-dashed border-slate-200 dark:border-slate-800 rounded-3xl h-[320px] flex flex-col items-center justify-center text-center p-8">
