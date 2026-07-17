@@ -3,6 +3,109 @@ import { MessageSquare, X, Send, User, Bot, Loader2, Mic, MicOff } from 'lucide-
 import { motion, AnimatePresence } from 'framer-motion';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 
+function RobotAvatar({ size = 48, className = "" }) {
+  return (
+    <svg 
+      width={size} 
+      height={size} 
+      viewBox="0 0 100 110" 
+      className={className}
+      fill="none" 
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <defs>
+        {/* Gradients */}
+        <linearGradient id="bodyGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stopColor="#ffffff" />
+          <stop offset="100%" stopColor="#d1d5db" />
+        </linearGradient>
+        <linearGradient id="headGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stopColor="#f3f4f6" />
+          <stop offset="100%" stopColor="#9ca3af" />
+        </linearGradient>
+        <linearGradient id="screenGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" stopColor="#1e293b" />
+          <stop offset="100%" stopColor="#0f172a" />
+        </linearGradient>
+        <filter id="glow">
+          <feGaussianBlur stdDeviation="1.5" result="coloredBlur"/>
+          <feMerge>
+            <feMergeNode in="coloredBlur"/>
+            <feMergeNode in="SourceGraphic"/>
+          </feMerge>
+        </filter>
+        <style>{`
+          @keyframes robot-float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-5px); }
+            100% { transform: translateY(0px); }
+          }
+          @keyframes eye-blink {
+            0%, 90%, 100% { transform: scaleY(1); }
+            95% { transform: scaleY(0.1); }
+          }
+          @keyframes shadow-scale {
+            0%, 100% { transform: scale(1); opacity: 0.25; }
+            50% { transform: scale(0.8); opacity: 0.12; }
+          }
+          .bot-container {
+            animation: robot-float 3.5s ease-in-out infinite;
+            transform-origin: center;
+          }
+          .bot-eye {
+            animation: eye-blink 5s infinite;
+            transform-origin: 37px 32px;
+          }
+          .bot-eye-right {
+            animation: eye-blink 5s infinite;
+            transform-origin: 63px 32px;
+          }
+          .bot-shadow {
+            animation: shadow-scale 3.5s ease-in-out infinite;
+            transform-origin: 50px 103px;
+          }
+        `}</style>
+      </defs>
+
+      {/* Ground Shadow */}
+      <ellipse className="bot-shadow" cx="50" cy="103" rx="18" ry="2.5" fill="#000" />
+
+      {/* Floating Robot Body Wrapper */}
+      <g className="bot-container">
+        {/* Left Arm */}
+        <rect x="12" y="55" width="8" height="24" rx="4" fill="url(#bodyGrad)" transform="rotate(15 12 55)" />
+        {/* Right Arm */}
+        <rect x="80" y="55" width="8" height="24" rx="4" fill="url(#bodyGrad)" transform="rotate(-15 88 55)" />
+
+        {/* Neck connector */}
+        <rect x="44" y="52" width="12" height="8" rx="2" fill="#9ca3af" />
+
+        {/* Torso */}
+        <rect x="30" y="56" width="40" height="34" rx="17" fill="url(#bodyGrad)" stroke="#cbd5e1" strokeWidth="1" />
+        <rect x="38" y="66" width="24" height="14" rx="4" fill="#cbd5e1" opacity="0.5" />
+        <line x1="50" y1="70" x2="50" y2="76" stroke="#9ca3af" strokeWidth="1.5" />
+
+        {/* Side Ears */}
+        <rect x="16" y="28" width="6" height="14" rx="3" fill="#9ca3af" />
+        <rect x="78" y="28" width="6" height="14" rx="3" fill="#9ca3af" />
+
+        {/* Head */}
+        <rect x="20" y="14" width="60" height="42" rx="18" fill="url(#headGrad)" stroke="#cbd5e1" strokeWidth="1" />
+
+        {/* Screen */}
+        <rect x="25" y="19" width="50" height="32" rx="12" fill="url(#screenGrad)" />
+
+        {/* Glowing Eyes */}
+        <ellipse className="bot-eye" cx="37" cy="32" rx="4.5" ry="3.5" fill="#22d3ee" filter="url(#glow)" />
+        <ellipse className="bot-eye-right" cx="63" cy="32" rx="4.5" ry="3.5" fill="#22d3ee" filter="url(#glow)" />
+
+        {/* Mouth (Smile) */}
+        <path d="M 44 42 Q 50 45 56 42" stroke="#22d3ee" strokeWidth="1.5" strokeLinecap="round" fill="none" filter="url(#glow)" />
+      </g>
+    </svg>
+  );
+}
+
 export default function Chatbot() {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState([
@@ -103,31 +206,31 @@ export default function Chatbot() {
     <>
       {/* Chat Button */}
       <motion.button 
-        className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 w-14 h-14 bg-blue-600 text-white rounded-full flex items-center justify-center shadow-[0_8px_30px_rgb(37,99,235,0.4)] hover:bg-blue-700 transition-colors z-50"
+        className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 w-16 h-16 rounded-full flex items-center justify-center z-50 cursor-pointer select-none"
         onClick={() => setIsOpen(true)}
-        whileHover={{ scale: 1.05 }}
-        whileTap={{ scale: 0.95 }}
+        whileHover={{ scale: 1.1, rotate: [0, -5, 5, 0] }}
+        whileTap={{ scale: 0.9 }}
         style={{ display: isOpen ? 'none' : 'flex' }}
       >
-        <MessageSquare size={24} />
+        <RobotAvatar size={68} />
       </motion.button>
 
       {/* Chat Window */}
       <AnimatePresence>
         {isOpen && (
           <motion.div 
-            initial={{ opacity: 0, y: 20, scale: 0.95 }}
+            initial={{ opacity: 0, y: 80, scale: 0.8 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 20, scale: 0.95 }}
-            transition={{ duration: 0.2 }}
+            exit={{ opacity: 0, y: 80, scale: 0.8 }}
+            transition={{ type: 'spring', damping: 20, stiffness: 280 }}
             className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 w-[calc(100vw-2rem)] sm:w-96 max-w-[380px] bg-white rounded-2xl shadow-[0_12px_40px_rgb(0,0,0,0.12)] border border-slate-200 z-50 flex flex-col overflow-hidden"
             style={{ height: '500px', maxHeight: '80vh' }}
           >
             {/* Header */}
             <div className="bg-blue-600 p-4 flex justify-between items-center text-white shrink-0">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center">
-                  <Bot size={20} />
+                <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center overflow-hidden">
+                  <RobotAvatar size={42} className="translate-y-1.5" />
                 </div>
                 <div>
                   <h3 className="font-bold text-sm">MediBot</h3>
@@ -145,10 +248,16 @@ export default function Chatbot() {
             {/* Messages Area */}
             <div className="flex-1 overflow-y-auto p-4 bg-slate-50 space-y-4 custom-scrollbar">
               {messages.map(msg => (
-                <div key={msg.id} className={`flex gap-3 ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}>
+                <motion.div 
+                  initial={{ opacity: 0, y: 15 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.25, ease: "easeOut" }}
+                  key={msg.id} 
+                  className={`flex gap-3 ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}
+                >
                   {msg.sender === 'bot' && (
-                    <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center shrink-0 mt-auto">
-                      <Bot size={16} className="text-blue-600" />
+                    <div className="w-8 h-8 rounded-full overflow-hidden bg-slate-100 flex items-center justify-center shrink-0 mt-auto border border-slate-200">
+                      <RobotAvatar size={32} className="translate-y-1" />
                     </div>
                   )}
                   
@@ -161,18 +270,36 @@ export default function Chatbot() {
                       <User size={16} className="text-slate-500" />
                     </div>
                   )}
-                </div>
+                </motion.div>
               ))}
               
               {isTyping && (
-                <div className="flex gap-3 justify-start">
-                  <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center shrink-0 mt-auto">
-                    <Bot size={16} className="text-blue-600" />
+                <motion.div 
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="flex gap-3 justify-start"
+                >
+                  <div className="w-8 h-8 rounded-full overflow-hidden bg-slate-100 flex items-center justify-center shrink-0 mt-auto border border-slate-200">
+                    <RobotAvatar size={32} className="translate-y-1" />
                   </div>
-                  <div className="p-4 rounded-2xl bg-white border border-slate-200 rounded-bl-none shadow-sm flex items-center">
-                    <Loader2 size={16} className="text-blue-600 animate-spin" />
+                  <div className="p-4 rounded-2xl bg-white border border-slate-200 rounded-bl-none shadow-sm flex items-center gap-1.5">
+                    <motion.span 
+                      animate={{ y: [0, -5, 0] }}
+                      transition={{ repeat: Infinity, duration: 0.6, delay: 0 }}
+                      className="w-1.5 h-1.5 bg-blue-600 rounded-full inline-block"
+                    />
+                    <motion.span 
+                      animate={{ y: [0, -5, 0] }}
+                      transition={{ repeat: Infinity, duration: 0.6, delay: 0.15 }}
+                      className="w-1.5 h-1.5 bg-blue-600 rounded-full inline-block"
+                    />
+                    <motion.span 
+                      animate={{ y: [0, -5, 0] }}
+                      transition={{ repeat: Infinity, duration: 0.6, delay: 0.3 }}
+                      className="w-1.5 h-1.5 bg-blue-600 rounded-full inline-block"
+                    />
                   </div>
-                </div>
+                </motion.div>
               )}
               <div ref={messagesEndRef} />
             </div>
@@ -187,14 +314,22 @@ export default function Chatbot() {
                 className={`flex-1 bg-slate-50 border border-slate-200 rounded-full px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all ${isRecording ? 'border-red-400 bg-red-50 text-red-700 animate-pulse' : ''}`}
               />
               {recognitionRef.current && (
-                <button
-                  type="button"
-                  onClick={toggleRecording}
-                  className={`w-10 h-10 rounded-full flex items-center justify-center shrink-0 border transition-all ${isRecording ? 'bg-red-500 text-white border-red-500 shadow-md shadow-red-200 animate-bounce' : 'bg-slate-50 text-slate-500 border-slate-200 hover:bg-slate-100 hover:text-slate-700'}`}
-                  title={isRecording ? "Stop Recording" : "Use Voice Booking"}
-                >
-                  {isRecording ? <MicOff size={16} /> : <Mic size={16} />}
-                </button>
+                <div className="relative shrink-0">
+                  {isRecording && (
+                    <>
+                      <span className="absolute inset-0 rounded-full bg-red-400 opacity-75 animate-ping" />
+                      <span className="absolute -inset-2 rounded-full bg-red-300 opacity-40 animate-pulse" />
+                    </>
+                  )}
+                  <button
+                    type="button"
+                    onClick={toggleRecording}
+                    className={`relative z-10 w-10 h-10 rounded-full flex items-center justify-center border transition-all ${isRecording ? 'bg-red-500 text-white border-red-500 shadow-md shadow-red-200' : 'bg-slate-50 text-slate-500 border-slate-200 hover:bg-slate-100 hover:text-slate-700'}`}
+                    title={isRecording ? "Stop Recording" : "Use Voice Booking"}
+                  >
+                    {isRecording ? <MicOff size={16} /> : <Mic size={16} />}
+                  </button>
+                </div>
               )}
               <button 
                 type="submit"
