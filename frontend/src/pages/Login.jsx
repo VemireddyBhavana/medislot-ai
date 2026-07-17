@@ -84,7 +84,7 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen relative flex items-center justify-center font-sans overflow-hidden bg-slate-900">
+    <div className="min-h-screen relative flex items-center justify-center font-sans overflow-hidden" style={{ background: '#0f172a' }}>
       {/* Background Video */}
       <video
         autoPlay loop muted playsInline
@@ -133,7 +133,8 @@ export default function Login() {
         initial={{ opacity: 0, y: 24 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.45, ease: 'easeOut' }}
-        className="relative z-10 w-full max-w-sm mx-4 rounded-3xl bg-slate-950/75 border border-white/10 backdrop-blur-2xl shadow-2xl overflow-hidden"
+        className="relative z-10 w-full max-w-sm mx-4 rounded-3xl border border-white/10 backdrop-blur-2xl shadow-2xl overflow-hidden"
+        style={{ background: theme === 'light' ? 'rgba(15,23,42,0.85)' : 'rgba(2,6,23,0.80)' }}
       >
         <div className="p-8 sm:p-10">
           {/* Logo */}
