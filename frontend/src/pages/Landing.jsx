@@ -1,12 +1,30 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { HeartPulse, ArrowRight, Activity, ShieldCheck, Zap, Navigation, BellRing } from 'lucide-react';
+import { HeartPulse, ArrowRight, Activity, ShieldCheck, Zap, Navigation, BellRing, Sun, Moon } from 'lucide-react';
 import AnimatedLogo from '../components/ui/AnimatedLogo';
 import { motion } from 'framer-motion';
 import './LandingFlowers.css';
 
 export default function Landing() {
   const navigate = useNavigate();
+  const [theme, setTheme] = useState(() => {
+    return localStorage.getItem('theme') || 'light';
+  });
+
+  useEffect(() => {
+    if (theme === 'dark') {
+      document.documentElement.classList.add('dark');
+      document.body.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+      document.body.classList.remove('dark');
+    }
+    localStorage.setItem('theme', theme);
+  }, [theme]);
+
+  const toggleTheme = () => {
+    setTheme(prev => prev === 'light' ? 'dark' : 'light');
+  };
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -375,6 +393,14 @@ export default function Landing() {
           <AnimatedLogo height={64} />
         </div>
         <div className="flex items-center gap-4 text-xs font-semibold text-slate-400">
+          <button 
+            onClick={toggleTheme}
+            className="p-2 text-slate-400 hover:text-white bg-slate-900/80 hover:bg-slate-800 rounded-full border border-slate-800 backdrop-blur-md transition-all cursor-pointer flex items-center justify-center"
+            title="Toggle Theme"
+          >
+            {theme === 'light' ? <Moon size={16} /> : <Sun size={16} />}
+          </button>
+          
           <div className="flex items-center gap-1.5 bg-slate-900/80 px-3 py-1.5 rounded-full border border-slate-800 backdrop-blur-md">
             <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
             System Live

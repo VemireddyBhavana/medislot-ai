@@ -1,12 +1,31 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Mail, Lock, User, ArrowRight } from 'lucide-react';
+import { Mail, Lock, User, ArrowRight, Sun, Moon } from 'lucide-react';
 import AnimatedLogo from '../components/ui/AnimatedLogo';
 import { registerWithEmail } from '../services/firebaseAuth';
 
 export default function Register() {
   const navigate = useNavigate();
+  const [theme, setTheme] = useState(() => {
+    return localStorage.getItem('theme') || 'light';
+  });
+
+  useEffect(() => {
+    if (theme === 'dark') {
+      document.documentElement.classList.add('dark');
+      document.body.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+      document.body.classList.remove('dark');
+    }
+    localStorage.setItem('theme', theme);
+  }, [theme]);
+
+  const toggleTheme = () => {
+    setTheme(prev => prev === 'light' ? 'dark' : 'light');
+  };
+
   const [role, setRole] = useState('patient');
   const [formData, setFormData] = useState({
     name: '',
@@ -54,6 +73,17 @@ export default function Register() {
       >
         <source src="https://res.cloudinary.com/de8opipom/video/upload/v1783343289/WhatsApp_Video_2026-07-06_at_6.16.41_PM_yjm2ng.mp4" type="video/mp4" />
       </video>
+
+      {/* Floating Theme Toggle */}
+      <div className="fixed top-6 right-6 z-50">
+        <button 
+          onClick={toggleTheme}
+          className="p-2.5 text-slate-400 hover:text-white bg-slate-950/75 hover:bg-slate-900 border border-white/10 backdrop-blur-xl rounded-full transition-all shadow-md cursor-pointer flex items-center justify-center"
+          title="Toggle Theme"
+        >
+          {theme === 'light' ? <Moon size={18} /> : <Sun size={18} />}
+        </button>
+      </div>
 
       {/* Glassmorphic Card */}
       <div className="relative z-10 w-full max-w-lg p-6 sm:p-10 m-4 rounded-3xl bg-slate-950/70 border border-white/10 backdrop-blur-xl shadow-2xl">
