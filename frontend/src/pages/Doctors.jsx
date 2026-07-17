@@ -29,7 +29,9 @@ export default function Doctors() {
   const specializations = ['All', ...new Set(doctors.map(d => d.specialization))];
 
   const filteredDoctors = doctors.filter(doc => {
-    const matchesSearch = doc.name.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesSearch = 
+      doc.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      doc.specialization.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesSpec = selectedSpecialization === 'All' || doc.specialization === selectedSpecialization;
     return matchesSearch && matchesSpec;
   });

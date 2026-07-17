@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useOutletContext } from 'react-router-dom';
 import { 
   Users, Calendar, CalendarCheck, CheckCircle2, 
   XCircle, AlertTriangle, Clock, TrendingUp, Activity, Bell
@@ -14,6 +15,7 @@ export default function AdminDashboard() {
   const [doctors, setDoctors] = useState([]);
   const [appointments, setAppointments] = useState([]);
   const [loading, setLoading] = useState(true);
+  const { globalSearch } = useOutletContext();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -57,8 +59,23 @@ export default function AdminDashboard() {
   const noShowCancelPct = totalAppointments ? Math.round(((noShows + cancelled) / totalAppointments) * 100) : 0;
 
   // Get actionable alerts (Urgent and High Risk)
-  const urgentApts = appointments.filter(a => a.priority === 'urgent' && a.status === 'booked').slice(0, 2);
-  const highRiskApts = appointments.filter(a => a.noShowRisk === 'high' && a.status === 'booked').slice(0, 2);
+  const urgentApts = appointments.filter(a => 
+    a.priority === 'urgent' && 
+    a.status === 'booked' &&
+    (!globalSearch || 
+      a.patientName?.toLowerCase().includes(globalSearch.toLowerCase()) || 
+      a.doctorName?.toLowerCase().includes(globalSearch.toLowerCase())
+    )
+  ).slice(0, 2);
+
+  const highRiskApts = appointments.filter(a => 
+    a.noShowRisk === 'high' && 
+    a.status === 'booked' &&
+    (!globalSearch || 
+      a.patientName?.toLowerCase().includes(globalSearch.toLowerCase()) || 
+      a.doctorName?.toLowerCase().includes(globalSearch.toLowerCase())
+    )
+  ).slice(0, 2);
 
   // Compute Workload Distribution
   const todaysAptsList = appointments.filter(a => a.appointmentDate === today && (a.status === 'booked' || a.status === 'completed'));

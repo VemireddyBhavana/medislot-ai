@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useOutletContext } from 'react-router-dom';
 import { Bell, Filter, CheckCircle2, Clock, AlertTriangle } from 'lucide-react';
 import PageContainer from '../components/layout/PageContainer';
 import SectionHeader from '../components/layout/SectionHeader';
@@ -14,6 +15,7 @@ export default function AdminNotifications() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [typeFilter, setTypeFilter] = useState('all');
+  const { globalSearch } = useOutletContext();
 
   const getAppointmentRef = (notif) => {
     if (notif.patientName) return `Patient: ${notif.patientName}`;
@@ -62,7 +64,14 @@ export default function AdminNotifications() {
     return <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-50 text-yellow-700 border border-yellow-200">Pending</span>;
   };
 
-  const filteredNotifications = notifications.filter(n => typeFilter === 'all' || n.type === typeFilter);
+  const filteredNotifications = notifications.filter(n => {
+    const matchesType = typeFilter === 'all' || n.type === typeFilter;
+    const matchesSearch = !globalSearch || 
+      n.message?.toLowerCase().includes(globalSearch.toLowerCase()) ||
+      n.patientName?.toLowerCase().includes(globalSearch.toLowerCase()) ||
+      n.type?.toLowerCase().includes(globalSearch.toLowerCase());
+    return matchesType && matchesSearch;
+  });
 
   return (
     <div className="space-y-6 pb-12">

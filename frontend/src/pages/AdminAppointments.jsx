@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useOutletContext } from 'react-router-dom';
 import { Search, Filter, AlertTriangle } from 'lucide-react';
 import PageContainer from '../components/layout/PageContainer';
 import SectionHeader from '../components/layout/SectionHeader';
@@ -17,7 +18,7 @@ export default function AdminAppointments() {
   const [appointments, setAppointments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [searchTerm, setSearchTerm] = useState('');
+  const { globalSearch: searchTerm, setGlobalSearch: setSearchTerm } = useOutletContext();
   const [statusFilter, setStatusFilter] = useState('all');
 
   useEffect(() => {

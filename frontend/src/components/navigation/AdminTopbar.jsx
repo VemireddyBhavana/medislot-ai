@@ -4,7 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import clsx from 'clsx';
 import { notificationAPI } from '../../services/api';
 
-export default function AdminTopbar({ title = 'Overview', onMenuClick }) {
+export default function AdminTopbar({ title = 'Overview', onMenuClick, search = '', onSearchChange = () => {} }) {
   const navigate = useNavigate();
   const [notifications, setNotifications] = useState([]);
   const [showDropdown, setShowDropdown] = useState(false);
@@ -61,6 +61,8 @@ export default function AdminTopbar({ title = 'Overview', onMenuClick }) {
           <input 
             type="text" 
             placeholder="Search..." 
+            value={search}
+            onChange={(e) => onSearchChange(e.target.value)}
             className="pl-10 pr-4 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/50 bg-gray-50 focus:bg-white transition-all w-64"
           />
         </div>

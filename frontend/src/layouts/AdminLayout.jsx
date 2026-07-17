@@ -6,6 +6,7 @@ import AdminTopbar from '../components/navigation/AdminTopbar';
 
 export default function AdminLayout() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [globalSearch, setGlobalSearch] = useState('');
   const location = useLocation();
   
   const token = localStorage.getItem('adminToken');
@@ -56,7 +57,12 @@ export default function AdminLayout() {
 
       {/* Main Content */}
       <main className="flex-1 flex flex-col h-screen overflow-hidden">
-        <AdminTopbar title={getPageTitle()} onMenuClick={() => setSidebarOpen(!sidebarOpen)} />
+        <AdminTopbar 
+          title={getPageTitle()} 
+          onMenuClick={() => setSidebarOpen(!sidebarOpen)} 
+          search={globalSearch}
+          onSearchChange={setGlobalSearch}
+        />
         <div className="flex-1 overflow-y-auto p-4 sm:p-8">
           <motion.div
             initial={{ opacity: 0, scale: 0.98 }}
@@ -65,7 +71,7 @@ export default function AdminLayout() {
             transition={{ duration: 0.3, ease: "easeOut" }}
             className="h-full"
           >
-            <Outlet />
+            <Outlet context={{ globalSearch, setGlobalSearch }} />
           </motion.div>
         </div>
       </main>
