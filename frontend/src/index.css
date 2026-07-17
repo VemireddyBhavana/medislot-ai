@@ -422,3 +422,37 @@ html, body {
   color: #fff;
   top: 16px;
 }
+
+/* ── Google Website Translator Premium Styles (Hiding generic widgets) ── */
+iframe.goog-te-banner-frame {
+  display: none !important;
+  visibility: hidden !important;
+}
+
+body {
+  top: 0px !important;
+}
+
+.goog-logo-link,
+.goog-te-gadget span,
+#goog-gt-tt,
+.goog-te-balloon-frame {
+  display: none !important;
+  visibility: hidden !important;
+}
+
+.goog-te-gadget {
+  font-size: 0px !important;
+}
+
+/* Hide the tooltip highlight styling Google applies on hover over translated words */
+font[style*="background-color"] {
+  background-color: transparent !important;
+  box-shadow: none !important;
+  box-sizing: border-box !important;
+}
+
+/* Fix for standard translate frame offset */
+.skiptranslate {
+  display: none !important;
+}

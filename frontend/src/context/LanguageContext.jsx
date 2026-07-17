@@ -250,9 +250,35 @@ export function LanguageProvider({ children }) {
     return localStorage.getItem('language') || 'en';
   });
 
+  // Sync state with Google Translate combo box on load and language changes
+  useEffect(() => {
+    let attempts = 0;
+    const interval = setInterval(() => {
+      const selectEl = document.querySelector('.goog-te-combo');
+      if (selectEl) {
+        if (language && selectEl.value !== language) {
+          selectEl.value = language;
+          selectEl.dispatchEvent(new Event('change'));
+        }
+        clearInterval(interval);
+      }
+      attempts++;
+      if (attempts > 40) { // check for 20 seconds
+        clearInterval(interval);
+      }
+    }, 500);
+    return () => clearInterval(interval);
+  }, [language]);
+
   const setLanguage = (lang) => {
     setLanguageState(lang);
     localStorage.setItem('language', lang);
+
+    const selectEl = document.querySelector('.goog-te-combo');
+    if (selectEl) {
+      selectEl.value = lang;
+      selectEl.dispatchEvent(new Event('change'));
+    }
   };
 
   const t = (key) => {
