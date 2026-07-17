@@ -30,7 +30,7 @@ export default function SmartScheduling() {
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-slate-950 pb-16 transition-colors duration-300">
       {/* Header Banner */}
-      <div className="bg-blue-600 dark:bg-blue-700 pt-10 pb-24 text-white relative overflow-hidden">
+      <div className="bg-blue-600 dark:bg-blue-700 pt-10 pb-24 text-white relative z-0 overflow-hidden">
         <PageContainer>
           <button 
             onClick={() => navigate('/home')} 
