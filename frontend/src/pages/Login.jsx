@@ -3,11 +3,10 @@ import { useNavigate, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Phone, KeyRound, ArrowRight, ChevronLeft } from 'lucide-react';
 import AnimatedLogo from '../components/ui/AnimatedLogo';
-import { signInWithGoogle, sendOtp, verifyOtp, getAuthMode } from '../services/firebaseAuth';
+import { signInWithGoogle, sendOtp, verifyOtp } from '../services/firebaseAuth';
 
 export default function Login() {
   const navigate = useNavigate();
-  const authMode = getAuthMode();
 
   // 'idle' | 'phone' | 'otp'
   const [screen, setScreen] = useState('idle');
@@ -139,32 +138,6 @@ export default function Login() {
                   </button>
                 </div>
 
-                {/* Divider */}
-                <div className="flex items-center gap-3 my-6">
-                  <div className="flex-1 h-px bg-white/10" />
-                  <span className="text-slate-600 text-[11px] font-medium">OR</span>
-                  <div className="flex-1 h-px bg-white/10" />
-                </div>
-
-                {/* Demo quick-login hint */}
-                {authMode === 'MOCK' && (
-                  <div className="bg-blue-500/8 border border-blue-400/15 rounded-2xl p-4 text-center mb-6">
-                    <p className="text-blue-300 text-[10px] font-bold uppercase tracking-widest mb-2">Demo Mode</p>
-                    <p className="text-slate-400 text-[11px] leading-relaxed">
-                      Use <span className="text-white font-bold">patient@medislot.ai</span>,&nbsp;
-                      <span className="text-white font-bold">doctor@medislot.ai</span>, or&nbsp;
-                      <span className="text-white font-bold">admin@medislot.ai</span>
-                      <br />Password: <span className="text-blue-400 font-bold">medislot</span>
-                    </p>
-                    <button
-                      onClick={() => { setError(null); setScreen('email'); }}
-                      className="mt-3 text-[11px] text-blue-400 hover:text-blue-300 font-bold underline underline-offset-2 cursor-pointer"
-                    >
-                      Sign in with Email instead →
-                    </button>
-                  </div>
-                )}
-
                 <p className="text-center text-[11px] text-slate-500">
                   Don't have an account?{' '}
                   <Link to="/register" className="text-blue-400 hover:text-blue-300 font-bold">
@@ -273,41 +246,6 @@ export default function Login() {
               </motion.div>
             )}
 
-            {/* ── EMAIL: hidden demo-only screen ── */}
-            {screen === 'email' && (
-              <motion.div
-                key="email"
-                initial={{ opacity: 0, x: 30 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -30 }}
-                transition={{ duration: 0.25 }}
-              >
-                <button
-                  onClick={() => { setScreen('idle'); setError(null); }}
-                  className="flex items-center gap-1 text-slate-400 hover:text-white text-xs mb-6 transition-colors cursor-pointer"
-                >
-                  <ChevronLeft size={14} /> Back
-                </button>
-                <h2 className="text-xl font-extrabold text-white mb-1">Sign in with Email</h2>
-                <p className="text-slate-400 text-xs mb-6">Demo accounts only — password is <span className="text-blue-400 font-bold">medislot</span></p>
-
-                {error && (
-                  <div className="bg-red-500/10 border border-red-500/30 text-red-300 p-3 rounded-xl text-xs font-semibold mb-4 text-center">
-                    {error}
-                  </div>
-                )}
-
-                <EmailLoginForm redirectUser={redirectUser} />
-
-                <p className="text-center text-[11px] text-slate-500 mt-5">
-                  Don't have an account?{' '}
-                  <Link to="/register" className="text-blue-400 hover:text-blue-300 font-bold">
-                    Register
-                  </Link>
-                </p>
-              </motion.div>
-            )}
-
           </AnimatePresence>
         </div>
       </motion.div>
@@ -315,81 +253,3 @@ export default function Login() {
   );
 }
 
-// ── Inline Email Form ─────────────────────────────────────────────────────────
-import { loginWithEmail } from '../services/firebaseAuth';
-import { Mail, Lock } from 'lucide-react';
-
-function EmailLoginForm({ redirectUser }) {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [role, setRole] = useState('patient');
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    setError(null);
-    try {
-      const { role: finalRole } = await loginWithEmail(email, password, role);
-      redirectUser(finalRole);
-    } catch (err) {
-      setError(err.message || 'Login failed.');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  return (
-    <form onSubmit={handleSubmit} className="space-y-4">
-      {error && (
-        <div className="bg-red-500/10 border border-red-500/30 text-red-300 p-3 rounded-xl text-xs font-semibold text-center">
-          {error}
-        </div>
-      )}
-
-      {/* Role pills */}
-      <div className="grid grid-cols-3 gap-2">
-        {['patient', 'doctor', 'admin'].map(r => (
-          <button
-            key={r}
-            type="button"
-            onClick={() => setRole(r)}
-            className={`py-1.5 rounded-xl text-xs font-bold border transition-all capitalize ${
-              role === r
-                ? 'border-blue-500 bg-blue-600/20 text-blue-300'
-                : 'border-white/10 text-slate-400 hover:border-white/20 hover:text-white'
-            }`}
-          >
-            {r === 'admin' ? 'Admin' : r.charAt(0).toUpperCase() + r.slice(1)}
-          </button>
-        ))}
-      </div>
-
-      <div className="relative border-b-2 border-white/20 focus-within:border-blue-500 transition-colors py-2">
-        <input
-          type="email" required placeholder="Email Address"
-          value={email} onChange={e => setEmail(e.target.value)}
-          className="w-full bg-transparent outline-none text-sm text-white placeholder-slate-500 pl-1 pr-8"
-        />
-        <Mail size={16} className="absolute right-2 top-1/2 -translate-y-1/2 text-slate-500" />
-      </div>
-
-      <div className="relative border-b-2 border-white/20 focus-within:border-blue-500 transition-colors py-2">
-        <input
-          type="password" required placeholder="Password"
-          value={password} onChange={e => setPassword(e.target.value)}
-          className="w-full bg-transparent outline-none text-sm text-white placeholder-slate-500 pl-1 pr-8"
-        />
-        <Lock size={16} className="absolute right-2 top-1/2 -translate-y-1/2 text-slate-500" />
-      </div>
-
-      <button
-        type="submit" disabled={loading}
-        className="w-full py-3.5 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-2xl text-sm transition-colors flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
-      >
-        {loading ? 'Signing in...' : 'Sign In'} <ArrowRight size={15} />
-      </button>
-    </form>
-  );
-}
