@@ -89,8 +89,8 @@ export default function Landing() {
           background: 'radial-gradient(ellipse at top left, #bfdbfe 0%, #eff6ff 50%, #e0f2fe 100%)'
         }} />
       )}
-      {/* Flowers — only in dark mode */}
-      <div className="flowers-wrapper" style={{ display: isDark ? undefined : 'none' }}>
+      {/* Flowers — visible in both modes */}
+      <div className="flowers-wrapper">
         <div className="flowers">
           {/* Flower 1 */}
           <div className="flower flower--1">
