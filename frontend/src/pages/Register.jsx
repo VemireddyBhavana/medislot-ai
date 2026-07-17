@@ -171,32 +171,8 @@ export default function Register() {
             <Lock size={16} className="absolute right-2 top-1/2 -translate-y-1/2 text-slate-500" />
           </div>
 
-          {/* Role selector */}
-          <div className="mb-4">
-            <label className="block text-xs font-bold text-slate-400 mb-2 uppercase tracking-wide">
-              I am joining as:
-            </label>
-            <div className="grid grid-cols-3 gap-3">
-              {[
-                { id: 'patient', label: 'Patient' },
-                { id: 'doctor', label: 'Doctor' },
-                { id: 'admin', label: 'Hospital Admin' }
-              ].map(r => (
-                <button
-                  key={r.id}
-                  type="button"
-                  onClick={() => setRole(r.id)}
-                  className={`py-2 px-3 border rounded-xl text-xs font-bold text-center transition-all ${
-                    role === r.id
-                      ? 'border-blue-500 bg-blue-600/20 text-blue-300'
-                      : 'border-white/10 text-slate-400 hover:border-white/20 hover:text-white'
-                  }`}
-                >
-                  {r.label}
-                </button>
-              ))}
-            </div>
-          </div>
+
+
 
           <button
             type="submit"
