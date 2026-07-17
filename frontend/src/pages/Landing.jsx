@@ -72,10 +72,21 @@ export default function Landing() {
     }
   ];
 
+  const isDark = theme === 'dark';
+
   return (
-    <div className="min-h-screen relative landing-page-outer" style={{ background: '#000' }}>
-      {/* Flower CSS Background Animation — outside motion.div so position:fixed works correctly */}
-      <div className="night" style={{ position: 'fixed', zIndex: 0 }}></div>
+    <div
+      className="min-h-screen relative landing-page-outer transition-colors duration-500"
+      style={{ background: isDark ? '#000' : '#eff6ff' }}
+    >
+      {/* Flower CSS Background Animation — only in dark mode */}
+      {isDark && <div className="night" style={{ position: 'fixed', zIndex: 0 }}></div>}
+      {/* Light mode gradient background */}
+      {!isDark && (
+        <div className="fixed inset-0 z-0 pointer-events-none" style={{
+          background: 'radial-gradient(ellipse at top left, #bfdbfe 0%, #eff6ff 40%, #dbeafe 100%)'
+        }} />
+      )}
       <div className="flowers-wrapper">
         <div className="flowers">
           {/* Flower 1 */}
@@ -383,8 +394,8 @@ export default function Landing() {
         animate={{ opacity: 1 }}
         exit={{ opacity: 0, x: -50, scale: 0.96 }}
         transition={{ type: "tween", ease: "anticipate", duration: 0.4 }}
-        className="min-h-screen text-white font-sans overflow-x-hidden relative flex flex-col justify-between landing-root"
-        style={{ zIndex: 2 }}
+        className="min-h-screen font-sans overflow-x-hidden relative flex flex-col justify-between landing-root transition-colors duration-500"
+        style={{ zIndex: 2, color: isDark ? '#fff' : '#0f172a' }}
       >
 
       {/* Header */}
@@ -392,7 +403,7 @@ export default function Landing() {
         <div className="flex items-center gap-2">
           <AnimatedLogo height={64} />
         </div>
-        <div className="flex items-center gap-4 text-xs font-semibold text-slate-400">
+        <div className="flex items-center gap-4 text-xs font-semibold" style={{ color: isDark ? '#94a3b8' : '#475569' }}>
           <label className="switch scale-[0.7] origin-right cursor-pointer shrink-0" title="Toggle Theme">
             <input type="checkbox" checked={theme === 'light'} onChange={toggleTheme}/>
             <span className="slider">
@@ -425,16 +436,29 @@ export default function Landing() {
             </span>
           </label>
 
-          <div className="flex items-center gap-1.5 bg-slate-900/80 px-3 py-1.5 rounded-full border border-slate-800 backdrop-blur-md">
+          <div
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-full backdrop-blur-md"
+            style={{
+              background: isDark ? 'rgba(15,23,42,0.8)' : 'rgba(219,234,254,0.8)',
+              border: isDark ? '1px solid #1e293b' : '1px solid #bfdbfe',
+              color: isDark ? '#94a3b8' : '#1d4ed8'
+            }}
+          >
             <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
             System Live
           </div>
         </div>
       </header>
 
-      {/* Main Content inside a stunning dark glassmorphic box aligned to the left */}
+      {/* Main Content */}
       <main className="flex-1 max-w-7xl mx-auto px-4 sm:px-6 flex items-start lg:items-center justify-start py-4 lg:py-8 z-10 w-full">
-        <div className="w-full md:w-[52%] lg:w-[48%] lg:max-w-[550px] p-5 lg:p-8 rounded-3xl bg-slate-950/40 md:bg-slate-950/60 lg:bg-slate-950/65 backdrop-blur-xl border border-slate-900/50 shadow-2xl flex flex-col gap-5 relative z-10">
+        <div
+          className="w-full md:w-[52%] lg:w-[48%] lg:max-w-[550px] p-5 lg:p-8 rounded-3xl backdrop-blur-xl shadow-2xl flex flex-col gap-5 relative z-10 transition-all duration-500"
+          style={{
+            background: isDark ? 'rgba(2,6,23,0.65)' : 'rgba(255,255,255,0.85)',
+            border: isDark ? '1px solid rgba(30,41,59,0.5)' : '1px solid rgba(191,219,254,0.8)'
+          }}
+        >
           {/* Hero Content */}
           <motion.div 
             className="text-left space-y-4"
@@ -442,17 +466,39 @@ export default function Landing() {
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, ease: "easeOut" }}
           >
-            <div className="inline-flex items-center gap-2 bg-blue-500/10 text-blue-400 px-3 py-1.5 rounded-full text-xs font-semibold border border-blue-500/20 backdrop-blur-md">
+            <div
+              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold backdrop-blur-md"
+              style={{
+                background: isDark ? 'rgba(59,130,246,0.1)' : 'rgba(219,234,254,0.8)',
+                color: isDark ? '#60a5fa' : '#1d4ed8',
+                border: isDark ? '1px solid rgba(59,130,246,0.2)' : '1px solid #bfdbfe'
+              }}
+            >
               <Activity size={14} className="animate-pulse" />
               AI-Powered Smart Scheduling
             </div>
-            
-            <h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight bg-gradient-to-b from-white via-slate-100 to-slate-400 bg-clip-text text-transparent leading-none">
+
+            <h1
+              className="text-3xl sm:text-5xl font-extrabold tracking-tight leading-none"
+              style={{
+                background: isDark
+                  ? 'linear-gradient(to bottom, #fff, #cbd5e1, #94a3b8)'
+                  : 'linear-gradient(to bottom, #0f172a, #1e40af, #3b82f6)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                backgroundClip: 'text'
+              }}
+            >
               Smarter Appointments.<br />
-              <span className="bg-gradient-to-r from-blue-400 via-blue-500 to-indigo-500 bg-clip-text text-transparent">Better Healthcare.</span>
+              <span style={{
+                background: 'linear-gradient(to right, #3b82f6, #6366f1)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                backgroundClip: 'text'
+              }}>Better Healthcare.</span>
             </h1>
-            
-            <p className="text-sm text-slate-400 leading-relaxed">
+
+            <p className="text-sm leading-relaxed" style={{ color: isDark ? '#94a3b8' : '#475569' }}>
               MediSlot AI bridges the gap between patient slots booking and clinic administration. Discover nearby hospitals using live location mapping and preview directions in 3D.
             </p>
 
@@ -469,30 +515,35 @@ export default function Landing() {
           </motion.div>
 
           {/* Key Features Grid inside the same card */}
-          <motion.div 
-            className="w-full border-t border-slate-900/60 pt-6 animate-in fade-in"
+          <motion.div
+            className="w-full pt-6 animate-in fade-in"
+            style={{ borderTop: isDark ? '1px solid rgba(30,41,59,0.6)' : '1px solid rgba(191,219,254,0.6)' }}
             variants={containerVariants}
             initial="hidden"
             animate="visible"
           >
-            <h2 className="text-xs font-bold uppercase tracking-wider text-slate-500 mb-4">Why Choose MediSlot AI?</h2>
-            
+            <h2 className="text-xs font-bold uppercase tracking-wider mb-4" style={{ color: isDark ? '#64748b' : '#64748b' }}>Why Choose MediSlot AI?</h2>
+
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {features.map((feat, index) => {
                 const IconComp = feat.icon;
                 return (
-                  <motion.div 
+                  <motion.div
                     key={index}
                     variants={itemVariants}
                     whileHover={{ y: -2, transition: { duration: 0.2 } }}
-                    className="bg-slate-900/30 border border-slate-800/50 rounded-xl p-4 backdrop-blur-sm hover:border-slate-700/40 transition-colors flex flex-col gap-2"
+                    className="rounded-xl p-4 backdrop-blur-sm transition-all flex flex-col gap-2"
+                    style={{
+                      background: isDark ? 'rgba(15,23,42,0.3)' : 'rgba(239,246,255,0.8)',
+                      border: isDark ? '1px solid rgba(30,41,59,0.5)' : '1px solid rgba(191,219,254,0.6)'
+                    }}
                   >
                     <div className={`w-8 h-8 rounded-lg border flex items-center justify-center ${feat.color}`}>
                       <IconComp size={16} />
                     </div>
                     <div>
-                      <h3 className="font-bold text-white text-xs mb-1">{feat.title}</h3>
-                      <p className="text-slate-400 text-[10px] leading-relaxed">{feat.description}</p>
+                      <h3 className="font-bold text-xs mb-1" style={{ color: isDark ? '#fff' : '#0f172a' }}>{feat.title}</h3>
+                      <p className="text-[10px] leading-relaxed" style={{ color: isDark ? '#94a3b8' : '#475569' }}>{feat.description}</p>
                     </div>
                   </motion.div>
                 );
@@ -503,7 +554,13 @@ export default function Landing() {
       </main>
 
       {/* Footer */}
-      <footer className="w-full max-w-7xl mx-auto px-6 py-8 border-t border-slate-900/50 flex flex-col sm:flex-row items-center justify-between gap-4 z-10 text-xs text-slate-500 backdrop-blur-sm">
+      <footer
+        className="w-full max-w-7xl mx-auto px-6 py-8 flex flex-col sm:flex-row items-center justify-between gap-4 z-10 text-xs backdrop-blur-sm transition-colors duration-500"
+        style={{
+          borderTop: isDark ? '1px solid rgba(15,23,42,0.5)' : '1px solid rgba(191,219,254,0.6)',
+          color: isDark ? '#64748b' : '#64748b'
+        }}
+      >
         <div>© 2026 MediSlot AI. All rights reserved.</div>
         <div className="flex items-center gap-6">
           <div className="flex items-center gap-1.5">
