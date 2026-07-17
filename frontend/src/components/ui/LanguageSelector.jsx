@@ -11,7 +11,7 @@ const languages = [
   { code: 'gu', name: 'ગુજરાતી', short: 'GU' }
 ];
 
-export default function LanguageSelector({ dropdownPosition = 'bottom-right' }) {
+export default function LanguageSelector({ dropdownPosition = 'bottom-right', variant = 'dropdown' }) {
   const { language, setLanguage } = useLanguage();
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
@@ -38,6 +38,29 @@ export default function LanguageSelector({ dropdownPosition = 'bottom-right' }) 
   };
 
   const currentPositionClass = positionClasses[dropdownPosition] || positionClasses['bottom-right'];
+
+  if (variant === 'inline') {
+    return (
+      <div className="grid grid-cols-5 gap-1.5 w-full">
+        {languages.map((lang) => {
+          const isSelected = lang.code === language;
+          return (
+            <button
+              key={lang.code}
+              onClick={() => setLanguage(lang.code)}
+              className={`py-2 px-0.5 text-[11px] font-bold rounded-xl transition-all duration-200 text-center border cursor-pointer
+                ${isSelected
+                  ? 'bg-blue-600 border-blue-600 text-white shadow-sm dark:bg-cyan-500 dark:border-cyan-500 dark:text-slate-950 font-extrabold'
+                  : 'bg-white/40 border-gray-200 text-slate-600 dark:bg-slate-900/40 dark:border-slate-800 dark:text-slate-400 hover:bg-gray-150/50 dark:hover:bg-slate-800/50'
+                }`}
+            >
+              {lang.short}
+            </button>
+          );
+        })}
+      </div>
+    );
+  }
 
   return (
     <div className="relative inline-block text-left" ref={dropdownRef}>

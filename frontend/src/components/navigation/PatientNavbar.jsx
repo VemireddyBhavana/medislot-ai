@@ -653,9 +653,9 @@ export default function PatientNavbar() {
                     </span>
                   </label>
                 </div>
-                <div className="flex justify-between items-center">
+                <div className="flex flex-col gap-2 pt-1.5">
                   <span className="text-sm font-bold text-gray-700 dark:text-slate-300">{t('nav.language')}</span>
-                  <LanguageSelector dropdownPosition="top-right" />
+                  <LanguageSelector variant="inline" />
                 </div>
               </div>
             </div>

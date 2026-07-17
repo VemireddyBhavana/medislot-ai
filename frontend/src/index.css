@@ -424,19 +424,29 @@ html, body {
 }
 
 /* ── Google Website Translator Premium Styles (Hiding generic widgets) ── */
-iframe.goog-te-banner-frame {
+iframe.goog-te-banner-frame,
+.goog-te-menu-frame,
+.goog-te-menu-value,
+.goog-te-banner,
+.goog-tooltip,
+.goog-te-balloon-frame {
   display: none !important;
   visibility: hidden !important;
+  opacity: 0 !important;
+}
+
+html {
+  top: 0px !important;
 }
 
 body {
   top: 0px !important;
+  position: static !important;
 }
 
 .goog-logo-link,
 .goog-te-gadget span,
-#goog-gt-tt,
-.goog-te-balloon-frame {
+#goog-gt-tt {
   display: none !important;
   visibility: hidden !important;
 }
@@ -453,6 +463,7 @@ font[style*="background-color"] {
 }
 
 /* Fix for standard translate frame offset */
-.skiptranslate {
+.skiptranslate,
+.goog-te-spinner-pos {
   display: none !important;
 }
