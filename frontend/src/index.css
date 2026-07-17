@@ -429,10 +429,16 @@ iframe.goog-te-banner-frame,
 .goog-te-menu-value,
 .goog-te-banner,
 .goog-tooltip,
-.goog-te-balloon-frame {
+.goog-te-balloon-frame,
+.goog-te-gadget-icon,
+.goog-te-gadget img,
+.goog-te-gadget-simple img,
+.goog-tooltip-blue,
+#google_translate_element {
   display: none !important;
   visibility: hidden !important;
   opacity: 0 !important;
+  pointer-events: none !important;
 }
 
 html {
@@ -464,8 +470,10 @@ font[style*="background-color"] {
 
 /* Fix for standard translate frame offset */
 .skiptranslate,
-.goog-te-spinner-pos {
+.goog-te-spinner-pos,
+.goog-te-spinner {
   display: none !important;
+  visibility: hidden !important;
 }
 
 /* Prevent Google Translate font tags from overriding layout weights and styles */
