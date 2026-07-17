@@ -40,6 +40,15 @@ export default function BookAppointment() {
   const [bookingSuccess, setBookingSuccess] = useState(false);
   const [error, setError] = useState('');
 
+  const getLocalTodayStr = () => {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, '0');
+    const day = String(today.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  };
+  const localTodayStr = getLocalTodayStr();
+
   // Pre-fill patient details from logged-in session (e.g. Google Login)
   useEffect(() => {
     try {
@@ -421,7 +430,7 @@ export default function BookAppointment() {
                         value={selectedDate}
                         onChange={(e) => setSelectedDate(e.target.value)}
                         className="w-full p-4 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white text-slate-700 font-medium"
-                        min={new Date().toISOString().split('T')[0]}
+                        min={localTodayStr}
                       />
                     </div>
 
