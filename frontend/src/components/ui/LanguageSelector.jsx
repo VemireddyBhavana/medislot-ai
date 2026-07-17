@@ -45,17 +45,19 @@ export default function LanguageSelector({ dropdownPosition = 'bottom-right', va
         {languages.map((lang) => {
           const isSelected = lang.code === language;
           return (
-            <button
+            <motion.button
               key={lang.code}
+              whileTap={{ scale: 0.95 }}
+              whileHover={{ scale: 1.05 }}
               onClick={() => setLanguage(lang.code)}
-              className={`py-2 px-0.5 text-[11px] font-bold rounded-xl transition-all duration-200 text-center border cursor-pointer
+              className={`py-2 px-0.5 text-[11px] font-bold rounded-xl transition-all duration-200 text-center border cursor-pointer select-none
                 ${isSelected
                   ? 'bg-blue-600 border-blue-600 text-white shadow-sm dark:bg-cyan-500 dark:border-cyan-500 dark:text-slate-950 font-extrabold'
                   : 'bg-white/40 border-gray-200 text-slate-600 dark:bg-slate-900/40 dark:border-slate-800 dark:text-slate-400 hover:bg-gray-150/50 dark:hover:bg-slate-800/50'
                 }`}
             >
               {lang.short}
-            </button>
+            </motion.button>
           );
         })}
       </div>
@@ -64,14 +66,15 @@ export default function LanguageSelector({ dropdownPosition = 'bottom-right', va
 
   return (
     <div className="relative inline-block text-left" ref={dropdownRef}>
-      <button
+      <motion.button
+        whileTap={{ scale: 0.95 }}
         onClick={() => setIsOpen(!isOpen)}
         className="flex items-center gap-2 px-3 py-2 text-xs font-bold rounded-xl transition-all duration-300 border backdrop-blur-md cursor-pointer select-none
           bg-white/70 dark:bg-slate-900/70 
           border-gray-200 dark:border-slate-800 
           text-slate-700 dark:text-slate-300 
           hover:bg-gray-100 dark:hover:bg-slate-800/80 
-          shadow-sm hover:shadow-md active:scale-95"
+          shadow-sm hover:shadow-md"
         style={{ minWidth: '85px' }}
       >
         <Languages size={14} className="shrink-0 text-blue-500 dark:text-cyan-400" />
@@ -80,7 +83,7 @@ export default function LanguageSelector({ dropdownPosition = 'bottom-right', va
           size={12} 
           className={`shrink-0 transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`} 
         />
-      </button>
+      </motion.button>
 
       <AnimatePresence>
         {isOpen && (
@@ -97,13 +100,15 @@ export default function LanguageSelector({ dropdownPosition = 'bottom-right', va
               {languages.map((lang) => {
                 const isSelected = lang.code === language;
                 return (
-                  <button
+                  <motion.button
                     key={lang.code}
+                    whileHover={{ x: 3 }}
+                    whileTap={{ scale: 0.98 }}
                     onClick={() => {
                       setLanguage(lang.code);
                       setIsOpen(false);
                     }}
-                    className={`w-full flex items-center justify-between px-3 py-2 text-xs font-semibold rounded-xl transition-all duration-200 cursor-pointer text-left
+                    className={`w-full flex items-center justify-between px-3 py-2 text-xs font-semibold rounded-xl transition-all duration-200 cursor-pointer text-left select-none
                       ${isSelected 
                         ? 'bg-blue-500/10 text-blue-600 dark:bg-cyan-500/10 dark:text-cyan-400' 
                         : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100/50 dark:hover:bg-slate-900/60 hover:text-slate-900 dark:hover:text-white'
@@ -116,7 +121,7 @@ export default function LanguageSelector({ dropdownPosition = 'bottom-right', va
                     {isSelected && (
                       <Check size={12} className="text-blue-500 dark:text-cyan-400 shrink-0" />
                     )}
-                  </button>
+                  </motion.button>
                 );
               })}
             </div>
