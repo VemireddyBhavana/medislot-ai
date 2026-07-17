@@ -267,7 +267,6 @@ export default function Login() {
                 <h2 className="text-xl font-extrabold text-white mb-1">Verify your number</h2>
                 <p className="text-slate-400 text-xs mb-6">
                   Enter the 6-digit code sent to <span className="text-white font-semibold">{phone}</span>.
-                  {authMode === 'MOCK' && <span className="text-blue-400"> (Demo: use 123456)</span>}
                 </p>
 
                 {error && (
