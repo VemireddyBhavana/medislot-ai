@@ -59,6 +59,10 @@ export const notificationAPI = {
   getAll: async () => {
     const response = await api.get('/notifications');
     return response.data;
+  },
+  updateStatus: async (id, statusData) => {
+    const response = await api.put(`/notifications/${id}`, statusData);
+    return response.data;
   }
 };
 

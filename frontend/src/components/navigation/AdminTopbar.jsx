@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Bell, Search, Menu, AlertTriangle, CheckCircle2, Clock } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
+import { motion, AnimatePresence } from 'framer-motion';
 import clsx from 'clsx';
 import { notificationAPI } from '../../services/api';
 
@@ -8,11 +9,14 @@ export default function AdminTopbar({ title = 'Overview', onMenuClick, search = 
   const navigate = useNavigate();
   const [notifications, setNotifications] = useState([]);
   const [showDropdown, setShowDropdown] = useState(false);
+  const [activeEmergency, setActiveEmergency] = useState(null);
+  const lastSpeechTimeRef = useRef(0);
   const dropdownRef = useRef(null);
 
   useEffect(() => {
     fetchNotifications();
-    const interval = setInterval(fetchNotifications, 10000);
+    // Poll every 3 seconds for completely real-time emergency updates
+    const interval = setInterval(fetchNotifications, 3000);
     return () => clearInterval(interval);
   }, []);
 
@@ -30,8 +34,46 @@ export default function AdminTopbar({ title = 'Overview', onMenuClick, search = 
     try {
       const data = await notificationAPI.getAll();
       setNotifications(data);
+
+      // Look for any pending SOS emergency alerts
+      const pendingSos = data.find(n => 
+        n.type === 'alert' && 
+        n.status === 'pending' && 
+        n.message && 
+        n.message.includes('EMERGENCY SOS')
+      );
+      
+      if (pendingSos) {
+        setActiveEmergency(pendingSos);
+        
+        // Trigger voice alarm only once every 8 seconds
+        const now = Date.now();
+        if (now - lastSpeechTimeRef.current > 8000) {
+          if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+            window.speechSynthesis.cancel();
+            const utterance = new SpeechSynthesisUtterance("Warning. Critical SOS emergency request received. Please check dashboard immediately.");
+            utterance.rate = 0.95;
+            utterance.pitch = 1.0;
+            window.speechSynthesis.speak(utterance);
+          }
+          lastSpeechTimeRef.current = now;
+        }
+      } else {
+        setActiveEmergency(null);
+      }
     } catch (err) {
       console.error('Failed to load admin topbar notifications', err);
+    }
+  };
+
+  const handleAcknowledgeSos = async () => {
+    if (!activeEmergency) return;
+    try {
+      await notificationAPI.updateStatus(activeEmergency._id, { status: 'sent' });
+      setActiveEmergency(null);
+      fetchNotifications();
+    } catch (err) {
+      console.error('Failed to acknowledge emergency', err);
     }
   };
 
@@ -156,6 +198,60 @@ export default function AdminTopbar({ title = 'Overview', onMenuClick, search = 
           </div>
         </div>
       </div>
+
+      {/* Real-time Emergency SOS Alert Popup for Admin */}
+      <AnimatePresence>
+        {activeEmergency && (
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-red-950/80 backdrop-blur-md z-[9999] flex items-center justify-center p-4"
+          >
+            <motion.div 
+              initial={{ scale: 0.9, y: 30 }}
+              animate={{ scale: 1, y: 0 }}
+              exit={{ scale: 0.9, y: 30 }}
+              className="bg-white border-4 border-red-600 rounded-3xl shadow-2xl max-w-lg w-full overflow-hidden p-6 text-center space-y-6"
+            >
+              <div className="flex justify-center text-red-600">
+                <AlertTriangle size={64} className="animate-bounce" />
+              </div>
+              
+              <div className="space-y-2">
+                <h3 className="text-2xl font-black text-red-700 tracking-tight uppercase">🚨 CRITICAL PATIENT EMERGENCY SOS 🚨</h3>
+                <p className="text-xs text-slate-500 font-bold">An immediate ambulance dispatch and specialist consultation is requested!</p>
+              </div>
+
+              <div className="bg-red-50 p-4 rounded-2xl border border-red-100 text-left space-y-3">
+                <p className="text-xs font-bold text-red-800 leading-relaxed">
+                  {activeEmergency.message}
+                </p>
+                <div className="pt-2 border-t border-red-200/50 flex flex-col gap-1 text-[11px] text-slate-600">
+                  <p>👤 <strong>Patient Name:</strong> {activeEmergency.patientName || 'N/A'}</p>
+                  <p>📧 <strong>Email Address:</strong> {activeEmergency.patientEmail || 'N/A'}</p>
+                  <p>📞 <strong>Contact Phone:</strong> {activeEmergency.patientPhone || 'N/A'}</p>
+                </div>
+              </div>
+
+              <div className="flex flex-col gap-2">
+                <button 
+                  onClick={handleAcknowledgeSos}
+                  className="w-full bg-red-600 hover:bg-red-700 text-white font-extrabold py-3.5 rounded-xl transition-all shadow-lg shadow-red-500/20 active:scale-[0.98] cursor-pointer"
+                >
+                  DISPATCH AMBULANCE &amp; ACKNOWLEDGE ALERT
+                </button>
+                <button 
+                  onClick={() => setActiveEmergency(null)}
+                  className="w-full bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-2 rounded-xl transition-all text-xs"
+                >
+                  Dismiss Temporarily
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </header>
   );
 }

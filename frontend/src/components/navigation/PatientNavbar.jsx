@@ -21,6 +21,14 @@ export default function PatientNavbar() {
   const [emergencyHospitals, setEmergencyHospitals] = useState([]);
   const [emergencyDoctors, setEmergencyDoctors] = useState([]);
   const [emergencyStatus, setEmergencyStatus] = useState('idle'); // 'idle' | 'sending' | 'success' | 'failed'
+  const [sosPhone, setSosPhone] = useState(() => {
+    try {
+      const userInfo = JSON.parse(localStorage.getItem('adminInfo') || '{}');
+      return userInfo.patientPhone || '';
+    } catch (e) {
+      return '';
+    }
+  });
 
   // Fetch nearby hospitals & active doctors for emergency display
   useEffect(() => {
@@ -67,15 +75,27 @@ export default function PatientNavbar() {
   }, [showEmergencyModal]);
 
   const triggerEmergencySos = async () => {
+    if (!sosPhone.trim()) {
+      alert("Please enter a valid call-back phone number so our team can reach you!");
+      return;
+    }
     setEmergencyStatus('sending');
     try {
+      // Save phone back to session
+      try {
+        const userInfo = JSON.parse(localStorage.getItem('adminInfo') || '{}');
+        userInfo.patientPhone = sosPhone;
+        localStorage.setItem('adminInfo', JSON.stringify(userInfo));
+      } catch (e) {}
+
       // Create system notification alert
       await createNotification({
         patientName: userName || 'Emergency Patient',
         patientEmail: userEmail || 'emergency@medislot.ai',
+        patientPhone: sosPhone,
         type: 'alert',
         channel: 'system',
-        message: `🚨 EMERGENCY SOS ALERT: Triggered by ${userName || 'Emergency Patient'} (${userEmail || 'emergency@medislot.ai'}). Needs immediate medical response / ambulance dispatch!`,
+        message: `🚨 EMERGENCY SOS ALERT: Triggered by ${userName || 'Emergency Patient'} (${userEmail || 'emergency@medislot.ai'}). Immediate medical response / ambulance routing requested! Call-Back Contact: ${sosPhone}`,
         status: 'pending'
       });
       setEmergencyStatus('success');
@@ -669,13 +689,25 @@ export default function PatientNavbar() {
                   <p className="text-xs text-slate-500 dark:text-slate-400 mb-4 leading-relaxed">Clicking the button below instantly alerts all nearby hospital ER coordinators and on-duty specialists with your profile details.</p>
                   
                   {emergencyStatus === 'idle' && (
-                    <button 
-                      onClick={triggerEmergencySos}
-                      className="w-full bg-red-600 hover:bg-red-700 text-white font-extrabold py-3.5 px-6 rounded-xl transition-all shadow-lg shadow-red-500/20 hover:shadow-red-500/35 hover:-translate-y-0.5 active:scale-[0.98] animate-pulse flex items-center justify-center gap-2 cursor-pointer"
-                    >
-                      <AlertTriangle size={18} />
-                      ACTIVATE EMERGENCY BROADCAST
-                    </button>
+                    <div className="space-y-3">
+                      <div>
+                        <label className="block text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1">Your Call-Back Phone Number *</label>
+                        <input 
+                          type="tel" 
+                          value={sosPhone}
+                          onChange={(e) => setSosPhone(e.target.value)}
+                          placeholder="e.g. +91 99999 88888" 
+                          className="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-red-500 focus:bg-white text-xs font-bold text-slate-800 dark:text-white"
+                        />
+                      </div>
+                      <button 
+                        onClick={triggerEmergencySos}
+                        className="w-full bg-red-600 hover:bg-red-700 text-white font-extrabold py-3.5 px-6 rounded-xl transition-all shadow-lg shadow-red-500/20 hover:shadow-red-500/35 hover:-translate-y-0.5 active:scale-[0.98] animate-pulse flex items-center justify-center gap-2 cursor-pointer"
+                      >
+                        <AlertTriangle size={18} />
+                        ACTIVATE EMERGENCY BROADCAST
+                      </button>
+                    </div>
                   )}
 
                   {emergencyStatus === 'sending' && (

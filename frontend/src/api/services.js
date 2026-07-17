@@ -88,3 +88,13 @@ export const createNotification = async (notifData) => {
     throw error;
   }
 };
+
+export const updateNotificationStatus = async (id, status) => {
+  try {
+    const response = await api.put(`/notifications/${id}`, { status });
+    return response.data;
+  } catch (error) {
+    console.error('Error updating notification status:', error);
+    throw error;
+  }
+};

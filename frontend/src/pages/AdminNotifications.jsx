@@ -32,6 +32,8 @@ export default function AdminNotifications() {
 
   useEffect(() => {
     fetchNotifications();
+    const interval = setInterval(fetchNotifications, 3000);
+    return () => clearInterval(interval);
   }, []);
 
   const fetchNotifications = async () => {
