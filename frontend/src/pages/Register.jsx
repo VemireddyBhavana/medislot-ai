@@ -76,13 +76,37 @@ export default function Register() {
 
       {/* Floating Theme Toggle */}
       <div className="fixed top-6 right-6 z-50">
-        <button 
-          onClick={toggleTheme}
-          className="p-2.5 text-slate-400 hover:text-white bg-slate-950/75 hover:bg-slate-900 border border-white/10 backdrop-blur-xl rounded-full transition-all shadow-md cursor-pointer flex items-center justify-center"
-          title="Toggle Theme"
-        >
-          {theme === 'light' ? <Moon size={18} /> : <Sun size={18} />}
-        </button>
+        <label className="switch scale-75 origin-top-right cursor-pointer" title="Toggle Theme">
+          <input type="checkbox" checked={theme === 'light'} onChange={toggleTheme}/>
+          <span className="slider">
+            <div className="moons-hole">
+              <div className="moon-hole"></div>
+              <div className="moon-hole"></div>
+              <div className="moon-hole"></div>
+            </div>
+            <div className="black-clouds">
+              <div className="black-cloud"></div>
+              <div className="black-cloud"></div>
+              <div className="black-cloud"></div>
+            </div>
+            <div className="clouds">
+              <div className="cloud"></div>
+              <div className="cloud"></div>
+              <div className="cloud"></div>
+              <div className="cloud"></div>
+              <div className="cloud"></div>
+              <div className="cloud"></div>
+              <div className="cloud"></div>
+            </div>
+            <div className="stars">
+              <svg className="star" viewBox="0 0 20 20"><path d="M 0 10 C 10 10,10 10 ,0 10 C 10 10 , 10 10 , 10 20 C 10 10 , 10 10 , 20 10 C 10 10 , 10 10 , 10 0 C 10 10,10 10 ,0 10 Z"></path></svg>
+              <svg className="star" viewBox="0 0 20 20"><path d="M 0 10 C 10 10,10 10 ,0 10 C 10 10 , 10 10 , 10 20 C 10 10 , 10 10 , 20 10 C 10 10 , 10 10 , 10 0 C 10 10,10 10 ,0 10 Z"></path></svg>
+              <svg className="star" viewBox="0 0 20 20"><path d="M 0 10 C 10 10,10 10 ,0 10 C 10 10 , 10 10 , 10 20 C 10 10 , 10 10 , 20 10 C 10 10 , 10 10 , 10 0 C 10 10,10 10 ,0 10 Z"></path></svg>
+              <svg className="star" viewBox="0 0 20 20"><path d="M 0 10 C 10 10,10 10 ,0 10 C 10 10 , 10 10 , 10 20 C 10 10 , 10 10 , 20 10 C 10 10 , 10 10 , 10 0 C 10 10,10 10 ,0 10 Z"></path></svg>
+              <svg className="star" viewBox="0 0 20 20"><path d="M 0 10 C 10 10,10 10 ,0 10 C 10 10 , 10 10 , 10 20 C 10 10 , 10 10 , 20 10 C 10 10 , 10 10 , 10 0 C 10 10,10 10 ,0 10 Z"></path></svg>
+            </div>
+          </span>
+        </label>
       </div>
 
       {/* Glassmorphic Card */}

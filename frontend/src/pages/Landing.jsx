@@ -393,14 +393,38 @@ export default function Landing() {
           <AnimatedLogo height={64} />
         </div>
         <div className="flex items-center gap-4 text-xs font-semibold text-slate-400">
-          <button 
-            onClick={toggleTheme}
-            className="p-2 text-slate-400 hover:text-white bg-slate-900/80 hover:bg-slate-800 rounded-full border border-slate-800 backdrop-blur-md transition-all cursor-pointer flex items-center justify-center"
-            title="Toggle Theme"
-          >
-            {theme === 'light' ? <Moon size={16} /> : <Sun size={16} />}
-          </button>
-          
+          <label className="switch scale-[0.7] origin-right cursor-pointer shrink-0" title="Toggle Theme">
+            <input type="checkbox" checked={theme === 'light'} onChange={toggleTheme}/>
+            <span className="slider">
+              <div className="moons-hole">
+                <div className="moon-hole"></div>
+                <div className="moon-hole"></div>
+                <div className="moon-hole"></div>
+              </div>
+              <div className="black-clouds">
+                <div className="black-cloud"></div>
+                <div className="black-cloud"></div>
+                <div className="black-cloud"></div>
+              </div>
+              <div className="clouds">
+                <div className="cloud"></div>
+                <div className="cloud"></div>
+                <div className="cloud"></div>
+                <div className="cloud"></div>
+                <div className="cloud"></div>
+                <div className="cloud"></div>
+                <div className="cloud"></div>
+              </div>
+              <div className="stars">
+                <svg className="star" viewBox="0 0 20 20"><path d="M 0 10 C 10 10,10 10 ,0 10 C 10 10 , 10 10 , 10 20 C 10 10 , 10 10 , 20 10 C 10 10 , 10 10 , 10 0 C 10 10,10 10 ,0 10 Z"></path></svg>
+                <svg className="star" viewBox="0 0 20 20"><path d="M 0 10 C 10 10,10 10 ,0 10 C 10 10 , 10 10 , 10 20 C 10 10 , 10 10 , 20 10 C 10 10 , 10 10 , 10 0 C 10 10,10 10 ,0 10 Z"></path></svg>
+                <svg className="star" viewBox="0 0 20 20"><path d="M 0 10 C 10 10,10 10 ,0 10 C 10 10 , 10 10 , 10 20 C 10 10 , 10 10 , 20 10 C 10 10 , 10 10 , 10 0 C 10 10,10 10 ,0 10 Z"></path></svg>
+                <svg className="star" viewBox="0 0 20 20"><path d="M 0 10 C 10 10,10 10 ,0 10 C 10 10 , 10 10 , 10 20 C 10 10 , 10 10 , 20 10 C 10 10 , 10 10 , 10 0 C 10 10,10 10 ,0 10 Z"></path></svg>
+                <svg className="star" viewBox="0 0 20 20"><path d="M 0 10 C 10 10,10 10 ,0 10 C 10 10 , 10 10 , 10 20 C 10 10 , 10 10 , 20 10 C 10 10 , 10 10 , 10 0 C 10 10,10 10 ,0 10 Z"></path></svg>
+              </div>
+            </span>
+          </label>
+
           <div className="flex items-center gap-1.5 bg-slate-900/80 px-3 py-1.5 rounded-full border border-slate-800 backdrop-blur-md">
             <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
             System Live
