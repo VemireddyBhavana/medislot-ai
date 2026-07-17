@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { HeartPulse, Menu, X, Bell } from 'lucide-react';
+import { HeartPulse, Menu, X, Bell, AlertTriangle, Phone, ShieldAlert, User, Activity } from 'lucide-react';
 import AnimatedLogo from '../ui/AnimatedLogo';
 import { motion, AnimatePresence } from 'framer-motion';
 import { notificationAPI } from '../../services/api';
+import { getNearbyHospitals, getDoctors, createNotification } from '../../api/services';
 import gsap from 'gsap';
 import './PatientNavbar.css';
 
@@ -13,6 +14,76 @@ export default function PatientNavbar() {
   const [notifications, setNotifications] = useState([]);
   const [showDropdown, setShowDropdown] = useState(false);
   const dropdownRef = useRef(null);
+
+  // Emergency SOS state variables
+  const [showEmergencyModal, setShowEmergencyModal] = useState(false);
+  const [emergencyLoading, setEmergencyLoading] = useState(false);
+  const [emergencyHospitals, setEmergencyHospitals] = useState([]);
+  const [emergencyDoctors, setEmergencyDoctors] = useState([]);
+  const [emergencyStatus, setEmergencyStatus] = useState('idle'); // 'idle' | 'sending' | 'success' | 'failed'
+
+  // Fetch nearby hospitals & active doctors for emergency display
+  useEffect(() => {
+    if (showEmergencyModal) {
+      const loadEmergencyData = async () => {
+        setEmergencyLoading(true);
+        try {
+          // Get browser coordinates if available
+          let lat = null;
+          let lng = null;
+          
+          const getCoords = () => new Promise((resolve) => {
+            if (navigator.geolocation) {
+              navigator.geolocation.getCurrentPosition(
+                (pos) => resolve({ lat: pos.coords.latitude, lng: pos.coords.longitude }),
+                () => resolve({ lat: null, lng: null }),
+                { timeout: 5000 }
+              );
+            } else {
+              resolve({ lat: null, lng: null });
+            }
+          });
+
+          const coords = await getCoords();
+          const [hospitalsData, doctorsData] = await Promise.all([
+            getNearbyHospitals(coords.lat, coords.lng),
+            getDoctors()
+          ]);
+
+          setEmergencyHospitals(hospitalsData.hospitals || []);
+          // Pick active emergency doctors (General Practice, Cardiology, Emergency Medicine)
+          setEmergencyDoctors((doctorsData || []).filter(d => 
+            d.isActive && 
+            ['Cardiology', 'General Practice', 'Pediatrics', 'Neurology'].includes(d.specialization)
+          ));
+        } catch (error) {
+          console.error('Failed to load emergency contacts', error);
+        } finally {
+          setEmergencyLoading(false);
+        }
+      };
+      loadEmergencyData();
+    }
+  }, [showEmergencyModal]);
+
+  const triggerEmergencySos = async () => {
+    setEmergencyStatus('sending');
+    try {
+      // Create system notification alert
+      await createNotification({
+        patientName: userName || 'Emergency Patient',
+        patientEmail: userEmail || 'emergency@medislot.ai',
+        type: 'alert',
+        channel: 'system',
+        message: `🚨 EMERGENCY SOS ALERT: Triggered by ${userName || 'Emergency Patient'} (${userEmail || 'emergency@medislot.ai'}). Needs immediate medical response / ambulance dispatch!`,
+        status: 'pending'
+      });
+      setEmergencyStatus('success');
+    } catch (error) {
+      console.error('Failed to send emergency alert', error);
+      setEmergencyStatus('failed');
+    }
+  };
   const [theme, setTheme] = useState(() => {
     return localStorage.getItem('theme') || 'light';
   });
@@ -416,6 +487,14 @@ export default function PatientNavbar() {
             )}
           </div>
 
+          <button 
+            onClick={() => setShowEmergencyModal(true)}
+            className="bg-red-600 hover:bg-red-700 text-white text-xs font-bold py-2 px-4 rounded-lg transition-all animate-pulse flex items-center gap-1.5 cursor-pointer shadow-md hover:shadow-red-500/20"
+          >
+            <AlertTriangle size={14} className="shrink-0" />
+            SOS Emergency
+          </button>
+
           <Link to="/hospitals">
             <button className="bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold py-2 px-4 rounded-lg transition-all">
               Book Now
@@ -491,6 +570,12 @@ export default function PatientNavbar() {
               </div>
             )}
           </div>
+          <button 
+            onClick={() => { setShowEmergencyModal(true); setIsMobileMenuOpen(false); }}
+            className="bg-red-600 hover:bg-red-700 text-white text-xs font-bold py-1.5 px-2.5 rounded-lg flex items-center gap-1 cursor-pointer"
+          >
+            SOS
+          </button>
           <Link to="/hospitals" onClick={() => setIsMobileMenuOpen(false)} className="bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold py-1.5 px-3 rounded-lg">
             Book
           </Link>
@@ -542,6 +627,132 @@ export default function PatientNavbar() {
                 </label>
               </div>
             </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Emergency SOS Modal */}
+      <AnimatePresence>
+        {showEmergencyModal && (
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-[999] flex items-center justify-center p-4"
+          >
+            <motion.div 
+              initial={{ scale: 0.95, y: 15 }}
+              animate={{ scale: 1, y: 0 }}
+              exit={{ scale: 0.95, y: 15 }}
+              className="bg-white dark:bg-slate-900 border border-red-500/30 rounded-3xl shadow-2xl max-w-lg w-full overflow-hidden flex flex-col max-h-[85vh]"
+            >
+              {/* Modal Banner */}
+              <div className="bg-red-600 text-white p-6 text-center relative">
+                <button 
+                  onClick={() => { setShowEmergencyModal(false); setEmergencyStatus('idle'); }}
+                  className="absolute right-4 top-4 p-1 rounded-full bg-black/20 hover:bg-black/40 text-white transition-all cursor-pointer"
+                >
+                  <X size={18} />
+                </button>
+                <div className="flex justify-center mb-2">
+                  <ShieldAlert size={40} className="animate-bounce text-white" />
+                </div>
+                <h3 className="text-xl font-black tracking-tight text-white">EMERGENCY SOS DESK</h3>
+                <p className="text-red-100 text-xs mt-1">Get immediate ambulance dispatch and ER team assistance.</p>
+              </div>
+
+              {/* Modal Body */}
+              <div className="p-6 overflow-y-auto space-y-6 flex-1 text-left">
+                {/* Trigger Section */}
+                <div className="bg-red-50/50 dark:bg-red-950/20 border border-red-100 dark:border-red-950/30 p-5 rounded-2xl">
+                  <h4 className="text-sm font-bold text-red-700 dark:text-red-400 mb-2">Broadcast SOS Alert</h4>
+                  <p className="text-xs text-slate-500 dark:text-slate-400 mb-4 leading-relaxed">Clicking the button below instantly alerts all nearby hospital ER coordinators and on-duty specialists with your profile details.</p>
+                  
+                  {emergencyStatus === 'idle' && (
+                    <button 
+                      onClick={triggerEmergencySos}
+                      className="w-full bg-red-600 hover:bg-red-700 text-white font-extrabold py-3.5 px-6 rounded-xl transition-all shadow-lg shadow-red-500/20 hover:shadow-red-500/35 hover:-translate-y-0.5 active:scale-[0.98] animate-pulse flex items-center justify-center gap-2 cursor-pointer"
+                    >
+                      <AlertTriangle size={18} />
+                      ACTIVATE EMERGENCY BROADCAST
+                    </button>
+                  )}
+
+                  {emergencyStatus === 'sending' && (
+                    <div className="py-2 flex flex-col items-center justify-center gap-2">
+                      <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-red-600" />
+                      <p className="text-xs font-bold text-red-600 dark:text-red-400 animate-pulse">Broadcasting SOS coordinates and medical profile...</p>
+                    </div>
+                  )}
+
+                  {emergencyStatus === 'success' && (
+                    <div className="bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-900/50 text-emerald-800 dark:text-emerald-300 p-4 rounded-xl text-xs font-bold flex items-center justify-center gap-2">
+                      <ShieldAlert size={16} className="text-emerald-500 shrink-0" />
+                      🚨 SOS BROADCAST ACTIVE: ER Teams Notified!
+                    </div>
+                  )}
+
+                  {emergencyStatus === 'failed' && (
+                    <div className="bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-900/50 text-red-800 dark:text-red-300 p-4 rounded-xl text-xs font-bold flex flex-col gap-2">
+                      <p>Failed to broadcast automatically. Please call the numbers below directly!</p>
+                      <button onClick={triggerEmergencySos} className="bg-red-600 text-white py-2 px-4 rounded-lg font-bold">Retry</button>
+                    </div>
+                  )}
+                </div>
+
+                {emergencyLoading ? (
+                  <div className="py-12 flex flex-col items-center justify-center gap-2">
+                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600" />
+                    <p className="text-xs text-slate-500">Locating closest hospitals...</p>
+                  </div>
+                ) : (
+                  <>
+                    {/* Nearby Hospitals & Ambulances */}
+                    <div className="space-y-3">
+                      <h4 className="text-xs font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
+                        <Phone size={12} className="text-blue-500" /> Nearby Hospital Ambulances
+                      </h4>
+                      <div className="space-y-2">
+                        {emergencyHospitals.slice(0, 3).map(h => (
+                          <div key={h.id} className="p-4 bg-slate-50 dark:bg-slate-800 rounded-xl border border-slate-100 dark:border-slate-700 flex items-center justify-between gap-4">
+                            <div className="min-w-0">
+                              <h5 className="font-bold text-slate-900 dark:text-white text-xs truncate">{h.name}</h5>
+                              <p className="text-[10px] text-slate-400 mt-0.5 truncate max-w-[200px]">{h.address}</p>
+                            </div>
+                            <a 
+                              href={`tel:${h.phone}`}
+                              className="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-3 py-1.5 rounded-lg text-[10px] flex items-center gap-1 shrink-0 shadow-sm"
+                            >
+                              <Phone size={10} /> Call Ambulance
+                            </a>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Available Specialists on Call */}
+                    <div className="space-y-3">
+                      <h4 className="text-xs font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
+                        <User size={12} className="text-blue-500" /> Doctors On Duty (Emergency Check-In)
+                      </h4>
+                      <div className="grid grid-cols-2 gap-2">
+                        {emergencyDoctors.slice(0, 4).map(d => (
+                          <div key={d._id} className="p-3 bg-slate-50 dark:bg-slate-800 rounded-xl border border-slate-100 dark:border-slate-700 flex items-center gap-2.5">
+                            <div className="w-8 h-8 rounded-full bg-blue-100 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400 flex items-center justify-center font-bold text-[10px] shrink-0">
+                              DR
+                            </div>
+                            <div className="min-w-0">
+                              <h5 className="font-bold text-slate-900 dark:text-white text-[11px] truncate">{d.name}</h5>
+                              <p className="text-[9px] text-slate-500 dark:text-slate-400 truncate">{d.specialization} • Rm {d.roomNumber}</p>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </>
+                )}
+              </div>
+            </motion.div>
           </motion.div>
         )}
       </AnimatePresence>

@@ -78,3 +78,13 @@ export const getWorkloadSummary = async (hospitalId, date) => {
     throw error;
   }
 };
+
+export const createNotification = async (notifData) => {
+  try {
+    const response = await api.post('/notifications/create', notifData);
+    return response.data;
+  } catch (error) {
+    console.error('Error creating notification:', error);
+    throw error;
+  }
+};

@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const notificationSchema = new mongoose.Schema({
-  appointmentId: { type: mongoose.Schema.Types.ObjectId, ref: 'Appointment', required: true },
+  appointmentId: { type: mongoose.Schema.Types.ObjectId, ref: 'Appointment' },
   patientName: { type: String },
   patientPhone: { type: String },
   patientEmail: { type: String },
