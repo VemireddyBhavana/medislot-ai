@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Mail, Lock, Eye, EyeOff, ArrowRight } from 'lucide-react';
@@ -75,6 +75,10 @@ export default function Login() {
     fontSize:     '14px',
   };
 
+  const placeholderClass = isDark
+    ? 'placeholder-slate-500'
+    : 'placeholder-slate-400';
+
   return (
     <div
       className="min-h-screen relative flex items-center justify-center font-sans overflow-hidden transition-colors duration-500"
@@ -148,7 +152,8 @@ export default function Login() {
             <div className="relative">
               <input id="login-email" type="email" required placeholder="Email"
                 value={email} onChange={e => setEmail(e.target.value)}
-                style={inputStyle} autoComplete="email" />
+                style={inputStyle} autoComplete="email"
+                className={placeholderClass} />
               <Mail size={16} className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none"
                 style={{ color: isDark ? '#475569' : '#94a3b8' }} />
             </div>
@@ -156,7 +161,8 @@ export default function Login() {
             <div className="relative">
               <input id="login-password" type={showPw ? 'text' : 'password'} required placeholder="Password"
                 value={password} onChange={e => setPassword(e.target.value)}
-                style={inputStyle} autoComplete="current-password" />
+                style={inputStyle} autoComplete="current-password"
+                className={placeholderClass} />
               <button type="button" onClick={() => setShowPw(p => !p)}
                 className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer"
                 style={{ color: isDark ? '#475569' : '#94a3b8' }}>
