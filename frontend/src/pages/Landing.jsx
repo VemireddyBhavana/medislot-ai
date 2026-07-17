@@ -486,23 +486,22 @@ export default function Landing() {
             </div>
 
             <h1
-              className="text-3xl sm:text-5xl font-extrabold tracking-tight leading-none"
-              style={{
-                background: isDark
-                  ? 'linear-gradient(to bottom, #fff, #cbd5e1, #94a3b8)'
-                  : 'linear-gradient(to bottom, #0f172a, #1e40af, #3b82f6)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                backgroundClip: 'text'
-              }}
+              className={`text-3xl sm:text-5xl font-extrabold tracking-tight leading-none bg-clip-text text-transparent ${
+                isDark
+                  ? 'bg-gradient-to-b from-white via-slate-200 to-slate-400'
+                  : 'bg-gradient-to-b from-slate-900 via-blue-950 to-blue-800'
+              }`}
             >
               Smarter Appointments.<br />
-              <span style={{
-                background: 'linear-gradient(to right, #3b82f6, #6366f1)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                backgroundClip: 'text'
-              }}>Better Healthcare.</span>
+              <span
+                className={`bg-clip-text text-transparent ${
+                  isDark
+                    ? 'bg-gradient-to-r from-blue-400 via-blue-500 to-indigo-400'
+                    : 'bg-gradient-to-r from-blue-600 via-blue-500 to-indigo-600'
+                }`}
+              >
+                Better Healthcare.
+              </span>
             </h1>
 
             <p className="text-sm leading-relaxed" style={{ color: isDark ? '#94a3b8' : '#475569' }}>
