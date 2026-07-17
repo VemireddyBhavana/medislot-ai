@@ -40,6 +40,22 @@ export default function BookAppointment() {
   const [bookingSuccess, setBookingSuccess] = useState(false);
   const [error, setError] = useState('');
 
+  // Pre-fill patient details from logged-in session (e.g. Google Login)
+  useEffect(() => {
+    try {
+      const userInfo = JSON.parse(localStorage.getItem('adminInfo') || '{}');
+      if (userInfo.name || userInfo.email) {
+        setPatientDetails(prev => ({
+          ...prev,
+          patientName: prev.patientName || userInfo.name || '',
+          patientEmail: prev.patientEmail || userInfo.email || ''
+        }));
+      }
+    } catch (e) {
+      console.error('Failed to parse adminInfo for pre-filling', e);
+    }
+  }, []);
+
   useEffect(() => {
     const fetchDoctors = async () => {
       try {

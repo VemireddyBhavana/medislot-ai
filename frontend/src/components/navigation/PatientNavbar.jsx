@@ -303,7 +303,47 @@ export default function PatientNavbar() {
     `;
   };
 
-  const pendingNotifications = notifications.filter(n => n.status === 'pending');
+  // Get current user details from localStorage
+  const userInfo = (() => {
+    try {
+      return JSON.parse(localStorage.getItem('adminInfo') || '{}');
+    } catch (e) {
+      return {};
+    }
+  })();
+  const userEmail = userInfo?.email;
+  const userName = userInfo?.name;
+
+  // Filter notifications to only show this user's notifications
+  const userNotifications = notifications.filter(n => {
+    if (!userEmail) return false;
+    
+    // Check email match (case-insensitive)
+    if (n.patientEmail && n.patientEmail.toLowerCase() === userEmail.toLowerCase()) return true;
+    
+    // Check name match (case-insensitive)
+    if (n.patientName && userName && n.patientName.toLowerCase() === userName.toLowerCase()) return true;
+    
+    return false;
+  });
+
+  const pendingNotifications = userNotifications.filter(n => n.status === 'pending');
+
+  // Automatically mark pending notifications as read locally when dropdown is opened
+  useEffect(() => {
+    if (showDropdown && pendingNotifications.length > 0) {
+      setNotifications(prev =>
+        prev.map(n => {
+          const isUserNotif = (userEmail && n.patientEmail && n.patientEmail.toLowerCase() === userEmail.toLowerCase()) ||
+                              (userName && n.patientName && n.patientName.toLowerCase() === userName.toLowerCase());
+          if (isUserNotif && n.status === 'pending') {
+            return { ...n, status: 'sent' };
+          }
+          return n;
+        })
+      );
+    }
+  }, [showDropdown]);
 
   return (
     <header className="bg-white dark:bg-slate-900 border-b border-gray-100 dark:border-slate-800 sticky top-0 z-50">
@@ -347,7 +387,9 @@ export default function PatientNavbar() {
             >
               <Bell size={18} />
               {pendingNotifications.length > 0 && (
-                <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full border-2 border-white dark:border-slate-900" />
+                <span className="absolute -top-1 -right-1.5 min-w-[16px] h-[16px] px-1 bg-red-500 text-white rounded-full flex items-center justify-center text-[9px] font-extrabold border border-white dark:border-slate-900 animate-pulse">
+                  {pendingNotifications.length}
+                </span>
               )}
             </button>
             
@@ -357,10 +399,10 @@ export default function PatientNavbar() {
                   <h3 className="font-bold text-gray-900 dark:text-white text-xs">Alerts</h3>
                 </div>
                 <div className="max-h-60 overflow-y-auto">
-                  {notifications.length === 0 ? (
+                  {userNotifications.length === 0 ? (
                     <div className="p-4 text-center text-xs text-gray-400">No notifications.</div>
                   ) : (
-                    notifications.map((notif) => (
+                    userNotifications.map((notif) => (
                       <div key={notif._id} className="p-3 hover:bg-slate-50 dark:hover:bg-slate-700/50 flex gap-2">
                         <div className="mt-0.5 shrink-0">
                           <span className={`w-2 h-2 rounded-full inline-block ${notif.type === 'alert' ? 'bg-red-500' : 'bg-blue-500'}`} />
@@ -424,7 +466,9 @@ export default function PatientNavbar() {
             >
               <Bell size={18} />
               {pendingNotifications.length > 0 && (
-                <span className="absolute top-0.5 right-0.5 w-1.5 h-1.5 bg-red-500 rounded-full" />
+                <span className="absolute -top-0.5 -right-1 min-w-[14px] h-[14px] px-1 bg-red-500 text-white rounded-full flex items-center justify-center text-[8px] font-extrabold border border-white dark:border-slate-900 animate-pulse">
+                  {pendingNotifications.length}
+                </span>
               )}
             </button>
             {showDropdown && (
@@ -433,10 +477,10 @@ export default function PatientNavbar() {
                   <h3 className="font-bold text-gray-900 dark:text-white text-xs">Alerts</h3>
                 </div>
                 <div className="max-h-56 overflow-y-auto">
-                  {notifications.length === 0 ? (
+                  {userNotifications.length === 0 ? (
                     <div className="p-4 text-center text-xs text-gray-400">No notifications.</div>
                   ) : (
-                    notifications.map((notif) => (
+                    userNotifications.map((notif) => (
                       <div key={notif._id} className="p-3 hover:bg-slate-50 dark:hover:bg-slate-700/50 flex gap-2">
                         <span className={`w-2 h-2 rounded-full mt-1 shrink-0 inline-block ${notif.type === 'alert' ? 'bg-red-500' : 'bg-blue-500'}`} />
                         <p className="text-[11px] text-gray-700 dark:text-slate-300">{notif.message}</p>
