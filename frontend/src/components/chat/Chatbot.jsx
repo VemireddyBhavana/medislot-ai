@@ -249,9 +249,17 @@ export default function Chatbot() {
     setInputValue('');
     setIsTyping(true);
 
+    const startTime = Date.now();
+
     // Get response from Gemini API
     const responseText = await generateResponse(userMessage.text);
     
+    // Enforce a minimum typing animation delay of 600ms for natural cadence
+    const elapsed = Date.now() - startTime;
+    if (elapsed < 600) {
+      await new Promise(resolve => setTimeout(resolve, 600 - elapsed));
+    }
+
     const botResponse = {
       id: Date.now() + 1,
       text: responseText,
@@ -305,26 +313,30 @@ export default function Chatbot() {
             </div>
 
             {/* Horizontal Language Tabs */}
-            <div 
-              className="bg-slate-100 dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 px-3 py-2 flex items-center gap-2 overflow-x-auto whitespace-nowrap shrink-0"
-              style={{ msOverflowStyle: 'none', scrollbarWidth: 'none' }}
-            >
-              {chatLanguages.map((lang) => {
-                const isActive = chatbotLang === lang.code;
-                return (
-                  <button
-                    key={lang.code}
-                    onClick={() => changeChatbotLanguage(lang.code)}
-                    className={`text-xs font-bold px-3 py-1.5 rounded-full transition-all duration-200 cursor-pointer select-none
-                      ${isActive 
-                        ? 'bg-emerald-700 text-white shadow-sm dark:bg-emerald-600' 
-                        : 'text-slate-600 dark:text-slate-400 hover:text-slate-800 dark:hover:text-white'
-                      }`}
-                  >
-                    {lang.name}
-                  </button>
-                );
-              })}
+            <div className="relative shrink-0">
+              <div 
+                className="bg-slate-100 dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 px-3 py-2 flex items-center gap-2 overflow-x-auto whitespace-nowrap"
+                style={{ msOverflowStyle: 'none', scrollbarWidth: 'none' }}
+              >
+                {chatLanguages.map((lang) => {
+                  const isActive = chatbotLang === lang.code;
+                  return (
+                    <button
+                      key={lang.code}
+                      onClick={() => changeChatbotLanguage(lang.code)}
+                      className={`text-xs font-bold px-3 py-1.5 rounded-full transition-all duration-200 cursor-pointer select-none
+                        ${isActive 
+                          ? 'bg-emerald-700 text-white shadow-sm dark:bg-emerald-600' 
+                          : 'text-slate-600 dark:text-slate-400 hover:text-slate-800 dark:hover:text-white'
+                        }`}
+                    >
+                      {lang.name}
+                    </button>
+                  );
+                })}
+              </div>
+              {/* Fade Overlay for scrolling indicator */}
+              <div className="absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-l from-slate-100 dark:from-slate-900 to-transparent pointer-events-none" />
             </div>
 
             {/* Messages Area */}
