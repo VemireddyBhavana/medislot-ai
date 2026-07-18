@@ -233,8 +233,8 @@ export default function BookAppointment() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!patientDetails.patientName || !patientDetails.patientPhone) {
-      setError('Please fill in required patient details.');
+    if (!patientDetails.patientName || !patientDetails.patientPhone || !patientDetails.patientEmail) {
+      setError('Please fill in all required patient details (Name, Phone Number, and Email Address).');
       return;
     }
     
@@ -603,9 +603,9 @@ export default function BookAppointment() {
                       </div>
 
                       <div>
-                        <label className="block text-xs font-bold text-slate-700 mb-1.5">Email Address</label>
-                        <input type="email" name="patientEmail" value={patientDetails.patientEmail} onChange={handleInputChange} className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white text-sm mb-1" placeholder="john@example.com" />
-                        <p className="text-[10px] text-slate-500 font-medium">Used to send your electronic receipt and appointment reminder.</p>
+                        <label className="block text-xs font-bold text-slate-700 mb-1.5">Email Address *</label>
+                        <input type="email" name="patientEmail" value={patientDetails.patientEmail} onChange={handleInputChange} className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white text-sm mb-1" placeholder="john@example.com" required />
+                        <p className="text-[10px] text-slate-500 font-medium">Your booking confirmation receipt and appointment details will be sent to this email address.</p>
                       </div>
 
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

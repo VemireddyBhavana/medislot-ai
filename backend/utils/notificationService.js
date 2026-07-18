@@ -39,16 +39,32 @@ const sendEmail = async (to, subject, html) => {
     
     // Use real SMTP if configured
     if (process.env.SMTP_HOST && process.env.SMTP_USER && process.env.SMTP_PASS) {
-      transporter = nodemailer.createTransport({
-        host: process.env.SMTP_HOST,
-        port: process.env.SMTP_PORT || 587,
-        secure: process.env.SMTP_SECURE === 'true',
-        auth: {
-          user: process.env.SMTP_USER,
-          pass: process.env.SMTP_PASS,
-        },
-        family: 4, // Force IPv4 to prevent IPv6 ENETUNREACH issues
-      });
+      if (process.env.SMTP_HOST.includes('gmail')) {
+        transporter = nodemailer.createTransport({
+          service: 'gmail',
+          auth: {
+            user: process.env.SMTP_USER,
+            pass: process.env.SMTP_PASS,
+          },
+          tls: {
+            rejectUnauthorized: false
+          }
+        });
+      } else {
+        transporter = nodemailer.createTransport({
+          host: process.env.SMTP_HOST,
+          port: parseInt(process.env.SMTP_PORT || '587', 10),
+          secure: process.env.SMTP_SECURE === 'true',
+          auth: {
+            user: process.env.SMTP_USER,
+            pass: process.env.SMTP_PASS,
+          },
+          tls: {
+            rejectUnauthorized: false
+          },
+          family: 4, // Force IPv4 to prevent IPv6 ENETUNREACH issues
+        });
+      }
     } else {
       // Fallback to Ethereal mock email for hackathon/development
       let testAccount = await nodemailer.createTestAccount();
