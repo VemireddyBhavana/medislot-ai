@@ -478,14 +478,45 @@ export default function BookAppointment() {
                     <h2 className="text-2xl font-bold text-slate-900 mb-6">Select Date & Time</h2>
                     
                     <div className="mb-8">
-                      <label className="block text-sm font-bold text-slate-700 dark:text-slate-200 mb-2">Preferred Date</label>
-                      <input 
-                        type="date" 
-                        value={selectedDate}
-                        onChange={(e) => setSelectedDate(e.target.value)}
-                        className="w-full p-4 bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white dark:focus:bg-slate-800 text-slate-700 dark:text-slate-200 font-medium cursor-pointer"
-                        min={istDateStr}
-                      />
+                      <label className="block text-sm font-bold text-slate-700 dark:text-slate-200 mb-3">Select Consultation Date</label>
+                      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+                        {[
+                          { label: 'Today', offset: 0 },
+                          { label: 'Tomorrow', offset: 1 },
+                          { label: 'Day After', offset: 2 },
+                          { label: 'In 3 Days', offset: 3 },
+                        ].map(opt => {
+                          const d = new Date();
+                          d.setDate(d.getDate() + opt.offset);
+                          const formatter = new Intl.DateTimeFormat('en-CA', {
+                            timeZone: 'Asia/Kolkata',
+                            year: 'numeric',
+                            month: '2-digit',
+                            day: '2-digit'
+                          });
+                          const dateVal = formatter.format(d);
+                          const displayLabel = new Intl.DateTimeFormat('en-US', {
+                            timeZone: 'Asia/Kolkata',
+                            month: 'short',
+                            day: 'numeric'
+                          }).format(d);
+                          return (
+                            <button
+                              key={opt.label}
+                              type="button"
+                              onClick={() => setSelectedDate(dateVal)}
+                              className={`p-3 rounded-xl font-bold text-xs transition-all border text-center ${
+                                selectedDate === dateVal
+                                  ? 'bg-blue-600 text-white border-blue-600 shadow-md ring-2 ring-blue-600/30'
+                                  : 'bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:border-blue-400 hover:bg-blue-50/50'
+                              }`}
+                            >
+                              <div>{opt.label}</div>
+                              <div className="text-[10px] opacity-80 font-normal mt-0.5">{displayLabel}</div>
+                            </button>
+                          );
+                        })}
+                      </div>
                     </div>
 
                     {selectedDate && (
